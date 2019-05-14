@@ -9,7 +9,7 @@ class APITypes(DjangoChoices):
 
     zrc = ChoiceItem("zrc", _("ZRC (Zaken)"))
     ztc = ChoiceItem("ztc", _("ZTC (Zaaktypen)"))
-    drc = ChoiceItem("drc", _("DRC (Informatieobjecten"))
+    drc = ChoiceItem("drc", _("DRC (Informatieobjecten)"))
     brc = ChoiceItem("brc", _("BRC (Besluiten)"))
 
     orc = ChoiceItem("orc", _("ORC (Overige)"))
