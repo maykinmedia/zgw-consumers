@@ -1,1 +1,1 @@
-default_app_config = 'zgw_consumers.apps.ZgwConsumersConfig'
+default_app_config = "zgw_consumers.apps.ZgwConsumersConfig"
