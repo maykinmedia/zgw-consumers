@@ -5,8 +5,9 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from zds_client import Client, ClientAuth
+from zds_client import ClientAuth
 
+from .client import get_client_class
 from .constants import APITypes
 
 
@@ -59,12 +60,13 @@ class Service(models.Model):
                     }
                 )
 
-    def build_client(self, **claims) -> Client:
+    def build_client(self, **claims):
         """
         Build an API client from the service configuration.
         """
         _uuid = uuid.uuid4()
         dummy_detail_url = f"{self.api_root}dummy/{_uuid}"
+        Client = get_client_class()
         client = Client.from_url(dummy_detail_url)
         client.auth = ClientAuth(client_id=self.client_id, secret=self.secret, **claims)
         return client
