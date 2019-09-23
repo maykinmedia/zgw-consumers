@@ -6,14 +6,17 @@ from django.db import migrations
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('zgw_consumers', '0001_initial'),
-    ]
+    dependencies = [("zgw_consumers", "0001_initial")]
 
     operations = [
         migrations.AlterField(
-            model_name='service',
-            name='extra',
-            field=django.contrib.postgres.fields.jsonb.JSONField(blank=True, default=dict, help_text="Extra configuration that's service-specific", verbose_name='extra configuration'),
-        ),
+            model_name="service",
+            name="extra",
+            field=django.contrib.postgres.fields.jsonb.JSONField(
+                blank=True,
+                default=dict,
+                help_text="Extra configuration that's service-specific",
+                verbose_name="extra configuration",
+            ),
+        )
     ]

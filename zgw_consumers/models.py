@@ -19,7 +19,7 @@ class Service(models.Model):
         _("extra configuration"),
         default=dict,
         help_text=_("Extra configuration that's service-specific"),
-        blank=True
+        blank=True,
     )
 
     # credentials for the API

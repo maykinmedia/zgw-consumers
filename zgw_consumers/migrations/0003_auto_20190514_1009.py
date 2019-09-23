@@ -5,14 +5,24 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    dependencies = [
-        ('zgw_consumers', '0002_auto_20190514_0944'),
-    ]
+    dependencies = [("zgw_consumers", "0002_auto_20190514_0944")]
 
     operations = [
         migrations.AlterField(
-            model_name='service',
-            name='api_type',
-            field=models.CharField(choices=[('ac', 'AC (Authorizations)'), ('nrc', 'NRC (Notifications)'), ('zrc', 'ZRC (Zaken)'), ('ztc', 'ZTC (Zaaktypen)'), ('drc', 'DRC (Informatieobjecten)'), ('brc', 'BRC (Besluiten)'), ('orc', 'ORC (Overige)')], max_length=20, verbose_name='type'),
-        ),
+            model_name="service",
+            name="api_type",
+            field=models.CharField(
+                choices=[
+                    ("ac", "AC (Authorizations)"),
+                    ("nrc", "NRC (Notifications)"),
+                    ("zrc", "ZRC (Zaken)"),
+                    ("ztc", "ZTC (Zaaktypen)"),
+                    ("drc", "DRC (Informatieobjecten)"),
+                    ("brc", "BRC (Besluiten)"),
+                    ("orc", "ORC (Overige)"),
+                ],
+                max_length=20,
+                verbose_name="type",
+            ),
+        )
     ]
