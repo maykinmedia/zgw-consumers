@@ -11,6 +11,6 @@ class APITypes(DjangoChoices):
     ztc = ChoiceItem("ztc", _("ZTC (Zaaktypen)"))
     drc = ChoiceItem("drc", _("DRC (Informatieobjecten)"))
     brc = ChoiceItem("brc", _("BRC (Besluiten)"))
-    kic = ChoiceItem('kic', _("KIC (Klantinteracties)"))
+    kic = ChoiceItem("kic", _("KIC (Klantinteracties)"))
 
     orc = ChoiceItem("orc", _("ORC (Overige)"))
