@@ -1,6 +1,7 @@
 import logging
 from functools import lru_cache
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Tuple
+from urllib.parse import urlparse, parse_qs
 
 from django import forms
 from django.contrib.admin import widgets
@@ -23,10 +24,21 @@ def get_zaaktypen() -> Dict[Service, List[Dict[str, Any]]]:
     for service in services:
         client = service.build_client(scopes=["zds.scopes.zaaktypes.lezen"])
         logger.debug("Fetching zaaktype list for service %r", service)
-        zaaktypen = client.list(
+        zaaktypen_per_service[service] = []
+        response = client.list(
             "zaaktype", catalogus_uuid=service.extra["main_catalogus_uuid"]
         )
-        zaaktypen_per_service[service] = zaaktypen
+        while response["next"]:
+            zaaktypen_per_service[service] += response["results"]
+            next_url = urlparse(response["next"])
+            query = parse_qs(next_url.query)
+            new_page = int(query["page"][0]) + 1
+            query["page"] = [new_page]
+            response = client.list(
+                "zaaktype",
+                catalogus_uuid=service.extra["main_catalogus_uuid"],
+                query_params=query,
+            )
 
     return zaaktypen_per_service
 
@@ -34,16 +46,16 @@ def get_zaaktypen() -> Dict[Service, List[Dict[str, Any]]]:
 def get_zaaktype_field(db_field: Field, request: HttpRequest, **kwargs):
     zaaktypen = get_zaaktypen()
 
+    def _get_choice(zaaktype: dict) -> Tuple[str, str]:
+        return (
+            zaaktype["url"],
+            f"{zaaktype['identificatie']} - {zaaktype['omschrijving']}",
+        )
+
     choices = [
         (
             f"Service: {service.label}",
-            [
-                (
-                    zaaktype["url"],
-                    f"{zaaktype['identificatie']} - {zaaktype['omschrijving']}",
-                )
-                for zaaktype in _zaaktypen
-            ],
+            [_get_choice(zaaktype) for zaaktype in _zaaktypen],
         )
         for service, _zaaktypen in zaaktypen.items()
     ]
