@@ -28,8 +28,8 @@ def get_zaaktypen() -> Dict[Service, List[Dict[str, Any]]]:
         response = client.list(
             "zaaktype", catalogus_uuid=service.extra["main_catalogus_uuid"]
         )
+        zaaktypen_per_service[service] += response["results"]
         while response["next"]:
-            zaaktypen_per_service[service] += response["results"]
             next_url = urlparse(response["next"])
             query = parse_qs(next_url.query)
             new_page = int(query["page"][0]) + 1
@@ -39,6 +39,7 @@ def get_zaaktypen() -> Dict[Service, List[Dict[str, Any]]]:
                 catalogus_uuid=service.extra["main_catalogus_uuid"],
                 query_params=query,
             )
+            zaaktypen_per_service[service] += response["results"]
 
     return zaaktypen_per_service
 
