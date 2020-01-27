@@ -9,6 +9,7 @@ from zds_client import ClientAuth
 
 from .client import get_client_class
 from .constants import APITypes
+from .query import ServiceManager
 
 
 class Service(models.Model):
@@ -26,6 +27,8 @@ class Service(models.Model):
     # credentials for the API
     client_id = models.CharField(max_length=255, blank=True)
     secret = models.CharField(max_length=255, blank=True)
+
+    objects = ServiceManager()
 
     class Meta:
         verbose_name = _("service")
