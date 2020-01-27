@@ -12,6 +12,7 @@ from zds_client import ClientAuth
 
 from .client import ZGWClient, get_client_class
 from .constants import APITypes, AuthTypes
+from .query import ServiceManager
 
 
 class Service(models.Model):
@@ -43,6 +44,8 @@ class Service(models.Model):
     nlx = models.URLField(
         _("NLX url"), max_length=1000, blank=True, help_text=_("NLX (outway) address")
     )
+
+    objects = ServiceManager()
 
     class Meta:
         verbose_name = _("service")
