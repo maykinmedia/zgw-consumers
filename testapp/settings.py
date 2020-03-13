@@ -6,8 +6,8 @@ SECRET_KEY = "so-secret-i-cant-believe-you-are-looking-at-this"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "zgw_consumers.db"),
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "zgw_consumers",
     }
 }
 
@@ -15,6 +15,7 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.auth",
     "django.contrib.sessions",
+    "django.contrib.messages",
     "django.contrib.admin",
     "zgw_consumers",
     "testapp",
