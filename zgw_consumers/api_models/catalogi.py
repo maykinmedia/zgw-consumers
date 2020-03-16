@@ -2,12 +2,12 @@ from dataclasses import dataclass
 
 from dateutil.relativedelta import relativedelta
 
-from .base import Model
+from .base import ZGWModel
 from .selectielijst import ProcesType, Resultaat
 
 
 @dataclass
-class ZaakType(Model):
+class ZaakType(ZGWModel):
     url: str
     catalogus: str
     identificatie: int
@@ -18,11 +18,11 @@ class ZaakType(Model):
     toelichting: str
     doorlooptijd: str
 
-    selectielijst_procestype: ProcesType
+    # selectielijst_procestype: ProcesType
 
 
 @dataclass
-class StatusType(Model):
+class StatusType(ZGWModel):
     url: str
     zaaktype: str
     omschrijving: str
@@ -33,7 +33,7 @@ class StatusType(Model):
 
 
 @dataclass
-class InformatieObjectType(Model):
+class InformatieObjectType(ZGWModel):
     url: str
     catalogus: str
     omschrijving: str
@@ -41,7 +41,7 @@ class InformatieObjectType(Model):
 
 
 @dataclass
-class ResultaatType(Model):
+class ResultaatType(ZGWModel):
     url: str
     zaaktype: ZaakType
     omschrijving: str
