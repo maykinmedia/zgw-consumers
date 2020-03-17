@@ -5,7 +5,7 @@ These are NOT django models.
 """
 import uuid
 from datetime import datetime
-from typing import List, Union
+from typing import Any, Dict, List, Union
 
 from dateutil.parser import parse
 from dateutil.relativedelta import relativedelta
@@ -64,12 +64,24 @@ class ZGWModel(Model):
         return uuid.UUID(_uuid)
 
 
+def get_all_annotations(cls: type) -> Dict[str, Any]:
+    annotations = {}
+    for supercls in cls.__bases__:
+        super_annotations = get_all_annotations(supercls)
+        annotations.update(super_annotations)
+
+    # Follow MRO - most specific top-level class wins, otherwise left-to-right
+    if hasattr(cls, "__annotations__"):
+        annotations.update(cls.__annotations__)
+    return annotations
+
+
 def factory(
     model: type, data: Union[JSONObject, List[JSONObject]]
 ) -> Union[type, List[type]]:
     _is_collection = isinstance(data, list)
 
-    known_kwargs = list(model.__annotations__.keys())
+    known_kwargs = list(get_all_annotations(model).keys())
 
     def _normalize(kwargs: dict):
         # TODO: this should be an explicit mapping, but *most* of the time with ZGW
