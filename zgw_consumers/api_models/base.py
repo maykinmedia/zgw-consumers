@@ -16,15 +16,21 @@ from .types import JSONObject
 
 __all__ = ["CONVERTERS", "factory", "Model", "ZGWModel"]
 
+
+def noop(value: Any) -> Any:
+    return value
+
+
 CONVERTERS = {
     type(None): lambda x: None,
-    datetime: parse,
-    relativedelta: parse_relativedelta,
+    str: noop,
+    int: noop,
+    float: noop,
+    dict: noop,  # TODO: recurse?
     uuid.UUID: lambda value: uuid.UUID(value),
-    int: lambda number: number,
-    float: lambda number: number,
+    datetime: parse,
     date: date.fromisoformat,
-    dict: lambda obj: obj,  # TODO: recurse?
+    relativedelta: parse_relativedelta,
 }
 
 
