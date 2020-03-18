@@ -1,6 +1,6 @@
 from dataclasses import dataclass
-from datetime import date
-from typing import Union
+from datetime import date, datetime
+from typing import Optional
 
 from .base import ZGWModel
 
@@ -15,11 +15,20 @@ class Zaak(ZGWModel):
     zaaktype: str
     registratiedatum: date
     startdatum: date
-    einddatum_gepland: Union[date, None]
-    uiterlijke_einddatum_afdoening: Union[date, None]
-    publicatiedatum: Union[date, None]
+    einddatum_gepland: Optional[date]
+    uiterlijke_einddatum_afdoening: Optional[date]
+    publicatiedatum: Optional[date]
     vertrouwelijkheidaanduiding: str
     status: str
     resultaat: str
     relevante_andere_zaken: list
     zaakgeometrie: dict
+
+
+@dataclass
+class Status(ZGWModel):
+    url: str
+    zaak: str
+    statustype: str
+    datum_status_gezet: datetime
+    statustoelichting: str
