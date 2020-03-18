@@ -4,7 +4,7 @@ Datamodels for ZGW resources.
 These are NOT django models.
 """
 import uuid
-from datetime import datetime
+from datetime import date, datetime
 from typing import Any, Dict, List, Union
 
 from dateutil.parser import parse
@@ -23,6 +23,7 @@ CONVERTERS = {
     uuid.UUID: lambda value: uuid.UUID(value),
     int: lambda number: number,
     float: lambda number: number,
+    date: date.fromisoformat,
 }
 
 
@@ -45,7 +46,7 @@ class Model:
                     continue
 
                 # Optional is ONE type combined with None
-                typehint = next(t for t in typehint.__args__ if t is not None)
+                typehint = next(t for t in typehint if t is not None)
 
             if isinstance(value, typehint):
                 continue
