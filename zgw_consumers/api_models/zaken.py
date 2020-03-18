@@ -15,6 +15,7 @@ class Zaak(ZGWModel):
     zaaktype: str
     registratiedatum: date
     startdatum: date
+    einddatum: Optional[date]
     einddatum_gepland: Optional[date]
     uiterlijke_einddatum_afdoening: Optional[date]
     publicatiedatum: Optional[date]
