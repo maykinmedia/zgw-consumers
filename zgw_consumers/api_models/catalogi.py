@@ -65,6 +65,9 @@ class InformatieObjectType(ZGWModel):
     catalogus: str
     omschrijving: str
     vertrouwelijkheidaanduiding: str
+    begin_geldigheid: date
+    einde_geldigheid: Optional[date]
+    concept: bool
 
 
 @dataclass

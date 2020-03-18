@@ -3,6 +3,7 @@ from datetime import date, datetime
 from typing import Optional
 
 from .base import ZGWModel
+from .constants import VertrouwelijkheidsAanduidingen
 
 
 @dataclass
@@ -24,6 +25,9 @@ class Zaak(ZGWModel):
     resultaat: str
     relevante_andere_zaken: list
     zaakgeometrie: dict
+
+    def get_vertrouwelijkheidaanduiding_display(self):
+        return VertrouwelijkheidsAanduidingen.values[self.vertrouwelijkheidaanduiding]
 
 
 @dataclass
