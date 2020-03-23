@@ -37,3 +37,13 @@ class Status(ZGWModel):
     statustype: str
     datum_status_gezet: datetime
     statustoelichting: str
+
+
+@dataclass
+class ZaakObject(ZGWModel):
+    url: str
+    zaak: str
+    object: str
+    object_type: str
+    object_type_overige: str
+    relatieomschrijving: str
