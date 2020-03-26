@@ -1,14 +1,16 @@
 import uuid
-from urllib.parse import urljoin
+from typing import Optional
+from urllib.parse import urljoin, urlsplit, urlunsplit
 
 from django.contrib.postgres.fields import JSONField
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models.functions import Length
 from django.utils.translation import ugettext_lazy as _
 
 from zds_client import ClientAuth
 
-from .client import get_client_class
+from .client import ZGWClient, get_client_class
 from .constants import APITypes, AuthTypes
 
 
@@ -93,3 +95,34 @@ class Service(models.Model):
         elif self.auth_type == AuthTypes.token:
             client.auth_value = {self.header_key: self.header_value}
         return client
+
+    @classmethod
+    def get_client(cls, url: str, **kwargs) -> Optional[ZGWClient]:
+        split_url = urlsplit(url)
+        scheme_and_domain = urlunsplit(split_url[:2] + ("", "", ""))
+
+        candidates = (
+            cls.objects.filter(api_root__startswith=scheme_and_domain)
+            .annotate(api_root_length=Length("api_root"))
+            .order_by("-api_root_length")
+        )
+
+        # select the one matching
+        for candidate in candidates.iterator():
+            if url.startswith(candidate.api_root):
+                credentials = candidate
+                break
+        else:
+            return None
+
+        client = credentials.build_client(**kwargs)
+
+        return client
+
+    @classmethod
+    def get_auth_header(cls, url: str, **kwargs) -> Optional[dict]:
+        client = cls.get_client(url, **kwargs)
+        if not client:
+            return None
+
+        return client.auth_header

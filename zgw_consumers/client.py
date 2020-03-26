@@ -37,3 +37,14 @@ class ZGWClient(Client):
             headers.update(self.auth_value)
 
         return super().pre_request(method, url, **kwargs)
+
+    @property
+    def auth_header(self) -> dict:
+        if self.auth:
+            return self.auth.credentials()
+
+        return self.auth_value or {}
+
+
+class UnknownService(Exception):
+    pass
