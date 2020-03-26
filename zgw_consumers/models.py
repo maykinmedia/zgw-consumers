@@ -31,7 +31,7 @@ class Service(models.Model):
         _("authorization type"),
         max_length=20,
         choices=AuthTypes,
-        default=AuthTypes.no_auth,
+        default=AuthTypes.jwt,
     )
     header_key = models.CharField(_("header key"), max_length=100, blank=True)
     header_value = models.CharField(_("header value"), max_length=255, blank=True)

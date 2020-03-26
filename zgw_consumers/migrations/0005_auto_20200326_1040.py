@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
                     ("token", "Token"),
                     ("jwt", "JWT"),
                 ],
-                default="no_auth",
+                default="jwt",
                 max_length=20,
                 verbose_name="authorization type",
             ),
