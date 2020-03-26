@@ -14,3 +14,9 @@ class APITypes(DjangoChoices):
     kic = ChoiceItem("kic", _("KIC (Klantinteracties)"))
 
     orc = ChoiceItem("orc", _("ORC (Overige)"))
+
+
+class AuthTypes(DjangoChoices):
+    no_auth = ChoiceItem("no_auth", _("No authorization"))
+    token = ChoiceItem("token", _("Token"))
+    jwt = ChoiceItem("jwt", _("JWT"))

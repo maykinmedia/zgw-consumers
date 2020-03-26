@@ -1,4 +1,5 @@
 import uuid
+from urllib.parse import urljoin
 
 from django.contrib.postgres.fields import JSONField
 from django.core.exceptions import ValidationError
@@ -8,7 +9,7 @@ from django.utils.translation import ugettext_lazy as _
 from zds_client import ClientAuth
 
 from .client import get_client_class
-from .constants import APITypes
+from .constants import APITypes, AuthTypes
 
 
 class Service(models.Model):
@@ -26,6 +27,17 @@ class Service(models.Model):
     # credentials for the API
     client_id = models.CharField(max_length=255, blank=True)
     secret = models.CharField(max_length=255, blank=True)
+    auth_type = models.CharField(
+        _("authorization type"),
+        max_length=20,
+        choices=AuthTypes,
+        default=AuthTypes.no_auth,
+    )
+    header_key = models.CharField(_("header key"), max_length=100, blank=True)
+    header_value = models.CharField(_("header value"), max_length=255, blank=True)
+    oas = models.URLField(
+        _("OAS"), max_length=255, help_text=_("Path to OAS yaml file")
+    )
 
     class Meta:
         verbose_name = _("service")
@@ -37,6 +49,10 @@ class Service(models.Model):
     def save(self, *args, **kwargs):
         if not self.api_root.endswith("/"):
             self.api_root = f"{self.api_root}/"
+
+        if not self.oas:
+            self.oas = urljoin(self.api_root, "schema/openapi.yaml")
+
         super().save(*args, **kwargs)
 
     def clean(self):
