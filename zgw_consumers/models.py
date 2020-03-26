@@ -84,5 +84,12 @@ class Service(models.Model):
         dummy_detail_url = f"{self.api_root}dummy/{_uuid}"
         Client = get_client_class()
         client = Client.from_url(dummy_detail_url)
-        client.auth = ClientAuth(client_id=self.client_id, secret=self.secret, **claims)
+        client.schema_url = self.oas
+
+        if self.auth_type == AuthTypes.jwt:
+            client.auth = ClientAuth(
+                client_id=self.client_id, secret=self.secret, **claims
+            )
+        elif self.auth_type == AuthTypes.token:
+            client.auth_value = {self.header_key: self.header_value}
         return client

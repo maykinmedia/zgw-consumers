@@ -1,8 +1,39 @@
+import logging
+from urllib.parse import urljoin
+
 from django.conf import settings
 from django.utils.module_loading import import_string
 
+from zds_client import Client
+from zds_client.oas import schema_fetcher
+
+logger = logging.getLogger(__name__)
+
 
 def get_client_class() -> type:
-    client_class = getattr(settings, "ZGW_CONSUMERS_CLIENT_CLASS", "zds_client.Client")
+    client_class = getattr(
+        settings, "ZGW_CONSUMERS_CLIENT_CLASS", "zgw_consumers.client.ZGWClient"
+    )
     Client = import_string(client_class)
     return Client
+
+
+class ZGWClient(Client):
+    auth_value = None
+    schema_url = None
+
+    def fetch_schema(self) -> None:
+        """ support custom urls for OAS """
+        url = self.schema_url or urljoin(self.base_url, "schema/openapi.yaml")
+        logger.info("Fetching schema at '%s'", url)
+        self._schema = schema_fetcher.fetch(url, {"v": "3"})
+
+    def pre_request(self, method, url, **kwargs):
+        """
+        Add authorization header to requests for APIs without jwt.
+        """
+        if not self.auth and self.auth_value:
+            headers = kwargs.get("headers", {})
+            headers.update(self.auth_value)
+
+        return super().pre_request(method, url, **kwargs)
