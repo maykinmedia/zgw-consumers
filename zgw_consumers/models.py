@@ -55,6 +55,9 @@ class Service(models.Model):
         if not self.api_root.endswith("/"):
             self.api_root = f"{self.api_root}/"
 
+        if not self.nlx.endswith("/"):
+            self.nlx = f"{self.nlx}/"
+
         if not self.oas:
             self.oas = urljoin(self.api_root, "schema/openapi.yaml")
 
@@ -100,7 +103,7 @@ class Service(models.Model):
         return client
 
     @classmethod
-    def get_client(cls, url: str, **kwargs) -> Optional[ZGWClient]:
+    def get_service(cls, url: str):
         split_url = urlsplit(url)
         scheme_and_domain = urlunsplit(split_url[:2] + ("", "", ""))
 
@@ -113,14 +116,17 @@ class Service(models.Model):
         # select the one matching
         for candidate in candidates.iterator():
             if url.startswith(candidate.api_root):
-                credentials = candidate
-                break
-        else:
+                return candidate
+
+        return None
+
+    @classmethod
+    def get_client(cls, url: str, **kwargs) -> Optional[ZGWClient]:
+        service = cls.get_service(url)
+        if not service:
             return None
 
-        client = credentials.build_client(**kwargs)
-
-        return client
+        return service.build_client(**kwargs)
 
     @classmethod
     def get_auth_header(cls, url: str, **kwargs) -> Optional[dict]:
