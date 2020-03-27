@@ -40,6 +40,9 @@ class Service(models.Model):
     oas = models.URLField(
         _("OAS"), max_length=255, help_text=_("Path to OAS yaml file")
     )
+    nlx = models.URLField(
+        _("NLX url"), max_length=255, blank=True, help_text=_("NLX inway address")
+    )
 
     class Meta:
         verbose_name = _("service")
