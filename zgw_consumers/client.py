@@ -1,4 +1,5 @@
 import logging
+from typing import Dict, Optional
 from urllib.parse import urljoin
 
 from django.conf import settings

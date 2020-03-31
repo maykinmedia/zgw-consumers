@@ -33,7 +33,7 @@ class Service(models.Model):
         _("authorization type"),
         max_length=20,
         choices=AuthTypes,
-        default=AuthTypes.jwt,
+        default=AuthTypes.zgw,
     )
     header_key = models.CharField(_("header key"), max_length=100, blank=True)
     header_value = models.CharField(_("header value"), max_length=255, blank=True)
@@ -66,6 +66,7 @@ class Service(models.Model):
     def clean(self):
         super().clean()
 
+        # validate extra for ztc service
         if self.api_type == APITypes.ztc:
             main_catalogus_uuid = self.extra.get("main_catalogus_uuid")
             if main_catalogus_uuid is None:
@@ -84,6 +85,20 @@ class Service(models.Model):
                     }
                 )
 
+        # validate header_key and header_value
+        if self.header_key and not self.header_value:
+            raise ValidationError(
+                {
+                    "header_value": _(
+                        "If header_key is set, header_value must also be set"
+                    )
+                }
+            )
+        if not self.header_key and self.header_value:
+            raise ValidationError(
+                {"header_key": _("If header_value is set, header_key must also be set")}
+            )
+
     def build_client(self, **claims):
         """
         Build an API client from the service configuration.
@@ -94,11 +109,11 @@ class Service(models.Model):
         client = Client.from_url(dummy_detail_url)
         client.schema_url = self.oas
 
-        if self.auth_type == AuthTypes.jwt:
+        if self.auth_type == AuthTypes.zgw:
             client.auth = ClientAuth(
                 client_id=self.client_id, secret=self.secret, **claims
             )
-        elif self.auth_type == AuthTypes.token:
+        elif self.auth_type == AuthTypes.api_key:
             client.auth_value = {self.header_key: self.header_value}
         return client
 
