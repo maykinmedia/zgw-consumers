@@ -38,10 +38,10 @@ class Service(models.Model):
     header_key = models.CharField(_("header key"), max_length=100, blank=True)
     header_value = models.CharField(_("header value"), max_length=255, blank=True)
     oas = models.URLField(
-        _("OAS"), max_length=255, help_text=_("Path to OAS yaml file")
+        _("OAS"), max_length=1000, help_text=_("URL to OAS yaml file")
     )
     nlx = models.URLField(
-        _("NLX url"), max_length=255, blank=True, help_text=_("NLX inway address")
+        _("NLX url"), max_length=1000, blank=True, help_text=_("NLX (outway) address")
     )
 
     class Meta:
@@ -103,7 +103,7 @@ class Service(models.Model):
         return client
 
     @classmethod
-    def get_service(cls, url: str):
+    def get_service(cls, url: str) -> "Service":
         split_url = urlsplit(url)
         scheme_and_domain = urlunsplit(split_url[:2] + ("", "", ""))
 

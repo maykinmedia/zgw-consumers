@@ -19,8 +19,8 @@ def get_client_class() -> type:
 
 
 class ZGWClient(Client):
-    auth_value = None
-    schema_url = None
+    auth_value: Optional[Dict[str, str]] = None
+    schema_url: str = ""
 
     def fetch_schema(self) -> None:
         """ support custom urls for OAS """
