@@ -55,7 +55,7 @@ class Service(models.Model):
         if not self.api_root.endswith("/"):
             self.api_root = f"{self.api_root}/"
 
-        if not self.nlx.endswith("/"):
+        if self.nlx and not self.nlx.endswith("/"):
             self.nlx = f"{self.nlx}/"
 
         if not self.oas:
