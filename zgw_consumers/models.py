@@ -107,7 +107,12 @@ class Service(models.Model):
         Build an API client from the service configuration.
         """
         _uuid = uuid.uuid4()
-        dummy_detail_url = f"{self.api_root}dummy/{_uuid}"
+
+        api_root = self.api_root
+        if self.nlx:
+            api_root = api_root.replace(self.api_root, self.nlx, 1)
+
+        dummy_detail_url = f"{api_root}dummy/{_uuid}"
         Client = get_client_class()
         client = Client.from_url(dummy_detail_url)
         client.schema_url = self.oas
@@ -118,6 +123,7 @@ class Service(models.Model):
             )
         elif self.auth_type == AuthTypes.api_key:
             client.auth_value = {self.header_key: self.header_value}
+
         return client
 
     @classmethod
