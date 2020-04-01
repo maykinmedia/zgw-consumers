@@ -73,12 +73,12 @@ class InformatieObjectType(ZGWModel):
 @dataclass
 class ResultaatType(ZGWModel):
     url: str
-    zaaktype: ZaakType
+    zaaktype: str
     omschrijving: str
     resultaattypeomschrijving: str
     omschrijving_generiek: str
-    selectielijstklasse: Resultaat
+    selectielijstklasse: str
     toelichting: str
     archiefnominatie: str
-    archiefactietermijn: relativedelta
+    archiefactietermijn: Optional[relativedelta]
     brondatum_archiefprocedure: dict
