@@ -31,10 +31,7 @@ class Service(models.Model):
     client_id = models.CharField(max_length=255, blank=True)
     secret = models.CharField(max_length=255, blank=True)
     auth_type = models.CharField(
-        _("authorization type"),
-        max_length=20,
-        choices=AuthTypes,
-        default=AuthTypes.zgw,
+        _("authorization type"), max_length=20, choices=AuthTypes, default=AuthTypes.zgw
     )
     header_key = models.CharField(_("header key"), max_length=100, blank=True)
     header_value = models.CharField(_("header value"), max_length=255, blank=True)
@@ -43,6 +40,21 @@ class Service(models.Model):
     )
     nlx = models.URLField(
         _("NLX url"), max_length=1000, blank=True, help_text=_("NLX (outway) address")
+    )
+    user_id = models.CharField(
+        _("user ID"),
+        max_length=255,
+        blank=True,
+        help_text=_(
+            "User ID to use for the audit trail. Although these external API credentials are typically used by"
+            "this API itself instead of a user, the user ID is required."
+        ),
+    )
+    user_representation = models.CharField(
+        _("user representation"),
+        max_length=255,
+        blank=True,
+        help_text=_("Human readable representation of the user."),
     )
 
     objects = ServiceManager()
@@ -119,7 +131,11 @@ class Service(models.Model):
 
         if self.auth_type == AuthTypes.zgw:
             client.auth = ClientAuth(
-                client_id=self.client_id, secret=self.secret, **claims
+                client_id=self.client_id,
+                secret=self.secret,
+                user_id=self.user_id,
+                user_representation=self.user_representation,
+                **claims,
             )
         elif self.auth_type == AuthTypes.api_key:
             client.auth_value = {self.header_key: self.header_value}
