@@ -1,7 +1,7 @@
 import logging
 from functools import lru_cache
 from typing import Any, Dict, List, Tuple
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import parse_qs, urlparse
 
 from django import forms
 from django.contrib.admin import widgets
