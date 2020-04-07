@@ -9,6 +9,19 @@ from .selectielijst import ProcesType, Resultaat
 
 
 @dataclass
+class Catalogus(ZGWModel):
+    url: str
+    domein: str
+    rsin: str
+    contactpersoon_beheer_emailadres: str
+    contactpersoon_beheer_naam: str
+    contactpersoon_beheer_telefoonnummer: str
+    besluittypen: list
+    informatieobjecttypen: list
+    zaaktypen: list
+
+
+@dataclass
 class ZaakType(ZGWModel):
     url: str
     catalogus: str
