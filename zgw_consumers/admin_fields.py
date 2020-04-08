@@ -22,7 +22,7 @@ def get_zaaktypen() -> Dict[Service, List[Dict[str, Any]]]:
     zaaktypen_per_service = {}
 
     for service in services:
-        client = service.build_client(scopes=["zds.scopes.zaaktypes.lezen"])
+        client = service.build_client()
         logger.debug("Fetching zaaktype list for service %r", service)
         zaaktypen_per_service[service] = []
         response = client.list(
