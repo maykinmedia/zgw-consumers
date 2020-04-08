@@ -19,5 +19,5 @@ def get_iot_choices():
 class InformatieObjectTypeField(forms.ChoiceField):
     widget = widgets.AdminRadioSelect
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(choices=get_iot_choices, *args, **kwargs)
+    def __init__(self, choices=get_iot_choices, *args, **kwargs):
+        super().__init__(choices=choices, *args, **kwargs)
