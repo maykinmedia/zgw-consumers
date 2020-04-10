@@ -23,7 +23,7 @@ def get_paginated_results(client, resource: str, minimum=None, *args, **kwargs) 
     while response["next"]:
         next_url = urlparse(response["next"])
         query = parse_qs(next_url.query)
-        new_page = int(query["page"][0]) + 1
+        new_page = int(query["page"][0])
         query_params["page"] = [new_page]
         kwargs["query_params"] = query_params
         response = client.list(resource, *args, **kwargs)
