@@ -1,8 +1,9 @@
 from dataclasses import dataclass
 from datetime import date, datetime
-from typing import Optional
+from typing import Any, Optional
 
 from .base import ZGWModel
+from .catalogi import Eigenschap
 from .constants import VertrouwelijkheidsAanduidingen
 
 
@@ -47,3 +48,19 @@ class ZaakObject(ZGWModel):
     object_type: str
     object_type_overige: str
     relatieomschrijving: str
+
+
+@dataclass
+class ZaakEigenschap(ZGWModel):
+    url: str
+    # uuid: uuid.UUID
+    zaak: str
+    eigenschap: str
+    naam: str
+    waarde: str
+
+    def get_waarde(self) -> Any:
+        assert isinstance(
+            self.eigenschap, Eigenschap
+        ), "Ensure eigenschap has been resolved"
+        return self.eigenschap.to_python(self.waarde)

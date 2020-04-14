@@ -1,10 +1,12 @@
 from dataclasses import dataclass
-from datetime import date
-from typing import Optional
+from datetime import date, datetime
+from decimal import Decimal
+from typing import Optional, Union
 
+from dateutil.parser import parse
 from dateutil.relativedelta import relativedelta
 
-from .base import ZGWModel
+from .base import Model, ZGWModel, factory
 from .selectielijst import ProcesType, Resultaat
 
 
@@ -95,3 +97,44 @@ class ResultaatType(ZGWModel):
     archiefnominatie: str
     archiefactietermijn: Optional[relativedelta]
     brondatum_archiefprocedure: dict
+
+
+@dataclass
+class EigenschapSpecificatie(Model):
+    groep: str
+    formaat: str
+    lengte: str
+    kardinaliteit: str
+    waardenverzameling: list  # List[str]
+
+
+EIGENSCHAP_FORMATEN = {
+    "tekst": str,
+    "getal": lambda val: Decimal(val.replace(",", ".")),
+    "datum": date.fromisoformat,
+    "datum_type": parse,
+}
+
+
+@dataclass
+class Eigenschap(ZGWModel):
+    url: str
+    zaaktype: str
+    naam: str
+    definitie: str
+    specificatie: dict
+    toelichting: str
+
+    def __post_init__(self):
+        super().__post_init__()
+        self.specificatie = factory(EigenschapSpecificatie, self.specificatie)
+
+    def to_python(self, value: str) -> Union[str, Decimal, date, datetime]:
+        """
+        Cast the string value into the appropriate python type based on the spec.
+        """
+        formaat = self.specificatie.formaat
+        assert formaat in EIGENSCHAP_FORMATEN, f"Unknown format {formaat}"
+
+        converter = EIGENSCHAP_FORMATEN[formaat]
+        return converter(value)
