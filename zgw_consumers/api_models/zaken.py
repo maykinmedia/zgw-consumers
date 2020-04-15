@@ -64,3 +64,11 @@ class ZaakEigenschap(ZGWModel):
             self.eigenschap, Eigenschap
         ), "Ensure eigenschap has been resolved"
         return self.eigenschap.to_python(self.waarde)
+
+
+@dataclass
+class Resultaat(ZGWModel):
+    url: str
+    zaak: str
+    resultaattype: str
+    toelichting: str
