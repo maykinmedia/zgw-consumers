@@ -1,5 +1,5 @@
 from concurrent import futures
-from typing import List, Type
+from typing import List, Optional, Type
 from urllib.parse import parse_qs, urlparse
 
 from .api_models.base import ZGWModel, factory
@@ -9,13 +9,26 @@ from .constants import APITypes
 from .models import Service
 
 
-def get_paginated_results(client, resource: str, minimum=None, *args, **kwargs) -> list:
+def get_paginated_results(
+    client: Client,
+    resource: str,
+    minimum: Optional[int] = None,
+    test_func: Optional[callable] = None,
+    *args,
+    **kwargs
+) -> list:
     query_params = kwargs.get("query_params", {})
 
     results = []
     response = client.list(resource, *args, **kwargs)
 
-    results += response["results"]
+    def _get_results(response):
+        _results = response["results"]
+        if test_func:
+            _results = [result for result in _results if test_func(result)]
+        return _results
+
+    results += _get_results(response)
 
     if minimum and len(results) >= minimum:
         return results
@@ -27,7 +40,7 @@ def get_paginated_results(client, resource: str, minimum=None, *args, **kwargs) 
         query_params["page"] = [new_page]
         kwargs["query_params"] = query_params
         response = client.list(resource, *args, **kwargs)
-        results += response["results"]
+        results += _get_results(response)
 
         if minimum and len(results) >= minimum:
             return results
