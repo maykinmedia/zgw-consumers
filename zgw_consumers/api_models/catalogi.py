@@ -7,7 +7,6 @@ from dateutil.parser import parse
 from dateutil.relativedelta import relativedelta
 
 from .base import Model, ZGWModel, factory
-from .selectielijst import ProcesType, Resultaat
 
 
 @dataclass
@@ -138,3 +137,11 @@ class Eigenschap(ZGWModel):
 
         converter = EIGENSCHAP_FORMATEN[formaat]
         return converter(value)
+
+
+@dataclass
+class RolType(ZGWModel):
+    url: str
+    zaaktype: str
+    omschrijving: str
+    omschrijving_generiek: str

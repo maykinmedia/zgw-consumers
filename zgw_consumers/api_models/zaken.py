@@ -4,7 +4,7 @@ from typing import Any, Optional
 
 from .base import ZGWModel
 from .catalogi import Eigenschap
-from .constants import VertrouwelijkheidsAanduidingen
+from .constants import RolOmschrijving, RolTypes, VertrouwelijkheidsAanduidingen
 
 
 @dataclass
@@ -72,3 +72,24 @@ class Resultaat(ZGWModel):
     zaak: str
     resultaattype: str
     toelichting: str
+
+
+@dataclass
+class Rol(ZGWModel):
+    url: str
+    zaak: str
+    betrokkene: str
+    betrokkene_type: str
+    roltype: str
+    omschrijving: str
+    omschrijving_generiek: str
+    roltoelichting: str
+    registratiedatum: datetime
+    indicatie_machtiging: str
+    betrokkene_identificatie: Optional[dict]
+
+    def get_betrokkene_type_display(self):
+        return RolTypes.values[self.betrokkene_type]
+
+    def get_omschrijving_generiek_display(self):
+        return RolOmschrijving.values[self.omschrijving_generiek]
