@@ -17,18 +17,20 @@ class Document(ZGWModel):
     bronorganisatie: str
     creatiedatum: date
     formaat: str  # noqa
-    indicatie_gebruiksrecht: dict
+    indicatie_gebruiksrecht: Optional[dict]
     informatieobjecttype: str
     inhoud: str
     integriteit: dict
     link: str
-    ondertekening: dict
+    ondertekening: Optional[dict]
     ontvangstdatum: Optional[date]
     status: str
     taal: str
     titel: str
+    versie: int
     vertrouwelijkheidaanduiding: str
     verzenddatum: Optional[date]
+    locked: bool
 
     def get_vertrouwelijkheidaanduiding_display(self):
         return VertrouwelijkheidsAanduidingen.values[self.vertrouwelijkheidaanduiding]
