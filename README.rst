@@ -7,7 +7,7 @@
 Welcome to zgw_consumers's documentation!
 =================================================
 
-:Version: 0.9.0.dev9
+:Version: 0.9.0.dev10
 :Source: https://github.com/maykinmedia/zgw_consumers
 :Keywords: ``<keywords>``
 :PythonVersion: 3.6
