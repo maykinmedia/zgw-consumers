@@ -5,6 +5,7 @@ These are NOT django models.
 """
 import uuid
 from datetime import date, datetime
+from functools import partial
 from typing import Any, Dict, List, Union
 
 from dateutil.parser import parse
@@ -46,20 +47,34 @@ class Model:
             if typehint is None:
                 typehint = type(None)
 
-            # support for Optional
-            if hasattr(typehint, "__origin__") and typehint.__origin__ is Union:
-                typehint = typehint.__args__
-
-                if value is None:
+            # support for Optional / List
+            if hasattr(typehint, "__origin__"):
+                if typehint.__origin__ is list and typehint.__args__:
+                    subtypehint = typehint.__args__[0]
+                    if issubclass(subtypehint, Model):
+                        setattr(self, attr, factory(subtypehint, value))
+                    else:
+                        converter = CONVERTERS[subtypehint]
+                        new_value = [converter(x) for x in value]
+                        setattr(self, attr, new_value)
                     continue
 
-                # Optional is ONE type combined with None
-                typehint = next(t for t in typehint if t is not None)
+                if typehint.__origin__ is Union:
+                    typehint = typehint.__args__
+
+                    if value is None:
+                        continue
+
+                    # Optional is ONE type combined with None
+                    typehint = next(t for t in typehint if t is not None)
 
             if isinstance(value, typehint):
                 continue
 
-            converter = CONVERTERS[typehint]
+            if issubclass(typehint, Model):
+                converter = partial(factory, typehint)
+            else:
+                converter = CONVERTERS[typehint]
             setattr(self, attr, converter(value))
 
 
