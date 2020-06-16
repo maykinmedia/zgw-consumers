@@ -1,22 +1,20 @@
-
-
 .. zgw_consumers documentation master file, created by startproject.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to zgw_consumers's documentation!
-=================================================
+Welcome to ZGW Consumers' documentation!
+========================================
 
-:Version: 0.9.0.dev10
-:Source: https://github.com/maykinmedia/zgw_consumers
-:Keywords: ``<keywords>``
-:PythonVersion: 3.6
+:Version: 0.9.0
+:Source: https://github.com/maykinmedia/zgw-consumers
+:Keywords: OpenAPI, Zaakgericht Werken, Common Ground, NLX
+:PythonVersion: 3.6, 3.7, 3.8
 
 |build-status| |requirements| |coverage|
 
 |python-versions| |django-versions| |pypi-version|
 
-<One liner describing the project>
+Manage your external API's to consume.
 
 .. contents::
 
@@ -25,8 +23,10 @@ Welcome to zgw_consumers's documentation!
 Features
 ========
 
-* ...
-* ...
+* Store services with their configuration in the database
+* Integrate with OpenAPI 3.0 specifications
+* NLX support
+* Declare data/domain objects as modern Python dataclasses
 
 Installation
 ============
@@ -34,35 +34,79 @@ Installation
 Requirements
 ------------
 
-* Python 3.6 or above
-* setuptools 30.3.0 or above
-* Django 1.11 or above
+* Python 3.6 or newer
+* setuptools 30.3.0 or newer
+* Django 2.2 or newer
 
 
 Install
 -------
 
+1. Install from PyPI
+
 .. code-block:: bash
 
-    pip install zgw_consumers
+    pip install zgw-consumers
+
+2. Add ``zgw_consumers`` to the ``INSTALLED_APPS`` setting.
+
+3. Optionally override ``ZGW_CONSUMERS_CLIENT_CLASS`` to a custom client class.
 
 
 Usage
 =====
 
-<document or refer to docs>
+In the Django admin, you can create ``Service`` instances to define your external APIs.
+
+**Client**
+
+To get a client for a given resource, you can use:
+
+.. code-block:: python
+
+    from zgw_consumers.models import Service
+
+    client = Service.get_client(some_url)
+
+Or, to just retrieve the auth header(s):
+
+.. code-block:: python
+
+    from zgw_consumers.models import Service
+
+    auth = Service.get_auth_header(some_url)
+
+**Data model**
+
+Use ``zgw_consumers.api_models.base.factory`` to turn raw JSON responses into instances
+of domain models:
+
+.. code-block:: python
+
+    from zgw_consumers.api_models.base import factory
+    from zgw_consumers.api_models.zaken import Zaak
+
+    results = client.list("zaak")["results"]
+
+    return factory(Zaak, results)
 
 
+It works for both collections and scalar values, and takes care of the camel-case to
+snake case conversion.
 
-.. |build-status| image:: https://travis-ci.org/maykinmedia/zgw_consumers.svg?branch=develop
-    :target: https://travis-ci.org/maykinmedia/zgw_consumers
 
-.. |requirements| image:: https://requires.io/github/maykinmedia/zgw_consumers/requirements.svg?branch=develop
-    :target: https://requires.io/github/maykinmedia/zgw_consumers/requirements/?branch=develop
+You can also define your own data models, take a look at the ``zgw_consumers.api_models``
+package for inspiration.
+
+.. |build-status| image:: https://travis-ci.org/maykinmedia/zgw-consumers.svg?branch=master
+    :target: https://travis-ci.org/maykinmedia/zgw-consumers
+
+.. |requirements| image:: https://requires.io/github/maykinmedia/zgw-consumers/requirements.svg?branch=master
+    :target: https://requires.io/github/maykinmedia/zgw-consumers/requirements/?branch=master
     :alt: Requirements status
 
-.. |coverage| image:: https://codecov.io/gh/maykinmedia/zgw_consumers/branch/develop/graph/badge.svg
-    :target: https://codecov.io/gh/maykinmedia/zgw_consumers
+.. |coverage| image:: https://codecov.io/gh/maykinmedia/zgw-consumers/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/maykinmedia/zgw-consumers
     :alt: Coverage status
 
 .. |python-versions| image:: https://img.shields.io/pypi/pyversions/zgw_consumers.svg
