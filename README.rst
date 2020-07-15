@@ -5,7 +5,7 @@
 Welcome to ZGW Consumers' documentation!
 ========================================
 
-:Version: 0.9.0
+:Version: 0.10.0
 :Source: https://github.com/maykinmedia/zgw-consumers
 :Keywords: OpenAPI, Zaakgericht Werken, Common Ground, NLX
 :PythonVersion: 3.6, 3.7, 3.8
@@ -51,6 +51,11 @@ Install
 2. Add ``zgw_consumers`` to the ``INSTALLED_APPS`` setting.
 
 3. Optionally override ``ZGW_CONSUMERS_CLIENT_CLASS`` to a custom client class.
+
+4. Optionally specify ``ZGW_CONSUMERS_OAS_CACHE`` to point to a separate django cache.
+   Defaults to ``django.core.cache.DEFAULT_CACHE_ALIAS``, which is ``default`` in
+   practice. For performance reasons we highly recommend to use a real cache backend
+   like Redis or Memcache.
 
 
 Usage
