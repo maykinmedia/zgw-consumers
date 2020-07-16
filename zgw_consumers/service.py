@@ -1,10 +1,10 @@
-from concurrent import futures
 from typing import List, Optional, Type
 from urllib.parse import parse_qs, urlparse
 
 from .api_models.base import ZGWModel, factory
 from .api_models.catalogi import Catalogus, InformatieObjectType
 from .client import Client
+from .concurrent import parallel
 from .constants import APITypes
 from .models import Service
 
@@ -61,7 +61,7 @@ def _fetch_list(
         results = get_paginated_results(client, resource)
         return results
 
-    with futures.ThreadPoolExecutor() as executor:
+    with parallel as executor:
         resp_data = executor.map(_fetch, clients)
         flattened = sum(resp_data, [])
 
