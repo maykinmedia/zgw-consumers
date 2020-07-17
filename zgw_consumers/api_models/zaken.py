@@ -48,6 +48,7 @@ class ZaakObject(ZGWModel):
     object_type: str
     object_type_overige: str
     relatieomschrijving: str
+    object_identificatie: Optional[dict]
 
 
 @dataclass
