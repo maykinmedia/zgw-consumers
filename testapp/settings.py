@@ -5,7 +5,20 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 SECRET_KEY = "so-secret-i-cant-believe-you-are-looking-at-this"
 
 DATABASES = {
-    "default": {"ENGINE": "django.db.backends.postgresql", "NAME": "zgw_consumers",}
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "HOST": os.getenv("DB_HOST", ""),
+        "NAME": os.getenv("DB_NAME", "zgw_consumers"),
+        "USER": os.getenv("DB_USER", "postgres"),
+        "PASSWORD": os.getenv("DB_PASSWORD", ""),
+    },
+    "postgres": {
+        "ENGINE": "django.db.backends.postgresql",
+        "HOST": os.getenv("DB_HOST", ""),
+        "NAME": "postgres",
+        "USER": os.getenv("DB_USER", "postgres"),
+        "PASSWORD": os.getenv("DB_PASSWORD", ""),
+    },
 }
 
 INSTALLED_APPS = [
