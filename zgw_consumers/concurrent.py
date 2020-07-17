@@ -1,9 +1,33 @@
 """
 Wrap around concurrent.futures to add Django-specific cleanup behaviour.
 """
+import functools
+import logging
+import threading
 from concurrent import futures
 
 from django.db import close_old_connections
+
+logger = logging.getLogger(__name__)
+
+
+def wrap_fn(fn):
+    """
+    Closes the database connections when the original function has completed.
+    """
+
+    @functools.wraps(fn)
+    def wrapped(*fn_args, **fn_kwargs):
+        try:
+            return fn(*fn_args, **fn_kwargs)
+        finally:
+            logger.debug(
+                "Closing all database connections",
+                extra={"thread_id": threading.get_ident()},
+            )
+            close_old_connections()
+
+    return wrapped
 
 
 class parallel:
@@ -17,16 +41,14 @@ class parallel:
             _fn = kwargs.pop("fn")
             self, *args = args
 
-        # wrap the callable so that db connections are closed afterwards
-        def fn(*fn_args, **fn_kwargs):
-            result = _fn(*fn_args, **fn_kwargs)
-            close_old_connections()
-            return result
+        fn = wrap_fn(_fn)
 
         return self.executor.submit(fn, *args, **kwargs)
 
     def map(self, fn, *iterables, timeout=None, chunksize=1):
-        return self.executor.map(fn, *iterables, timeout=timeout, chunksize=chunksize)
+        return self.executor.map(
+            wrap_fn(fn), *iterables, timeout=timeout, chunksize=chunksize
+        )
 
     def __enter__(self):
         return self
