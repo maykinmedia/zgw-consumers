@@ -5,3 +5,5 @@ NLX_DIRECTORY_URLS = {
     NLXDirectories.preprod: "https://directory.preprod.nlx.io/",
     NLXDirectories.prod: "https://directory.prod.nlx.io/",
 }
+
+NLX_OUTWAY_TIMEOUT = 2  # 2 seconds

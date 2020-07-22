@@ -1,6 +1,7 @@
+import socket
 import uuid
 from typing import Optional
-from urllib.parse import urljoin, urlsplit, urlunsplit
+from urllib.parse import urljoin, urlparse, urlsplit, urlunsplit
 
 from django.conf import settings
 from django.contrib.postgres.fields import JSONField
@@ -200,3 +201,21 @@ class NLXConfig(SingletonModel):
             settings, "NLX_DIRECTORY_URLS", zgw_settings.NLX_DIRECTORY_URLS
         )
         return nlx_directory_urls.get(self.directory, "")
+
+    def clean(self):
+        if not self.outway:
+            return
+
+        # try to tcp connect to the port
+        parsed = urlparse(self.outway)
+        nlx_outway_timeout = getattr(
+            settings, "NLX_DIRECTORY_URLS", zgw_settings.NLX_OUTWAY_TIMEOUT
+        )
+        with socket.socket() as s:
+            s.settimeout(nlx_outway_timeout)
+            try:
+                s.connect((parsed.hostname, parsed.port))
+            except ConnectionRefusedError:
+                raise ValidationError(
+                    _("Connection refused. Please, provide a correct address")
+                )
