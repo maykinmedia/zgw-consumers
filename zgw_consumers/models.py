@@ -2,16 +2,20 @@ import uuid
 from typing import Optional
 from urllib.parse import urljoin, urlsplit, urlunsplit
 
+from django.conf import settings
 from django.contrib.postgres.fields import JSONField
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.functions import Length
 from django.utils.translation import ugettext_lazy as _
 
+from solo.models import SingletonModel
 from zds_client import ClientAuth
 
+from zgw_consumers import settings as zgw_settings
+
 from .client import ZGWClient, get_client_class
-from .constants import APITypes, AuthTypes
+from .constants import APITypes, AuthTypes, NLXDirectories
 from .query import ServiceManager
 
 
@@ -175,3 +179,24 @@ class Service(models.Model):
             return None
 
         return client.auth_header
+
+
+class NLXConfig(SingletonModel):
+    directory = models.CharField(
+        _("NLX directory"), max_length=50, choices=NLXDirectories.choices, blank=True
+    )
+    outway = models.URLField(
+        _("NLX outway address"),
+        blank=True,
+        help_text=_("Example: http://my-outway.nlx:8080"),
+    )
+
+    class Meta:
+        verbose_name = _("NLX configuration")
+
+    @property
+    def directory_url(self) -> str:
+        nlx_directory_urls = getattr(
+            settings, "NLX_DIRECTORY_URLS", zgw_settings.NLX_DIRECTORY_URLS
+        )
+        return nlx_directory_urls.get(self.directory, "")

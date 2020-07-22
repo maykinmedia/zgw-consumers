@@ -1,7 +1,9 @@
 from django.contrib import admin
 
+from solo.admin import SingletonModelAdmin
+
 from .admin_fields import get_zaaktype_field
-from .models import Service
+from .models import NLXConfig, Service
 
 
 @admin.register(Service)
@@ -9,6 +11,11 @@ class ServiceAdmin(admin.ModelAdmin):
     list_display = ("label", "api_type", "api_root", "auth_type")
     list_filter = ("api_type", "auth_type")
     search_fields = ("label", "api_root", "nlx")
+
+
+@admin.register(NLXConfig)
+class NLXConfigAdmin(SingletonModelAdmin):
+    pass
 
 
 class ListZaaktypenMixin:
