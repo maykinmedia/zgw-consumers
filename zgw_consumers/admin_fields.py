@@ -82,18 +82,16 @@ def get_nlx_field(db_field: Field, request: HttpRequest, **kwargs):
 
     nlx_outway = NLXConfig.get_solo().outway
 
-    def _get_choices(service) -> Tuple[str, str]:
+    def _get_choice(service) -> Tuple[str, str]:
         url = f"{nlx_outway}{service['organization_name']}/{service['service_name']}/"
-        return (url, service["service_name"])
+        label = f"{service['organization_name']} - {service['service_name']}"
+        return (url, label)
 
-    choices = [
-        (organization, [_get_choices(service) for service in services])
-        for organization, services in nlx_services.items()
-    ]
+    choices = [_get_choice(service) for service in nlx_services]
+    choices.insert(0, ("", "---------"))
 
     return forms.ChoiceField(
         label=db_field.verbose_name.capitalize(),
-        widget=widgets.AdminRadioSelect(),
         choices=choices,
         required=False,
         help_text=db_field.help_text,

@@ -202,7 +202,15 @@ class NLXConfig(SingletonModel):
         )
         return nlx_directory_urls.get(self.directory, "")
 
+    def save(self, *args, **kwargs):
+        if not self.outway.endswith("/"):
+            self.outway = f"{self.outway}/"
+
+        super().save(*args, **kwargs)
+
     def clean(self):
+        super().clean()
+
         if not self.outway:
             return
 

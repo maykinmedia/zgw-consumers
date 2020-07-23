@@ -142,9 +142,5 @@ def get_nlx_services() -> dict:
     response.raise_for_status()
 
     services = response.json()["services"]
-    print("services=", services)
-    services.sort(key=lambda x: x["organization_name"])
-    services_per_organization = {
-        k: list(v) for k, v in groupby(services, key=lambda x: x["organization_name"])
-    }
-    return services_per_organization
+    services.sort(key=lambda x: (x["organization_name"], x["organization_name"]))
+    return services
