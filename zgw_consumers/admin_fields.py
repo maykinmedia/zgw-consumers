@@ -8,8 +8,11 @@ from django.contrib.admin import widgets
 from django.db.models import Field
 from django.http import HttpRequest
 
+import requests
+
 from .constants import APITypes
-from .models import Service
+from .models import NLXConfig, Service
+from .nlx import get_nlx_services
 
 logger = logging.getLogger(__name__)
 
@@ -59,6 +62,33 @@ def get_zaaktype_field(db_field: Field, request: HttpRequest, **kwargs):
             [_get_choice(zaaktype) for zaaktype in _zaaktypen],
         )
         for service, _zaaktypen in zaaktypen.items()
+    ]
+
+    return forms.ChoiceField(
+        label=db_field.verbose_name.capitalize(),
+        widget=widgets.AdminRadioSelect(),
+        choices=choices,
+        required=False,
+        help_text=db_field.help_text,
+    )
+
+
+def get_nlx_field(db_field: Field, request: HttpRequest, **kwargs):
+    try:
+        nlx_services = get_nlx_services()
+    except requests.RequestException:
+        logger.warning("Failed fetching the NLX services", exc_info=True)
+        nlx_services = []
+
+    nlx_outway = NLXConfig.get_solo().outway
+
+    def _get_choices(service) -> Tuple[str, str]:
+        url = f"{nlx_outway}{service['organization_name']}/{service['service_name']}/"
+        return (url, service["service_name"])
+
+    choices = [
+        (organization, [_get_choices(service) for service in services])
+        for organization, services in nlx_services.items()
     ]
 
     return forms.ChoiceField(
