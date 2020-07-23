@@ -84,11 +84,13 @@ def get_nlx_field(db_field: Field, request: HttpRequest, **kwargs):
 
     def _get_choice(service) -> Tuple[str, str]:
         url = f"{nlx_outway}{service['organization_name']}/{service['service_name']}/"
-        label = f"{service['organization_name']} - {service['service_name']}"
-        return (url, label)
+        return (url, service["service_name"])
 
-    choices = [_get_choice(service) for service in nlx_services]
-    choices.insert(0, ("", "---------"))
+    choices = [
+        (organization, [_get_choice(service) for service in services])
+        for organization, services in nlx_services
+    ]
+    choices.insert(0, ("No NLX", [("", "---------")]))
 
     return forms.ChoiceField(
         label=db_field.verbose_name.capitalize(),

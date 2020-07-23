@@ -130,10 +130,10 @@ class NLXClientMixin:
         super().post_response(pre_id, response_data)
 
 
-def get_nlx_services() -> dict:
+def get_nlx_services() -> list:
     config = NLXConfig.get_solo()
     if not config.outway:
-        return {}
+        return []
 
     directory = config.directory_url
     url = f"{directory}api/directory/list-services"
@@ -143,4 +143,7 @@ def get_nlx_services() -> dict:
 
     services = response.json()["services"]
     services.sort(key=lambda x: (x["organization_name"], x["organization_name"]))
-    return services
+    services_per_organization = [
+        (k, list(v)) for k, v in groupby(services, key=lambda x: x["organization_name"])
+    ]
+    return services_per_organization
