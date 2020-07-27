@@ -217,7 +217,7 @@ class NLXConfig(SingletonModel):
         # try to tcp connect to the port
         parsed = urlparse(self.outway)
         nlx_outway_timeout = getattr(
-            settings, "NLX_DIRECTORY_URLS", zgw_settings.NLX_OUTWAY_TIMEOUT
+            settings, "NLX_OUTWAY_TIMEOUT", zgw_settings.NLX_OUTWAY_TIMEOUT
         )
         with socket.socket() as s:
             s.settimeout(nlx_outway_timeout)
