@@ -1,11 +1,13 @@
 """
 Rewrite the URLs in anything that looks like a string, dict or list.
 """
-from typing import Any, Iterable, List, Optional, Union
+from itertools import groupby
+from typing import Any, Dict, Iterable, List, Optional, Union
 
+import requests
 from zds_client.client import Object
 
-from .models import Service
+from .models import NLXConfig, Service
 
 
 def _rewrite_url(value: str, rewrites: Iterable) -> Optional[str]:
@@ -126,3 +128,22 @@ class NLXClientMixin:
         if response_data:
             self.rewriter.backwards(response_data)
         super().post_response(pre_id, response_data)
+
+
+def get_nlx_services() -> list:
+    config = NLXConfig.get_solo()
+    if not config.outway or not config.directory_url:
+        return []
+
+    directory = config.directory_url
+    url = f"{directory}api/directory/list-services"
+
+    response = requests.get(url)
+    response.raise_for_status()
+
+    services = response.json()["services"]
+    services.sort(key=lambda x: (x["organization_name"], x["service_name"]))
+    services_per_organization = [
+        (k, list(v)) for k, v in groupby(services, key=lambda x: x["organization_name"])
+    ]
+    return services_per_organization

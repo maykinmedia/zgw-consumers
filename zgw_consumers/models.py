@@ -1,17 +1,22 @@
+import socket
 import uuid
 from typing import Optional
-from urllib.parse import urljoin, urlsplit, urlunsplit
+from urllib.parse import urljoin, urlparse, urlsplit, urlunsplit
 
+from django.conf import settings
 from django.contrib.postgres.fields import JSONField
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.functions import Length
 from django.utils.translation import ugettext_lazy as _
 
+from solo.models import SingletonModel
 from zds_client import ClientAuth
 
+from zgw_consumers import settings as zgw_settings
+
 from .client import ZGWClient, get_client_class
-from .constants import APITypes, AuthTypes
+from .constants import APITypes, AuthTypes, NLXDirectories
 from .query import ServiceManager
 
 
@@ -175,3 +180,50 @@ class Service(models.Model):
             return None
 
         return client.auth_header
+
+
+class NLXConfig(SingletonModel):
+    directory = models.CharField(
+        _("NLX directory"), max_length=50, choices=NLXDirectories.choices, blank=True
+    )
+    outway = models.URLField(
+        _("NLX outway address"),
+        blank=True,
+        help_text=_("Example: http://my-outway.nlx:8080"),
+    )
+
+    class Meta:
+        verbose_name = _("NLX configuration")
+
+    @property
+    def directory_url(self) -> str:
+        nlx_directory_urls = getattr(
+            settings, "NLX_DIRECTORY_URLS", zgw_settings.NLX_DIRECTORY_URLS
+        )
+        return nlx_directory_urls.get(self.directory, "")
+
+    def save(self, *args, **kwargs):
+        if not self.outway.endswith("/"):
+            self.outway = f"{self.outway}/"
+
+        super().save(*args, **kwargs)
+
+    def clean(self):
+        super().clean()
+
+        if not self.outway:
+            return
+
+        # try to tcp connect to the port
+        parsed = urlparse(self.outway)
+        nlx_outway_timeout = getattr(
+            settings, "NLX_OUTWAY_TIMEOUT", zgw_settings.NLX_OUTWAY_TIMEOUT
+        )
+        with socket.socket() as s:
+            s.settimeout(nlx_outway_timeout)
+            try:
+                s.connect((parsed.hostname, parsed.port))
+            except ConnectionRefusedError:
+                raise ValidationError(
+                    _("Connection refused. Please, provide a correct address")
+                )

@@ -20,3 +20,9 @@ class AuthTypes(DjangoChoices):
     no_auth = ChoiceItem("no_auth", _("No authorization"))
     api_key = ChoiceItem("api_key", _("API key"))
     zgw = ChoiceItem("zgw", _("ZGW client_id + secret"))
+
+
+class NLXDirectories(DjangoChoices):
+    demo = ChoiceItem("demo", _("Demo"))
+    preprod = ChoiceItem("preprod", _("Pre-prod"))
+    prod = ChoiceItem("prod", _("Prod"))
