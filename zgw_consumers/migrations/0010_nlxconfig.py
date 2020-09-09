@@ -44,6 +44,8 @@ class Migration(migrations.Migration):
                     ),
                 ),
             ],
-            options={"verbose_name": "NLX configuration",},
+            options={
+                "verbose_name": "NLX configuration",
+            },
         ),
     ]
