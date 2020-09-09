@@ -63,3 +63,13 @@ class RolOmschrijving(DjangoChoices):
         "uitgevoerd wordt conform de daarover gemaakte afspraken.",
     )
     medeinitiator = ChoiceItem("mede_initiator", "Mede-initiator", description="")
+
+
+class VervalRedenen(DjangoChoices):
+    tijdelijk = ChoiceItem("tijdelijk", "Besluit met tijdelijke werking")
+    ingetrokken_overheid = ChoiceItem(
+        "ingetrokken_overheid", "Besluit ingetrokken door overheid"
+    )
+    ingetrokken_belanghebbende = ChoiceItem(
+        "ingetrokken_belanghebbende", "Besluit ingetrokken o.v.v. belanghebbende"
+    )

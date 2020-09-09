@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from datetime import date, datetime
 from decimal import Decimal
-from typing import Optional, Union
+from typing import List, Optional, Union
 
 from dateutil.parser import parse
 from dateutil.relativedelta import relativedelta
@@ -145,3 +145,22 @@ class RolType(ZGWModel):
     zaaktype: str
     omschrijving: str
     omschrijving_generiek: str
+
+
+@dataclass
+class BesluitType(ZGWModel):
+    url: str
+    catalogus: str
+    omschrijving: str
+    omschrijving_generiek: str
+    besluitcategorie: str
+    reactietermijn: Optional[relativedelta]
+    publicatie_indicatie: bool
+    publicatietekst: str
+    publicatietermijn: Optional[relativedelta]
+    toelichting: str
+    zaaktypen: List[str]
+    informatieobjecttypen: List[str]
+    begin_geldigheid: date
+    einde_geldigheid: Optional[date]
+    concept: bool
