@@ -4,7 +4,6 @@ from typing import Optional
 from urllib.parse import urljoin, urlparse, urlsplit, urlunsplit
 
 from django.conf import settings
-from django.contrib.postgres.fields import JSONField
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.functions import Length
@@ -24,13 +23,6 @@ class Service(models.Model):
     label = models.CharField(_("label"), max_length=100)
     api_type = models.CharField(_("type"), max_length=20, choices=APITypes.choices)
     api_root = models.CharField(_("api root url"), max_length=255, unique=True)
-
-    extra = JSONField(
-        _("extra configuration"),
-        default=dict,
-        help_text=_("Extra configuration that's service-specific"),
-        blank=True,
-    )
 
     # credentials for the API
     client_id = models.CharField(max_length=255, blank=True)
@@ -85,25 +77,6 @@ class Service(models.Model):
 
     def clean(self):
         super().clean()
-
-        # validate extra for ztc service
-        if self.api_type == APITypes.ztc:
-            main_catalogus_uuid = self.extra.get("main_catalogus_uuid")
-            if main_catalogus_uuid is None:
-                raise ValidationError(
-                    {"extra": _("Expected a 'main_catalogus_uuid' extra config")}
-                )
-
-            try:
-                uuid.UUID(main_catalogus_uuid)
-            except ValueError:
-                raise ValidationError(
-                    {
-                        "extra": _(
-                            "'main_catalogus_uuid' does not look like a valid UUID4"
-                        )
-                    }
-                )
 
         # validate header_key and header_value
         if self.header_key and not self.header_value:

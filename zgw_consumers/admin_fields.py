@@ -28,9 +28,7 @@ def get_zaaktypen() -> Dict[Service, List[Dict[str, Any]]]:
         client = service.build_client()
         logger.debug("Fetching zaaktype list for service %r", service)
         zaaktypen_per_service[service] = []
-        response = client.list(
-            "zaaktype", catalogus_uuid=service.extra["main_catalogus_uuid"]
-        )
+        response = client.list("zaaktype")
         zaaktypen_per_service[service] += response["results"]
         while response["next"]:
             next_url = urlparse(response["next"])
@@ -39,7 +37,6 @@ def get_zaaktypen() -> Dict[Service, List[Dict[str, Any]]]:
             query["page"] = [new_page]
             response = client.list(
                 "zaaktype",
-                catalogus_uuid=service.extra["main_catalogus_uuid"],
                 query_params=query,
             )
             zaaktypen_per_service[service] += response["results"]
