@@ -12,14 +12,18 @@ DATABASES = {
         "USER": os.getenv("DB_USER", "postgres"),
         "PASSWORD": os.getenv("DB_PASSWORD", ""),
     },
-    "postgres": {
-        "ENGINE": "django.db.backends.postgresql",
-        "HOST": os.getenv("DB_HOST", ""),
-        "NAME": "postgres",
-        "USER": os.getenv("DB_USER", "postgres"),
-        "PASSWORD": os.getenv("DB_PASSWORD", ""),
-    },
 }
+
+# used to connect to the administrative database to check the amount of connections
+# in tests/test_concurrency.py
+POSTGRES_CONN_PARAMS = {
+    "ENGINE": "django.db.backends.postgresql",
+    "HOST": os.getenv("DB_HOST", ""),
+    "NAME": "postgres",
+    "USER": os.getenv("DB_USER", "postgres"),
+    "PASSWORD": os.getenv("DB_PASSWORD", ""),
+}
+
 
 INSTALLED_APPS = [
     "django.contrib.contenttypes",

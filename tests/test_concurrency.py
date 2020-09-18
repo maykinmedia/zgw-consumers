@@ -1,7 +1,6 @@
 from django.conf import settings
-from django.db import connection, connections
-
-import psycopg2
+from django.db import connection
+from django.db.utils import ConnectionHandler
 
 from zgw_consumers.concurrent import parallel
 
@@ -15,15 +14,13 @@ def get_num_connections() -> int:
     We need raw psycopg2 cursor access here, because the test-runner creates a separate
     test database otherwise.
     """
-    conn_params = {
-        **connections["postgres"].get_connection_params(),
-        "database": "postgres",
-    }
+    handler = ConnectionHandler(databases={"default": settings.POSTGRES_CONN_PARAMS})
+    handler.ensure_defaults("default")
+    connection = handler["default"]
 
     app_user = settings.DATABASES["default"]["USER"]
 
     try:
-        connection = psycopg2.connect(**conn_params)
         with connection.cursor() as cursor:
             cursor.execute(GET_NUM_CONNECTIONS, [app_user])
             count: int = cursor.fetchone()[0]
