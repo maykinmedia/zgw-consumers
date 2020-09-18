@@ -37,6 +37,10 @@ class OASCache:
         caches[self.alias].set(key, value, self.DURATION)
         self._local_cache[key] = value
 
+    def clear(self):
+        self._local_cache = {}  # reset in-memory cache
+        caches[self.alias].clear()
+
 
 def install_schema_fetcher_cache():
     schema_fetcher.cache = OASCache()

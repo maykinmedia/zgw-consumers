@@ -3,6 +3,7 @@ cache: pip
 
 services:
   - postgresql
+  - redis-server
 
 addons:
   postgresql: "11"
@@ -19,6 +20,7 @@ python:
 env:
   global:
   - PGPORT=5433
+  - CACHE_OAS=localhost:6379/0
   jobs:
   - DJANGO=2.2
   - DJANGO=3.0
