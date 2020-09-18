@@ -2,9 +2,15 @@ from django.conf import settings
 from django.db import connection
 from django.db.utils import ConnectionHandler
 
+from tabulate import tabulate
+
 from zgw_consumers.concurrent import parallel
 
 GET_NUM_CONNECTIONS = "SELECT count(*) from pg_stat_activity WHERE usename = %s;"
+
+SHOW_CONNECTIONS = (
+    "SELECT datname, usename, state, query from pg_stat_activity WHERE usename = %s;"
+)
 
 
 def get_num_connections() -> int:
@@ -24,6 +30,15 @@ def get_num_connections() -> int:
         with connection.cursor() as cursor:
             cursor.execute(GET_NUM_CONNECTIONS, [app_user])
             count: int = cursor.fetchone()[0]
+
+            # debug - show pg_stat_activity records
+            cursor.execute(SHOW_CONNECTIONS, [app_user])
+            rows = cursor.fetchall()
+
+            headers = [x.name for x in cursor.description]
+            tabulated = tabulate(rows, headers=headers)
+            print("Open connections:")
+            print(tabulated)
         return count
     finally:
         connection.close()
