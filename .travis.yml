@@ -4,21 +4,35 @@ cache: pip
 services:
   - postgresql
 
+addons:
+  postgresql: "11"
+  apt:
+    packages:
+    - postgresql-11
+    - postgresql-client-11
+
 python:
   - "3.6"
   - "3.7"
   - "3.8"
 
 env:
+  global:
+  - PGPORT=5433
+  jobs:
   - DJANGO=2.2
   - DJANGO=3.0
   - DJANGO=3.1
 
-matrix:
+jobs:
   fast_finish: true
   include:
     - { python: "3.8", env: TOXENV=isort }
     # - { python: "3.8", env: TOXENV=docs }
+
+before_install:
+  - sudo sed -i -e '/local.*peer/s/postgres/all/' -e 's/peer\|md5/trust/g' /etc/postgresql/*/main/pg_hba.conf
+  - sudo service postgresql@11-main restart
 
 install:
   - pip install tox tox-travis

@@ -1,3 +1,4 @@
+import time
 import uuid
 
 from django.conf import settings
@@ -9,10 +10,6 @@ from tabulate import tabulate
 from zgw_consumers.concurrent import parallel
 
 TEST_QUERY = f"SELECT '{uuid.uuid4()}'"
-
-GET_NUM_CONNECTIONS = (
-    "SELECT count(*) from pg_stat_activity WHERE usename = %s AND query = %s;"
-)
 
 SHOW_CONNECTIONS = (
     "SELECT datname, usename, state, query from pg_stat_activity WHERE usename = %s;"
@@ -32,6 +29,9 @@ def get_num_connections() -> int:
 
     app_user = settings.DATABASES["default"]["USER"]
 
+    # seems like the connections need some time to close on the backend?
+    time.sleep(1)
+
     try:
         with connection.cursor() as cursor:
             # debug - show pg_stat_activity records
@@ -42,8 +42,10 @@ def get_num_connections() -> int:
             tabulated = tabulate(rows, headers=headers)
             print("Open connections:")
             print(tabulated)
-            cursor.execute(GET_NUM_CONNECTIONS, [app_user, TEST_QUERY])
-            count: int = cursor.fetchone()[0]
+
+            # filter on the test query
+            unexpected = [row for row in rows if row[-1] == TEST_QUERY]
+            count = len(unexpected)
     finally:
         connection.close()
 
