@@ -6,12 +6,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('zgw_consumers', '0010_nlxconfig'),
+        ("zgw_consumers", "0010_nlxconfig"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='service',
-            name='extra',
+            model_name="service",
+            name="extra",
         ),
     ]
