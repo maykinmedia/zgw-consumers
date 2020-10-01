@@ -28,7 +28,10 @@ class Service(models.Model):
     client_id = models.CharField(max_length=255, blank=True)
     secret = models.CharField(max_length=255, blank=True)
     auth_type = models.CharField(
-        _("authorization type"), max_length=20, choices=AuthTypes, default=AuthTypes.zgw
+        _("authorization type"),
+        max_length=20,
+        choices=AuthTypes.choices,
+        default=AuthTypes.zgw,
     )
     header_key = models.CharField(_("header key"), max_length=100, blank=True)
     header_value = models.CharField(_("header value"), max_length=255, blank=True)
