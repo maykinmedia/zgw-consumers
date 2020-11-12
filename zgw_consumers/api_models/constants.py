@@ -1,3 +1,5 @@
+from django.utils.translation import gettext as _
+
 from djchoices import ChoiceItem, DjangoChoices
 
 
@@ -73,3 +75,9 @@ class VervalRedenen(DjangoChoices):
     ingetrokken_belanghebbende = ChoiceItem(
         "ingetrokken_belanghebbende", "Besluit ingetrokken o.v.v. belanghebbende"
     )
+
+
+class AardRelatieChoices(DjangoChoices):
+    vervolg = ChoiceItem("vervolg", _("Vervolg"))
+    bijdrage = ChoiceItem("bijdrage", _("Bijdrage"))
+    onderwerp = ChoiceItem("onderwerp", _("Onderwerp"))
