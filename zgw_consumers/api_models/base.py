@@ -32,6 +32,7 @@ CONVERTERS = {
     datetime: parse,
     date: date.fromisoformat,
     relativedelta: parse_relativedelta,
+    bool: noop,
 }
 
 
