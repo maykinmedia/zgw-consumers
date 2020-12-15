@@ -8,7 +8,7 @@ from datetime import date, datetime
 from functools import partial
 from typing import Any, Dict, List, Union
 
-from dateutil.parser import parse
+from dateutil.parser import isoparse, parse
 from dateutil.relativedelta import relativedelta
 from relativedeltafield import parse_relativedelta
 
@@ -30,7 +30,7 @@ CONVERTERS = {
     dict: noop,  # TODO: recurse?
     uuid.UUID: lambda value: uuid.UUID(value),
     datetime: parse,
-    date: date.fromisoformat,
+    date: isoparse,
     relativedelta: parse_relativedelta,
     bool: noop,
 }

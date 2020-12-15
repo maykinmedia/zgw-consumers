@@ -3,7 +3,7 @@ from datetime import date, datetime
 from decimal import Decimal
 from typing import List, Optional, Union
 
-from dateutil.parser import parse
+from dateutil.parser import isoparse, parse
 from dateutil.relativedelta import relativedelta
 
 from .base import Model, ZGWModel, factory
@@ -110,7 +110,7 @@ class EigenschapSpecificatie(Model):
 EIGENSCHAP_FORMATEN = {
     "tekst": str,
     "getal": lambda val: Decimal(val.replace(",", ".")),
-    "datum": date.fromisoformat,
+    "datum": isoparse,
     "datum_type": parse,
 }
 
