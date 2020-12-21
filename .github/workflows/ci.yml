@@ -10,6 +10,10 @@ on:
   pull_request:
   workflow_dispatch:
 
+env:
+  PGPORT: '5432'
+  DB_HOST: '127.0.0.1'
+
 jobs:
   tests:
     runs-on: ubuntu-latest
