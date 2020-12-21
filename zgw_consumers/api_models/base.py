@@ -10,9 +10,9 @@ from typing import Any, Dict, List, Union
 
 from dateutil.parser import parse
 from dateutil.relativedelta import relativedelta
-from relativedeltafield import parse_relativedelta
 
 from ._camel_case import underscoreize
+from .compat import parse_relativedelta
 from .types import JSONObject
 
 __all__ = ["CONVERTERS", "factory", "Model", "ZGWModel"]
