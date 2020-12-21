@@ -4,6 +4,7 @@ Datamodels for ZGW resources.
 These are NOT django models.
 """
 import uuid
+from dataclasses import Field, fields
 from datetime import date, datetime
 from functools import partial
 from typing import Any, Dict, List, Union
@@ -41,8 +42,9 @@ class Model:
         self._type_cast()
 
     def _type_cast(self):
-        annotations = get_all_annotations(self.__class__)
-        for attr, typehint in annotations.items():
+        model_fields = get_model_fields(self)
+        for attr, field in model_fields.items():
+            typehint = field.type
             value = getattr(self, attr)
 
             if typehint is None:
@@ -89,16 +91,8 @@ class ZGWModel(Model):
         return uuid.UUID(_uuid)
 
 
-def get_all_annotations(cls: type) -> Dict[str, Any]:
-    annotations = {}
-    for supercls in cls.__bases__:
-        super_annotations = get_all_annotations(supercls)
-        annotations.update(super_annotations)
-
-    # Follow MRO - most specific top-level class wins, otherwise left-to-right
-    if hasattr(cls, "__annotations__"):
-        annotations.update(cls.__annotations__)
-    return annotations
+def get_model_fields(model: Union[type, Model]) -> Dict[str, Field]:
+    return {field.name: field for field in fields(model)}
 
 
 def factory(
@@ -106,7 +100,8 @@ def factory(
 ) -> Union[type, List[type]]:
     _is_collection = isinstance(data, list)
 
-    known_kwargs = list(get_all_annotations(model).keys())
+    model_fields = get_model_fields(model)
+    known_kwargs = list(model_fields.keys())
 
     def _normalize(kwargs: dict):
         # TODO: this should be an explicit mapping, but *most* of the time with ZGW

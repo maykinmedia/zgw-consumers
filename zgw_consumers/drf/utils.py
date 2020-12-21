@@ -1,6 +1,6 @@
 from typing import Union
 
-from ..api_models.base import get_all_annotations
+from ..api_models.base import get_model_fields
 
 
 def get_field_kwargs(field_name, model_field):
@@ -13,8 +13,8 @@ def get_field_kwargs(field_name, model_field):
 
 
 def extract_model_field_type(model_class, field_name):
-    annotations = get_all_annotations(model_class)
-    typehint = annotations[field_name]
+    model_field = get_model_fields(model_class)[field_name]
+    typehint = model_field.type
 
     if typehint is None:
         typehint = type(None)
