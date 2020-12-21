@@ -10,7 +10,7 @@ Welcome to ZGW Consumers' documentation!
 :Keywords: OpenAPI, Zaakgericht Werken, Common Ground, NLX
 :PythonVersion: 3.6, 3.7, 3.8
 
-|build-status| |requirements| |coverage|
+|build-status| |coverage| |linting|
 
 |python-versions| |django-versions| |pypi-version|
 
@@ -103,12 +103,13 @@ snake case conversion.
 You can also define your own data models, take a look at the ``zgw_consumers.api_models``
 package for inspiration.
 
-.. |build-status| image:: https://travis-ci.org/maykinmedia/zgw-consumers.svg?branch=master
-    :target: https://travis-ci.org/maykinmedia/zgw-consumers
+.. |build-status| image:: https://github.com/maykinmedia/zgw-consumers/workflows/Run%20CI/badge.svg
+    :target: https://github.com/maykinmedia/zgw-consumers/actions?query=workflow%3A%22Run+CI%22
+    :alt: Run CI
 
-.. |requirements| image:: https://requires.io/github/maykinmedia/zgw-consumers/requirements.svg?branch=master
-    :target: https://requires.io/github/maykinmedia/zgw-consumers/requirements/?branch=master
-    :alt: Requirements status
+.. |linting| image:: https://github.com/maykinmedia/zgw-consumers/workflows/Code%20quality%20checks/badge.svg
+    :target: https://github.com/maykinmedia/zgw-consumers/actions?query=workflow%3A%22Code+quality+checks%22
+    :alt: Code linting
 
 .. |coverage| image:: https://codecov.io/gh/maykinmedia/zgw-consumers/branch/master/graph/badge.svg
     :target: https://codecov.io/gh/maykinmedia/zgw-consumers

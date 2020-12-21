@@ -2,19 +2,18 @@ import logging
 from typing import Dict, Optional
 from urllib.parse import urljoin
 
-from django.conf import settings
 from django.utils.module_loading import import_string
 
 from zds_client import Client
 from zds_client.oas import schema_fetcher
 
+from .settings import get_setting
+
 logger = logging.getLogger(__name__)
 
 
 def get_client_class() -> type:
-    client_class = getattr(
-        settings, "ZGW_CONSUMERS_CLIENT_CLASS", "zgw_consumers.client.ZGWClient"
-    )
+    client_class = get_setting("ZGW_CONSUMERS_CLIENT_CLASS")
     Client = import_string(client_class)
     return Client
 

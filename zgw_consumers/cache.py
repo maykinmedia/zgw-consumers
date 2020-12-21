@@ -1,10 +1,11 @@
 """
 Replace the OAS schema cache with django's cache mechanism.
 """
-from django.conf import settings
-from django.core.cache import DEFAULT_CACHE_ALIAS, caches
+from django.core.cache import caches
 
 from zds_client.oas import schema_fetcher
+
+from .settings import get_setting
 
 
 class OASCache:
@@ -12,7 +13,7 @@ class OASCache:
     DURATION = 60 * 60 * 24  # 24 hours
 
     def __init__(self):
-        self.alias = getattr(settings, "ZGW_CONSUMERS_OAS_CACHE", DEFAULT_CACHE_ALIAS)
+        self.alias = get_setting("ZGW_CONSUMERS_OAS_CACHE")
         self._local_cache = {}  # in memory
 
     def __contains__(self, key: str):
@@ -36,6 +37,10 @@ class OASCache:
         key = f"{self.KEY_PREFIX}:{key}"
         caches[self.alias].set(key, value, self.DURATION)
         self._local_cache[key] = value
+
+    def clear(self):
+        self._local_cache = {}  # reset in-memory cache
+        caches[self.alias].clear()
 
 
 def install_schema_fetcher_cache():

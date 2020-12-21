@@ -24,6 +24,19 @@ POSTGRES_CONN_PARAMS = {
     "PASSWORD": os.getenv("DB_PASSWORD", ""),
 }
 
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+    },
+    "oas": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": f"redis://{os.environ.get('CACHE_OAS', 'localhost:6379/1')}",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "IGNORE_EXCEPTIONS": True,
+        },
+    },
+}
 
 INSTALLED_APPS = [
     "django.contrib.contenttypes",
@@ -62,3 +75,5 @@ TEMPLATES = [
 ]
 
 ROOT_URLCONF = "testapp.urls"
+
+ZGW_CONSUMERS_OAS_CACHE = "oas"
