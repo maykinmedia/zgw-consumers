@@ -2,20 +2,22 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to zgw_consumers's documentation!
-=================================================
+Welcome to ZGW-Consumer's documentation!
+========================================
 
-|build-status| |requirements| |coverage|
+|build-status| |coverage| |linting|
 
 |python-versions| |django-versions| |pypi-version|
 
-<One liner describing the project>
+Manage your external API's to consume.
 
 Features
 ========
 
-* ...
-* ...
+* Store services with their configuration in the database
+* Integrate with OpenAPI 3.0 specifications
+* Built in NLX_ support
+* Declare data/domain objects as modern Python dataclasses
 
 .. toctree::
    :maxdepth: 2
@@ -32,15 +34,16 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
-.. |build-status| image:: https://travis-ci.org/maykinmedia/zgw_consumers.svg?branch=develop
-    :target: https://travis-ci.org/maykinmedia/zgw_consumers
+.. |build-status| image:: https://github.com/maykinmedia/zgw-consumers/workflows/Run%20CI/badge.svg
+    :target: https://github.com/maykinmedia/zgw-consumers/actions?query=workflow%3A%22Run+CI%22
+    :alt: Run CI
 
-.. |requirements| image:: https://requires.io/github/maykinmedia/zgw_consumers/requirements.svg?branch=develop
-    :target: https://requires.io/github/maykinmedia/zgw_consumers/requirements/?branch=develop
-    :alt: Requirements status
+.. |linting| image:: https://github.com/maykinmedia/zgw-consumers/workflows/Code%20quality%20checks/badge.svg
+    :target: https://github.com/maykinmedia/zgw-consumers/actions?query=workflow%3A%22Code+quality+checks%22
+    :alt: Code linting
 
-.. |coverage| image:: https://codecov.io/gh/maykinmedia/zgw_consumers/branch/develop/graph/badge.svg
-    :target: https://codecov.io/gh/maykinmedia/zgw_consumers
+.. |coverage| image:: https://codecov.io/gh/maykinmedia/zgw-consumers/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/maykinmedia/zgw-consumers
     :alt: Coverage status
 
 .. |python-versions| image:: https://img.shields.io/pypi/pyversions/zgw_consumers.svg
@@ -49,3 +52,5 @@ Indices and tables
 
 .. |pypi-version| image:: https://img.shields.io/pypi/v/zgw_consumers.svg
     :target: https://pypi.org/project/zgw_consumers/
+
+.. _NLX: https://nlx.io
