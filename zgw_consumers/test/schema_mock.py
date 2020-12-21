@@ -28,6 +28,11 @@ def read_schema(service: str, extension=".yaml"):
     return _cache[service]
 
 
+def _clear_cache():
+    for key in list(_cache.keys()):
+        del _cache[key]
+
+
 def mock_service_oas_get(m: Mocker, url: str, service: str, oas_url: str = "") -> None:
     if not oas_url:
         oas_url = f"{url}schema/openapi.yaml?v=3"
