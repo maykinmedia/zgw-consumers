@@ -111,7 +111,7 @@ EIGENSCHAP_FORMATEN = {
     "tekst": str,
     "getal": lambda val: Decimal(val.replace(",", ".")),
     "datum": date.fromisoformat,
-    "datum_type": parse,
+    "datum_tijd": parse,
 }
 
 
