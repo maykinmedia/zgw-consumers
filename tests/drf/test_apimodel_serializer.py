@@ -21,6 +21,7 @@ class SimpleModel:
     some_bool: bool
     some_uuid: UUID
 
+
 @pytest.mark.parametrize(
     "field,expected_type",
     [
