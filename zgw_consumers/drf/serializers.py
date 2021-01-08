@@ -10,6 +10,7 @@ import copy
 from collections import OrderedDict
 from datetime import date, datetime, time
 from decimal import Decimal
+from uuid import UUID
 
 from rest_framework import fields, serializers
 
@@ -26,6 +27,7 @@ class APIModelSerializer(serializers.Serializer):
         datetime: fields.DateTimeField,
         time: fields.TimeField,
         bool: fields.BooleanField,
+        UUID: fields.UUIDField,
     }
 
     def get_fields(self):
