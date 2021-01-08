@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from datetime import date, datetime, time
 from decimal import Decimal
+from uuid import UUID
 
 import pytest
 from rest_framework import fields
@@ -18,7 +19,7 @@ class SimpleModel:
     some_float: float
     some_decimal: Decimal
     some_bool: bool
-
+    some_uuid: UUID
 
 @pytest.mark.parametrize(
     "field,expected_type",
@@ -31,6 +32,7 @@ class SimpleModel:
         ("some_float", fields.FloatField),
         # ("some_decimal", fields.DecimalField),
         ("some_bool", fields.BooleanField),
+        ("some_uuid", fields.UUIDField),
     ],
 )
 def test_simple_model_serializer_fields(field: str, expected_type):
