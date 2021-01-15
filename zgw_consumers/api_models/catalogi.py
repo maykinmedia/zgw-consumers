@@ -26,7 +26,7 @@ class Catalogus(ZGWModel):
 class ZaakType(ZGWModel):
     url: str
     catalogus: str
-    identificatie: int
+    identificatie: str
     omschrijving: str
     omschrijving_generiek: str
     vertrouwelijkheidaanduiding: str
