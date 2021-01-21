@@ -61,7 +61,7 @@ def _fetch_list(
         results = get_paginated_results(client, resource)
         return results
 
-    with parallel as executor:
+    with parallel() as executor:
         resp_data = executor.map(_fetch, clients)
         flattened = sum(resp_data, [])
 
