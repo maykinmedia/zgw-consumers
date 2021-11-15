@@ -5,6 +5,7 @@ from urllib.parse import urljoin, urlparse, urlsplit, urlunsplit
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.db.models.functions import Length
 from django.utils.translation import gettext_lazy as _
@@ -36,7 +37,14 @@ class Service(models.Model):
     header_key = models.CharField(_("header key"), max_length=100, blank=True)
     header_value = models.CharField(_("header value"), max_length=255, blank=True)
     oas = models.URLField(
-        _("OAS"), max_length=1000, help_text=_("URL to OAS yaml file")
+        _("OAS url"), max_length=1000, blank=True, help_text=_("URL to OAS yaml file")
+    )
+    oas_file = models.FileField(
+        _("OAS file"),
+        blank=True,
+        help_text=_("OAS yaml file"),
+        upload_to="zgw-consumers/oas/",
+        validators=[FileExtensionValidator(["yml", "yaml"])],
     )
     nlx = models.URLField(
         _("NLX url"), max_length=1000, blank=True, help_text=_("NLX (outway) address")
@@ -73,9 +81,6 @@ class Service(models.Model):
         if self.nlx and not self.nlx.endswith("/"):
             self.nlx = f"{self.nlx}/"
 
-        if not self.oas:
-            self.oas = urljoin(self.api_root, "schema/openapi.yaml")
-
         super().save(*args, **kwargs)
 
     def clean(self):
@@ -95,6 +100,21 @@ class Service(models.Model):
                 {"header_key": _("If header_value is set, header_key must also be set")}
             )
 
+        if self.oas and self.oas_file:
+            raise ValidationError(
+                {
+                    "oas": _("Set either oas or oas_file, not both"),
+                    "oas_file": _("Set either oas or oas_file, not both"),
+                }
+            )
+        elif not self.oas and not self.oas_file:
+            raise ValidationError(
+                {
+                    "oas": _("Set either oas or oas_file"),
+                    "oas_file": _("Set either oas or oas_file"),
+                }
+            )
+
     def build_client(self, **claims):
         """
         Build an API client from the service configuration.
@@ -109,6 +129,7 @@ class Service(models.Model):
         Client = get_client_class()
         client = Client.from_url(dummy_detail_url)
         client.schema_url = self.oas
+        client.schema_file = self.oas_file
 
         if self.auth_type == AuthTypes.zgw:
             client.auth = ClientAuth(

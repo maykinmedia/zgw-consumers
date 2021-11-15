@@ -1,9 +1,10 @@
 import logging
-from typing import Dict, Optional
+from typing import IO, Dict, Optional
 from urllib.parse import urljoin
 
 from django.utils.module_loading import import_string
 
+import yaml
 from zds_client import Client
 from zds_client.oas import schema_fetcher
 
@@ -18,15 +19,25 @@ def get_client_class() -> type:
     return Client
 
 
+def load_schema_file(file: IO):
+    spec = yaml.safe_load(file)
+    return spec
+
+
 class ZGWClient(Client):
     auth_value: Optional[Dict[str, str]] = None
     schema_url: str = ""
+    schema_file: IO = None
 
     def fetch_schema(self) -> None:
-        """ support custom urls for OAS """
-        url = self.schema_url or urljoin(self.base_url, "schema/openapi.yaml")
-        logger.info("Fetching schema at '%s'", url)
-        self._schema = schema_fetcher.fetch(url, {"v": "3"})
+        """support custom OAS resolution"""
+        if self.schema_file:
+            logger.info("Loaded schema from file '%s'", self.schema_file)
+            self._schema = load_schema_file(self.schema_file)
+        else:
+            url = self.schema_url or urljoin(self.base_url, "schema/openapi.yaml")
+            logger.info("Fetching schema at '%s'", url)
+            self._schema = schema_fetcher.fetch(url, {"v": "3"})
 
     def pre_request(self, method, url, **kwargs):
         """
