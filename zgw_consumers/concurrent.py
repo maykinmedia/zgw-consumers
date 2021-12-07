@@ -6,9 +6,21 @@ import logging
 import threading
 from concurrent import futures
 
-from django.db import close_old_connections
+from django.db import connections
 
 logger = logging.getLogger(__name__)
+
+
+def close_db_connections():
+    """
+    Forcibly close all the db connections.
+
+    Only closing old db connections is not sufficient when using the CONN_MAX_AGE DB
+    setting. Connections are not deemed old enough, but they stay in memory of a thread
+    pool which cannot be re-used by other calls. Therefore, at the end of an parallel
+    block, we close all connections.
+    """
+    connections.close_all()
 
 
 def wrap_fn(fn):
@@ -25,7 +37,7 @@ def wrap_fn(fn):
                 "Closing all database connections",
                 extra={"thread_id": threading.get_ident()},
             )
-            close_old_connections()
+            close_db_connections()
 
     return wrapped
 
