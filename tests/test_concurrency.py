@@ -23,7 +23,7 @@ def get_num_connections() -> int:
     We need raw psycopg2 cursor access here, because the test-runner creates a separate
     test database otherwise.
     """
-    handler = ConnectionHandler(databases={"default": settings.POSTGRES_CONN_PARAMS})
+    handler = ConnectionHandler({"default": settings.POSTGRES_CONN_PARAMS})
     handler.ensure_defaults("default")
     connection = handler["default"]
 
