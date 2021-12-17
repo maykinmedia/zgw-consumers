@@ -144,7 +144,7 @@ def get_nlx_services() -> List[Tuple[Organization, List[ServiceType]]]:
 
     cert = (
         (config.certificate.path, config.certificate_key.path)
-        if (config.certificate and config.certificate)
+        if (config.certificate and config.certificate_key)
         else None
     )
 
