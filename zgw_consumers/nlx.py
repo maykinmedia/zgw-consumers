@@ -2,7 +2,7 @@
 Rewrite the URLs in anything that looks like a string, dict or list.
 """
 from itertools import groupby
-from typing import Any, Dict, Iterable, List, Optional, Union
+from typing import Any, Dict, Iterable, List, Optional, Tuple, Union
 
 import requests
 from zds_client.client import Object
@@ -130,7 +130,11 @@ class NLXClientMixin:
         super().post_response(pre_id, response_data)
 
 
-def get_nlx_services() -> list:
+Organization = Dict[str, str]
+ServiceType = Dict[str, str]
+
+
+def get_nlx_services() -> List[Tuple[Organization, List[ServiceType]]]:
     config = NLXConfig.get_solo()
     if not config.outway or not config.directory_url:
         return []
@@ -138,12 +142,19 @@ def get_nlx_services() -> list:
     directory = config.directory_url
     url = f"{directory}api/directory/list-services"
 
-    response = requests.get(url)
+    cert = (
+        (config.certificate.path, config.certificate_key.path)
+        if (config.certificate and config.certificate_key)
+        else None
+    )
+
+    response = requests.get(url, cert=cert)
     response.raise_for_status()
 
     services = response.json()["services"]
-    services.sort(key=lambda x: (x["organization_name"], x["service_name"]))
+    services.sort(key=lambda s: (s["organization"]["serial_number"], s["name"]))
+
     services_per_organization = [
-        (k, list(v)) for k, v in groupby(services, key=lambda x: x["organization_name"])
+        (k, list(v)) for k, v in groupby(services, key=lambda s: s["organization"])
     ]
     return services_per_organization
