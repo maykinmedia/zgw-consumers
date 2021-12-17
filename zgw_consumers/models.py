@@ -3,13 +3,13 @@ import uuid
 from typing import Optional
 from urllib.parse import urlparse, urlsplit, urlunsplit
 
-from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.db.models.functions import Length
 from django.utils.translation import gettext_lazy as _
 
+from privates.fields import PrivateMediaFileField
 from solo.models import SingletonModel
 from zds_client import ClientAuth
 
@@ -187,6 +187,22 @@ class NLXConfig(SingletonModel):
         _("NLX outway address"),
         blank=True,
         help_text=_("Example: http://my-outway.nlx:8080"),
+    )
+    certificate = PrivateMediaFileField(
+        upload_to="zgw-consumers/nlx/",
+        blank=True,
+        help_text=_(
+            "Your organization TLS certificate for the NLX network. This is used to "
+            "fetch the list of available services from the NLX directory API."
+        ),
+    )
+    certificate_key = PrivateMediaFileField(
+        upload_to="zgw-consumers/nlx/",
+        help_text=_(
+            "Your organization TLS private key for the NLX network. This is used to "
+            "fetch the list of available services from the NLX directory API."
+        ),
+        blank=True,
     )
 
     class Meta:
