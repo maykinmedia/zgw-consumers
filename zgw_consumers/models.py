@@ -145,7 +145,7 @@ class Service(models.Model):
         return client
 
     @classmethod
-    def get_service(cls, url: str) -> "Service":
+    def get_service(cls, url: str) -> Optional["Service"]:
         split_url = urlsplit(url)
         scheme_and_domain = urlunsplit(split_url[:2] + ("", "", ""))
 
