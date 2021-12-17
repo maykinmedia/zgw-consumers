@@ -7,12 +7,11 @@ from django import forms
 from django.contrib.admin import widgets
 from django.db.models import Field
 from django.http import HttpRequest
-
-import requests
+from django.utils.translation import gettext_lazy as _
 
 from .constants import APITypes
 from .models import NLXConfig, Service
-from .nlx import get_nlx_services
+from .nlx import ServiceType, get_nlx_services
 
 logger = logging.getLogger(__name__)
 
@@ -73,21 +72,26 @@ def get_zaaktype_field(db_field: Field, request: HttpRequest, **kwargs):
 def get_nlx_field(db_field: Field, request: HttpRequest, **kwargs):
     try:
         nlx_services = get_nlx_services()
-    except requests.RequestException:
+    except Exception:
         logger.warning("Failed fetching the NLX services", exc_info=True)
         nlx_services = []
 
     nlx_outway = NLXConfig.get_solo().outway
 
-    def _get_choice(service) -> Tuple[str, str]:
-        url = f"{nlx_outway}{service['organization_name']}/{service['service_name']}/"
-        return (url, service["service_name"])
+    def _get_choice(service: ServiceType) -> Tuple[str, str]:
+        org_id = service["organization"]["serial_number"]
+        name = service["name"]
+        url = f"{nlx_outway}{org_id}/{name}/"
+        return (url, name)
 
     choices = [
-        (organization, [_get_choice(service) for service in services])
+        (
+            f"{organization['name']} (ID: {organization['serial_number']})",
+            [_get_choice(service) for service in services],
+        )
         for organization, services in nlx_services
     ]
-    choices.insert(0, ("No NLX", [("", "---------")]))
+    choices.insert(0, (_("No NLX"), [("", "---------")]))
 
     return forms.ChoiceField(
         label=db_field.verbose_name.capitalize(),
