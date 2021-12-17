@@ -12,6 +12,7 @@ from django.utils.translation import gettext_lazy as _
 from .constants import APITypes
 from .models import NLXConfig, Service
 from .nlx import ServiceType, get_nlx_services
+from .utils import cache_on_request
 
 logger = logging.getLogger(__name__)
 
@@ -70,11 +71,12 @@ def get_zaaktype_field(db_field: Field, request: HttpRequest, **kwargs):
 
 
 def get_nlx_field(db_field: Field, request: HttpRequest, **kwargs):
-    try:
-        nlx_services = get_nlx_services()
-    except Exception:
-        logger.warning("Failed fetching the NLX services", exc_info=True)
-        nlx_services = []
+    with cache_on_request(request, "_nlx_services", get_nlx_services) as cached:
+        try:
+            nlx_services = cached.value
+        except Exception:
+            logger.warning("Failed fetching the NLX services", exc_info=True)
+            nlx_services = []
 
     nlx_outway = NLXConfig.get_solo().outway
 
