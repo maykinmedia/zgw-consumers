@@ -227,11 +227,14 @@ class NLXConfig(SingletonModel):
 
         # try to tcp connect to the port
         parsed = urlparse(self.outway)
+        default_port = 80 if parsed.scheme == "http" else 443
+        port = parsed.port or default_port
+
         nlx_outway_timeout = zgw_settings.get_setting("NLX_OUTWAY_TIMEOUT")
         with socket.socket() as s:
             s.settimeout(nlx_outway_timeout)
             try:
-                s.connect((parsed.hostname, parsed.port))
+                s.connect((parsed.hostname, port))
             except ConnectionRefusedError:
                 raise ValidationError(
                     _("Connection refused. Please, provide a correct address")
