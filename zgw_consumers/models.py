@@ -1,7 +1,7 @@
 import socket
 import uuid
 from typing import Optional
-from urllib.parse import urljoin, urlparse, urlsplit, urlunsplit
+from urllib.parse import urlparse, urlsplit, urlunsplit
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -194,9 +194,7 @@ class NLXConfig(SingletonModel):
 
     @property
     def directory_url(self) -> str:
-        nlx_directory_urls = getattr(
-            settings, "NLX_DIRECTORY_URLS", zgw_settings.NLX_DIRECTORY_URLS
-        )
+        nlx_directory_urls = zgw_settings.get_setting("NLX_DIRECTORY_URLS")
         return nlx_directory_urls.get(self.directory, "")
 
     def save(self, *args, **kwargs):
@@ -213,9 +211,7 @@ class NLXConfig(SingletonModel):
 
         # try to tcp connect to the port
         parsed = urlparse(self.outway)
-        nlx_outway_timeout = getattr(
-            settings, "NLX_OUTWAY_TIMEOUT", zgw_settings.NLX_OUTWAY_TIMEOUT
-        )
+        nlx_outway_timeout = zgw_settings.get_setting("NLX_OUTWAY_TIMEOUT")
         with socket.socket() as s:
             s.settimeout(nlx_outway_timeout)
             try:
