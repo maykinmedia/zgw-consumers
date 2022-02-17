@@ -214,7 +214,7 @@ class NLXConfig(SingletonModel):
         return nlx_directory_urls.get(self.directory, "")
 
     def save(self, *args, **kwargs):
-        if not self.outway.endswith("/"):
+        if self.outway and not self.outway.endswith("/"):
             self.outway = f"{self.outway}/"
 
         super().save(*args, **kwargs)
@@ -235,7 +235,7 @@ class NLXConfig(SingletonModel):
             s.settimeout(nlx_outway_timeout)
             try:
                 s.connect((parsed.hostname, port))
-            except ConnectionRefusedError:
+            except (OSError, ConnectionRefusedError):
                 raise ValidationError(
-                    _("Connection refused. Please, provide a correct address")
+                    _("Connection refused. Please provide a correct address.")
                 )
