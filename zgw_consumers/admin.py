@@ -4,6 +4,7 @@ from privates.admin import PrivateMediaMixin
 from solo.admin import SingletonModelAdmin
 
 from .admin_fields import get_nlx_field, get_zaaktype_field
+from .forms import CertificateAdminForm
 from .models.certificates import Certificate
 from .models.services import NLXConfig, Service
 from .widgets import NoDownloadPrivateFileWidget
@@ -30,6 +31,8 @@ class NLXConfigAdmin(PrivateMediaMixin, SingletonModelAdmin):
 
 @admin.register(Certificate)
 class CertificateAdmin(admin.ModelAdmin):
+    form = CertificateAdminForm
+
     list_display = ("label", "type")
     list_filter = ("label", "type")
     search_fields = ("label", "type")

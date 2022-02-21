@@ -24,3 +24,11 @@ class cache_on_request:
             setattr(self.request, self.key, value)
             cached_value = value
         return cached_value
+
+
+def pretty_print_certificate_components(x509name) -> str:
+    components = [
+        (label.decode("utf-8"), value.decode("utf-8"))
+        for (label, value) in x509name.get_components()
+    ]
+    return ", ".join([f"{label}: {value}" for (label, value) in components])
