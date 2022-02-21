@@ -29,3 +29,8 @@ class NLXDirectories(DjangoChoices):
     demo = ChoiceItem("demo", _("Demo"))
     preprod = ChoiceItem("preprod", _("Pre-prod"))
     prod = ChoiceItem("prod", _("Prod"))
+
+
+class CertificateTypes(DjangoChoices):
+    key_pair = ChoiceItem("key_pair", _("Key-pair"))
+    cert_only = ChoiceItem("cert_only", _("Certificate only"))

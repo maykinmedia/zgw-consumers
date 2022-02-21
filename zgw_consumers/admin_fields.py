@@ -10,7 +10,7 @@ from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
 from .constants import APITypes
-from .models import NLXConfig, Service
+from .models.services import NLXConfig, Service
 from .nlx import ServiceType, get_nlx_services
 from .utils import cache_on_request
 

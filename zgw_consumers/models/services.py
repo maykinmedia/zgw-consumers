@@ -15,9 +15,9 @@ from zds_client import ClientAuth
 
 from zgw_consumers import settings as zgw_settings
 
-from .client import ZGWClient, get_client_class
-from .constants import APITypes, AuthTypes, NLXDirectories
-from .query import ServiceManager
+from ..client import ZGWClient, get_client_class
+from ..constants import APITypes, AuthTypes, NLXDirectories
+from ..query import ServiceManager
 
 
 class Service(models.Model):
