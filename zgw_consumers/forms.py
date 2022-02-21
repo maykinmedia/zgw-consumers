@@ -8,6 +8,11 @@ from zgw_consumers.models import Certificate
 
 
 class CertificateAdminForm(forms.ModelForm):
+    private_key = forms.CharField(
+        widget=forms.PasswordInput,
+        help_text=_("The private key can only be updated, but not read."),
+    )
+
     class Meta:
         model = Certificate
         fields = ("label", "type", "public_certificate", "private_key")
