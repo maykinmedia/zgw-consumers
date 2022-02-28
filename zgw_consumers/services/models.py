@@ -21,3 +21,6 @@ class RestAPIService(Service):
         upload_to="zgw-consumers/oas/",
         validators=[FileExtensionValidator(["yml", "yaml"])],
     )
+
+    class Meta:
+        abstract = True
