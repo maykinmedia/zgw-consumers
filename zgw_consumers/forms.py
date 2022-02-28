@@ -4,13 +4,15 @@ from django.utils.translation import gettext_lazy as _
 
 from OpenSSL import crypto
 
-from zgw_consumers.models import Certificate
+from .models import Certificate
+from .widgets import PasswordAreaWidget
 
 
 class CertificateAdminForm(forms.ModelForm):
     private_key = forms.CharField(
-        widget=forms.PasswordInput,
+        widget=PasswordAreaWidget(),
         help_text=_("The private key can only be updated, but not read."),
+        required=False,
     )
 
     class Meta:
