@@ -56,3 +56,52 @@ class CertificateTests(TestCase):
             )
 
         self.assertTrue(form.is_valid())
+
+    def test_invalid_key_pair(self):
+        certificate_f = open(os.path.join(TEST_FILES, "test.certificate"), "r")
+        # Valid key that belongs to another certificate
+        key_f = open(os.path.join(TEST_FILES, "test2.key"), "r")
+
+        # TODO make factory
+        certificate = Certificate.objects.create(
+            label="Test certificate",
+            type=CertificateTypes.key_pair,
+            public_certificate=certificate_f.read(),
+            private_key=key_f.read(),
+        )
+
+        certificate_f.close()
+        key_f.close()
+
+        self.assertFalse(certificate.is_valid_key_pair())
+
+    def test_valid_key_pair(self):
+        certificate_f = open(os.path.join(TEST_FILES, "test.certificate"), "r")
+        key_f = open(os.path.join(TEST_FILES, "test1.key"), "r")
+
+        # TODO make factory
+        certificate = Certificate.objects.create(
+            label="Test certificate",
+            type=CertificateTypes.key_pair,
+            public_certificate=certificate_f.read(),
+            private_key=key_f.read(),
+        )
+
+        certificate_f.close()
+        key_f.close()
+
+        self.assertTrue(certificate.is_valid_key_pair())
+
+    def test_valid_key_pair_missing_key(self):
+        certificate_f = open(os.path.join(TEST_FILES, "test.certificate"), "r")
+
+        # TODO make factory
+        certificate = Certificate.objects.create(
+            label="Test certificate",
+            type=CertificateTypes.key_pair,
+            public_certificate=certificate_f.read(),
+        )
+
+        certificate_f.close()
+
+        self.assertIsNone(certificate.is_valid_key_pair())
