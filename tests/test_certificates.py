@@ -2,6 +2,7 @@ import os
 from datetime import datetime
 
 from django.test import TestCase
+from django.core.files import File
 
 from zgw_consumers.constants import CertificateTypes
 from zgw_consumers.forms import CertificateAdminForm
@@ -19,8 +20,8 @@ class CertificateTests(TestCase):
         certificate = Certificate.objects.create(
             label="Test certificate",
             type=CertificateTypes.key_pair,
-            public_certificate=certificate_f.read(),
-            private_key=key_f.read(),
+            public_certificate=File(certificate_f),
+            private_key=File(key_f),
         )
 
         certificate_f.close()
@@ -35,24 +36,25 @@ class CertificateTests(TestCase):
         )
 
     def test_admin_validation_invalid_certificate(self):
-        form = CertificateAdminForm(
-            data={
-                "label": "Test invalid certificate",
-                "type": CertificateTypes.cert_only,
-                "public_certificate": "Some invalid certificate text",
-            }
-        )
+        with open(os.path.join(TEST_FILES, "invalid.certificate"), "r") as certificate_f:
+            form = CertificateAdminForm(
+                {
+                    "label": "Test invalid certificate",
+                    "type": CertificateTypes.cert_only,
+                },
+                {"public_certificate": File(certificate_f)}
+            )
 
         self.assertFalse(form.is_valid())
 
     def test_admin_validation_valid_certificate(self):
         with open(os.path.join(TEST_FILES, "test.certificate"), "r") as certificate_f:
             form = CertificateAdminForm(
-                data={
+                {
                     "label": "Test invalid certificate",
                     "type": CertificateTypes.cert_only,
-                    "public_certificate": certificate_f.read(),
-                }
+                },
+                {"public_certificate": File(certificate_f)}
             )
 
         self.assertTrue(form.is_valid())
@@ -66,8 +68,8 @@ class CertificateTests(TestCase):
         certificate = Certificate.objects.create(
             label="Test certificate",
             type=CertificateTypes.key_pair,
-            public_certificate=certificate_f.read(),
-            private_key=key_f.read(),
+            public_certificate=File(certificate_f),
+            private_key=File(key_f),
         )
 
         certificate_f.close()
@@ -83,8 +85,8 @@ class CertificateTests(TestCase):
         certificate = Certificate.objects.create(
             label="Test certificate",
             type=CertificateTypes.key_pair,
-            public_certificate=certificate_f.read(),
-            private_key=key_f.read(),
+            public_certificate=File(certificate_f),
+            private_key=File(key_f),
         )
 
         certificate_f.close()
@@ -93,15 +95,12 @@ class CertificateTests(TestCase):
         self.assertTrue(certificate.is_valid_key_pair())
 
     def test_valid_key_pair_missing_key(self):
-        certificate_f = open(os.path.join(TEST_FILES, "test.certificate"), "r")
-
-        # TODO make factory
-        certificate = Certificate.objects.create(
-            label="Test certificate",
-            type=CertificateTypes.key_pair,
-            public_certificate=certificate_f.read(),
-        )
-
-        certificate_f.close()
+        with open(os.path.join(TEST_FILES, "test.certificate"), "r") as certificate_f:
+            # TODO make factory
+            certificate = Certificate.objects.create(
+                label="Test certificate",
+                type=CertificateTypes.key_pair,
+                public_certificate=File(certificate_f),
+            )
 
         self.assertIsNone(certificate.is_valid_key_pair())
