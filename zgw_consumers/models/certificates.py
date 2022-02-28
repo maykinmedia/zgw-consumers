@@ -78,6 +78,9 @@ class Certificate(models.Model):
 
         try:
             context.check_privatekey()
-            return True
         except SSL.Error:
             return False
+
+        return True
+
+    is_valid_key_pair.boolean = True
