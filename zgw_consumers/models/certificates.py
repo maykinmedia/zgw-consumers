@@ -3,7 +3,7 @@ from datetime import datetime
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from OpenSSL import crypto
+from OpenSSL import SSL, crypto
 
 from ..constants import CertificateTypes
 from ..utils import pretty_print_certificate_components
@@ -35,6 +35,7 @@ class Certificate(models.Model):
         verbose_name_plural = _("certificates")
 
     _certificate_obj = None
+    _private_key_obj = None
 
     @property
     def _certificate(self):
@@ -43,6 +44,14 @@ class Certificate(models.Model):
                 crypto.FILETYPE_PEM, self.public_certificate.encode("utf-8")
             )
         return self._certificate_obj
+
+    @property
+    def _private_key(self):
+        if not self._private_key_obj:
+            self._private_key_obj = crypto.load_privatekey(
+                crypto.FILETYPE_PEM, self.private_key.encode("utf-8")
+            )
+        return self._private_key_obj
 
     @property
     def expiry_date(self) -> datetime:
@@ -58,3 +67,17 @@ class Certificate(models.Model):
     def subject(self):
         subject_x509name = self._certificate.get_subject()
         return pretty_print_certificate_components(subject_x509name)
+
+    def is_valid_key_pair(self):
+        if not self.private_key:
+            return None
+
+        context = SSL.Context(SSL.TLSv1_METHOD)
+        context.use_privatekey(self._private_key)
+        context.use_certificate(self._certificate)
+
+        try:
+            context.check_privatekey()
+            return True
+        except SSL.Error:
+            return False
