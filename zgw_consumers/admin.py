@@ -30,12 +30,14 @@ class NLXConfigAdmin(PrivateMediaMixin, SingletonModelAdmin):
 
 
 @admin.register(Certificate)
-class CertificateAdmin(admin.ModelAdmin):
+class CertificateAdmin(PrivateMediaMixin, admin.ModelAdmin):
     form = CertificateAdminForm
 
     list_display = ("label", "type", "expiry_date", "is_valid_key_pair")
     list_filter = ("label", "type")
     search_fields = ("label", "type")
+
+    private_media_fields = ("public_certificate", "private_key")
 
 
 class ListZaaktypenMixin:

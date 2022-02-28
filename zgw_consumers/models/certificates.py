@@ -1,15 +1,21 @@
-from datetime import datetime
+from datetime import date, datetime
 
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from OpenSSL import SSL, crypto
+from privates.fields import PrivateMediaFileField
 
 from ..constants import CertificateTypes
+from ..mixins import DeleteFileFieldFilesMixin
 from ..utils import pretty_print_certificate_components
 
 
-class Certificate(models.Model):
+def ssl_upload_to(instance, filename):
+    return "ssl_certs_keys/{d}".format(d=date.today().strftime("%Y/%m/%d"))
+
+
+class Certificate(DeleteFileFieldFilesMixin, models.Model):
     label = models.CharField(
         _("label"),
         max_length=100,
@@ -23,11 +29,16 @@ class Certificate(models.Model):
             "Is this only a certificate or is there an associated private key?"
         ),
     )
-    public_certificate = models.TextField(
-        _("public certificate"), help_text=_("The content of the certificate")
+    public_certificate = PrivateMediaFileField(
+        _("public certificate"),
+        help_text=_("The content of the certificate"),
+        upload_to=ssl_upload_to,
     )
-    private_key = models.TextField(
-        _("private key"), help_text=_("The content of the private key"), blank=True
+    private_key = PrivateMediaFileField(
+        _("private key"),
+        help_text=_("The content of the private key"),
+        blank=True,
+        upload_to=ssl_upload_to,
     )
 
     class Meta:
@@ -40,17 +51,19 @@ class Certificate(models.Model):
     @property
     def _certificate(self):
         if not self._certificate_obj:
-            self._certificate_obj = crypto.load_certificate(
-                crypto.FILETYPE_PEM, self.public_certificate.encode("utf-8")
-            )
+            with self.public_certificate.open(mode="rb") as certificate_f:
+                self._certificate_obj = crypto.load_certificate(
+                    crypto.FILETYPE_PEM, certificate_f.read()
+                )
         return self._certificate_obj
 
     @property
     def _private_key(self):
         if not self._private_key_obj:
-            self._private_key_obj = crypto.load_privatekey(
-                crypto.FILETYPE_PEM, self.private_key.encode("utf-8")
-            )
+            with self.private_key.open(mode="rb") as key_f:
+                self._private_key_obj = crypto.load_privatekey(
+                    crypto.FILETYPE_PEM, key_f.read()
+                )
         return self._private_key_obj
 
     @property
