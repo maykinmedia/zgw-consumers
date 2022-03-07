@@ -1,5 +1,5 @@
 import logging
-from typing import IO, Dict, Optional
+from typing import IO, Any, Dict, List, Optional, Union
 from urllib.parse import urljoin
 
 from django.utils.module_loading import import_string
@@ -11,6 +11,8 @@ from zds_client.oas import schema_fetcher
 from .settings import get_setting
 
 logger = logging.getLogger(__name__)
+
+Object = Dict[str, Any]
 
 
 def get_client_class() -> type:
@@ -28,6 +30,9 @@ class ZGWClient(Client):
     auth_value: Optional[Dict[str, str]] = None
     schema_url: str = ""
     schema_file: IO = None
+    client_certificate_path = None
+    client_private_key_path = None
+    server_certificate_path = None
 
     def fetch_schema(self) -> None:
         """support custom OAS resolution"""
@@ -55,6 +60,36 @@ class ZGWClient(Client):
             return self.auth.credentials()
 
         return self.auth_value or {}
+
+    def request(
+        self,
+        path: str,
+        operation: str,
+        method="GET",
+        expected_status=200,
+        request_kwargs: Optional[dict] = None,
+        **kwargs,
+    ) -> Union[List[Object], Object]:
+
+        if self.server_certificate_path:
+            kwargs.update({"verify": self.server_certificate_path})
+
+        if self.client_certificate_path:
+            if self.client_private_key_path:
+                kwargs.update(
+                    {
+                        "cert": (
+                            self.client_certificate_path,
+                            self.client_private_key_path,
+                        )
+                    }
+                )
+            else:
+                kwargs.update({"cert": self.client_certificate_path})
+
+        return super().request(
+            path, operation, method, expected_status, request_kwargs, **kwargs
+        )
 
 
 class UnknownService(Exception):

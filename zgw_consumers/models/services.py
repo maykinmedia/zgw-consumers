@@ -4,7 +4,6 @@ from typing import Optional
 from urllib.parse import urlparse, urlsplit, urlunsplit
 
 from django.core.exceptions import ValidationError
-from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.db.models.functions import Length
 from django.utils.translation import gettext_lazy as _
@@ -15,13 +14,14 @@ from zds_client import ClientAuth
 
 from zgw_consumers import settings as zgw_settings
 
-from .client import ZGWClient, get_client_class
-from .constants import APITypes, AuthTypes, NLXDirectories
-from .query import ServiceManager
+from ..client import ZGWClient, get_client_class
+from ..constants import APITypes, AuthTypes, NLXDirectories
+from ..query import ServiceManager
+from . import Certificate
+from .abstract import RestAPIService
 
 
-class Service(models.Model):
-    label = models.CharField(_("label"), max_length=100)
+class Service(RestAPIService):
     api_type = models.CharField(_("type"), max_length=20, choices=APITypes.choices)
     api_root = models.CharField(_("api root url"), max_length=255, unique=True)
 
@@ -36,16 +36,6 @@ class Service(models.Model):
     )
     header_key = models.CharField(_("header key"), max_length=100, blank=True)
     header_value = models.CharField(_("header value"), max_length=255, blank=True)
-    oas = models.URLField(
-        _("OAS url"), max_length=1000, blank=True, help_text=_("URL to OAS yaml file")
-    )
-    oas_file = models.FileField(
-        _("OAS file"),
-        blank=True,
-        help_text=_("OAS yaml file"),
-        upload_to="zgw-consumers/oas/",
-        validators=[FileExtensionValidator(["yml", "yaml"])],
-    )
     nlx = models.URLField(
         _("NLX url"), max_length=1000, blank=True, help_text=_("NLX (outway) address")
     )
@@ -63,6 +53,22 @@ class Service(models.Model):
         max_length=255,
         blank=True,
         help_text=_("Human readable representation of the user."),
+    )
+    client_certificate = models.ForeignKey(
+        Certificate,
+        blank=True,
+        null=True,
+        help_text=_("The SSL/TLS certificate of the client"),
+        on_delete=models.PROTECT,
+        related_name="service_client",
+    )
+    server_certificate = models.ForeignKey(
+        Certificate,
+        blank=True,
+        null=True,
+        help_text=_("The SSL/TLS certificate of the server"),
+        on_delete=models.PROTECT,
+        related_name="service_server",
     )
 
     objects = ServiceManager()
@@ -130,6 +136,21 @@ class Service(models.Model):
         client = Client.from_url(dummy_detail_url)
         client.schema_url = self.oas
         client.schema_file = self.oas_file
+
+        if self.server_certificate:
+            client.server_certificate_path = (
+                self.server_certificate.public_certificate.path
+            )
+
+        if self.client_certificate:
+            client.client_certificate_path = (
+                self.client_certificate.public_certificate.path
+            )
+
+            if self.client_certificate.private_key:
+                client.client_private_key_path = (
+                    self.client_certificate.private_key.path
+                )
 
         if self.auth_type == AuthTypes.zgw:
             client.auth = ClientAuth(
