@@ -4,7 +4,6 @@ from typing import Optional
 from urllib.parse import urlparse, urlsplit, urlunsplit
 
 from django.core.exceptions import ValidationError
-from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.db.models.functions import Length
 from django.utils.translation import gettext_lazy as _
@@ -137,6 +136,11 @@ class Service(RestAPIService):
         client = Client.from_url(dummy_detail_url)
         client.schema_url = self.oas
         client.schema_file = self.oas_file
+
+        if self.server_certificate:
+            client.public_certificate_path = (
+                self.server_certificate.public_certificate.path
+            )
 
         if self.auth_type == AuthTypes.zgw:
             client.auth = ClientAuth(
