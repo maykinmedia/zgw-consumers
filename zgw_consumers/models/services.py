@@ -17,8 +17,8 @@ from zgw_consumers import settings as zgw_settings
 from ..client import ZGWClient, get_client_class
 from ..constants import APITypes, AuthTypes, NLXDirectories
 from ..query import ServiceManager
-from ..services.models import RestAPIService
 from . import Certificate
+from .abstract import RestAPIService
 
 
 class Service(RestAPIService):
@@ -59,7 +59,7 @@ class Service(RestAPIService):
         blank=True,
         null=True,
         help_text=_("The SSL/TLS certificate of the client"),
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name="service_client",
     )
     server_certificate = models.ForeignKey(
@@ -67,7 +67,7 @@ class Service(RestAPIService):
         blank=True,
         null=True,
         help_text=_("The SSL/TLS certificate of the server"),
-        on_delete=models.CASCADE,
+        on_delete=models.PROTECT,
         related_name="service_server",
     )
 
@@ -138,9 +138,19 @@ class Service(RestAPIService):
         client.schema_file = self.oas_file
 
         if self.server_certificate:
-            client.public_certificate_path = (
+            client.server_certificate_path = (
                 self.server_certificate.public_certificate.path
             )
+
+        if self.client_certificate:
+            client.client_certificate_path = (
+                self.client_certificate.public_certificate.path
+            )
+
+            if self.client_certificate.private_key:
+                client.client_private_key_path = (
+                    self.client_certificate.private_key.path
+                )
 
         if self.auth_type == AuthTypes.zgw:
             client.auth = ClientAuth(

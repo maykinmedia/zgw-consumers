@@ -30,7 +30,9 @@ class ZGWClient(Client):
     auth_value: Optional[Dict[str, str]] = None
     schema_url: str = ""
     schema_file: IO = None
-    public_certificate_path = None
+    client_certificate_path = None
+    client_private_key_path = None
+    server_certificate_path = None
 
     def fetch_schema(self) -> None:
         """support custom OAS resolution"""
@@ -69,8 +71,21 @@ class ZGWClient(Client):
         **kwargs,
     ) -> Union[List[Object], Object]:
 
-        if self.public_certificate_path:
-            kwargs.update({"cert": self.public_certificate_path})
+        if self.server_certificate_path:
+            kwargs.update({"verify": self.server_certificate_path})
+
+        if self.client_certificate_path:
+            if self.client_private_key_path:
+                kwargs.update(
+                    {
+                        "cert": (
+                            self.client_certificate_path,
+                            self.client_private_key_path,
+                        )
+                    }
+                )
+            else:
+                kwargs.update({"cert": self.client_certificate_path})
 
         return super().request(
             path, operation, method, expected_status, request_kwargs, **kwargs

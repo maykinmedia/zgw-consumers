@@ -11,10 +11,6 @@ from ..mixins import DeleteFileFieldFilesMixin
 from ..utils import pretty_print_certificate_components
 
 
-def ssl_upload_to(instance, filename):
-    return "ssl_certs_keys/{d}".format(d=date.today().strftime("%Y/%m/%d"))
-
-
 class Certificate(DeleteFileFieldFilesMixin, models.Model):
     label = models.CharField(
         _("label"),
@@ -32,13 +28,13 @@ class Certificate(DeleteFileFieldFilesMixin, models.Model):
     public_certificate = PrivateMediaFileField(
         _("public certificate"),
         help_text=_("The content of the certificate"),
-        upload_to=ssl_upload_to,
+        upload_to="ssl_certs_keys/%Y/%m/%d",
     )
     private_key = PrivateMediaFileField(
         _("private key"),
         help_text=_("The content of the private key"),
         blank=True,
-        upload_to=ssl_upload_to,
+        upload_to="ssl_certs_keys/%Y/%m/%d",
     )
 
     class Meta:
@@ -85,7 +81,7 @@ class Certificate(DeleteFileFieldFilesMixin, models.Model):
         if not self.private_key:
             return None
 
-        context = SSL.Context(SSL.TLSv1_METHOD)
+        context = SSL.Context(SSL.TLSv1_2_METHOD)
         context.use_privatekey(self._private_key)
         context.use_certificate(self._certificate)
 

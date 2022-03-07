@@ -33,6 +33,7 @@ class NLXConfigAdmin(PrivateMediaMixin, SingletonModelAdmin):
 class CertificateAdmin(PrivateMediaMixin, admin.ModelAdmin):
     form = CertificateAdminForm
 
+    fields = ("label", "type", "public_certificate", "private_key")
     list_display = ("label", "type", "expiry_date", "is_valid_key_pair")
     list_filter = ("label", "type")
     search_fields = ("label", "type")

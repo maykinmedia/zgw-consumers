@@ -10,7 +10,7 @@ from .models import Certificate
 class CertificateAdminForm(forms.ModelForm):
     class Meta:
         model = Certificate
-        fields = ("label", "type", "public_certificate", "private_key")
+        fields = "__all__"
 
     def clean_public_certificate(self):
         if self.cleaned_data["public_certificate"].closed:
