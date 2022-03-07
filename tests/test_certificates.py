@@ -83,7 +83,7 @@ class CertificateTests(TestCase):
 
     def test_valid_key_pair(self):
         certificate_f = open(os.path.join(TEST_FILES, "test.certificate"), "r")
-        key_f = open(os.path.join(TEST_FILES, "test1.key"), "r")
+        key_f = open(os.path.join(TEST_FILES, "test.key"), "r")
 
         certificate = Certificate.objects.create(
             label="Test certificate",
