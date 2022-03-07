@@ -13,6 +13,8 @@ class CertificateAdminForm(forms.ModelForm):
         fields = ("label", "type", "public_certificate", "private_key")
 
     def clean_public_certificate(self):
+        if self.cleaned_data["public_certificate"].closed:
+            self.cleaned_data["public_certificate"].open()
         self.cleaned_data["public_certificate"].seek(0)
 
         try:
