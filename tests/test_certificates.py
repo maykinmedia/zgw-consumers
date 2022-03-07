@@ -1,8 +1,10 @@
 import os
 from datetime import datetime
 
-from django.test import TestCase
 from django.core.files import File
+from django.test import TestCase
+
+from privates.test import temp_private_root
 
 from zgw_consumers.constants import CertificateTypes
 from zgw_consumers.forms import CertificateAdminForm
@@ -11,6 +13,7 @@ from zgw_consumers.models import Certificate
 TEST_FILES = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
 
 
+@temp_private_root()
 class CertificateTests(TestCase):
     def test_calculated_properties(self):
         certificate_f = open(os.path.join(TEST_FILES, "test.certificate"), "r")
@@ -36,13 +39,15 @@ class CertificateTests(TestCase):
         )
 
     def test_admin_validation_invalid_certificate(self):
-        with open(os.path.join(TEST_FILES, "invalid.certificate"), "r") as certificate_f:
+        with open(
+            os.path.join(TEST_FILES, "invalid.certificate"), "r"
+        ) as certificate_f:
             form = CertificateAdminForm(
                 {
                     "label": "Test invalid certificate",
                     "type": CertificateTypes.cert_only,
                 },
-                {"public_certificate": File(certificate_f)}
+                {"public_certificate": File(certificate_f)},
             )
 
         self.assertFalse(form.is_valid())
@@ -54,7 +59,7 @@ class CertificateTests(TestCase):
                     "label": "Test invalid certificate",
                     "type": CertificateTypes.cert_only,
                 },
-                {"public_certificate": File(certificate_f)}
+                {"public_certificate": File(certificate_f)},
             )
 
         self.assertTrue(form.is_valid())
