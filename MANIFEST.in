@@ -1,5 +1,6 @@
 include *.rst
 include LICENSE
+include zgw_consumers/py.typed
 recursive-include zgw_consumers *.html
 recursive-include zgw_consumers *.txt
 recursive-include zgw_consumers *.po
