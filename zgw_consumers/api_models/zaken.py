@@ -94,3 +94,14 @@ class Rol(ZGWModel):
 
     def get_omschrijving_generiek_display(self):
         return RolOmschrijving.values[self.omschrijving_generiek]
+
+
+@dataclass
+class ZaakInformatieObject(ZGWModel):
+    url: str
+    informatieobject: str
+    zaak: str
+    aard_relatie_weergave: str
+    titel: str
+    beschrijving: str
+    registratiedatum: datetime
