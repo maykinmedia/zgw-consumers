@@ -279,6 +279,7 @@ class ServiceWithCertificateTests(TestCase):
             certificate.delete()
 
 
+@temp_private_root()
 class TestCertificateFilesDeletion(TransactionTestCase):
     def test_certificate_deletion_deletes_files(self):
         with open(os.path.join(TEST_FILES, "test.certificate"), "r") as certificate_f:
