@@ -3,7 +3,7 @@ from datetime import datetime
 
 from django.core.files import File
 from django.db.models.deletion import ProtectedError
-from django.test import TestCase
+from django.test import TestCase, TransactionTestCase
 
 import requests_mock
 from privates.test import temp_private_root
@@ -278,6 +278,8 @@ class ServiceWithCertificateTests(TestCase):
         with self.assertRaises(ProtectedError):
             certificate.delete()
 
+
+class TestCertificateFilesDeletion(TransactionTestCase):
     def test_certificate_deletion_deletes_files(self):
         with open(os.path.join(TEST_FILES, "test.certificate"), "r") as certificate_f:
             certificate = Certificate.objects.create(
@@ -289,7 +291,6 @@ class ServiceWithCertificateTests(TestCase):
         file_path = certificate.public_certificate.path
         storage = certificate.public_certificate.storage
 
-        with self.captureOnCommitCallbacks(execute=True):
-            certificate.delete()
+        certificate.delete()
 
         self.assertFalse(storage.exists(file_path))
