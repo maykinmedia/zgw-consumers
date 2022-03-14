@@ -2,6 +2,7 @@ import os
 from datetime import datetime
 
 from django.core.files import File
+from django.db.models.deletion import ProtectedError
 from django.test import TestCase
 
 import requests_mock
@@ -254,3 +255,25 @@ class ServiceWithCertificateTests(TestCase):
         self.assertEqual(
             self.server_certificate.public_certificate.path, request_with_tls.verify
         )
+
+    def test_certificate_deletion(self):
+        oas_path = os.path.join(os.path.dirname(__file__), "schemas/drc.yaml")
+
+        with open(os.path.join(TEST_FILES, "test.certificate"), "r") as certificate_f:
+            certificate = Certificate.objects.create(
+                label="Test client certificate",
+                type=CertificateTypes.cert_only,
+                public_certificate=File(certificate_f, name="test.certificate"),
+            )
+
+        with open(oas_path, "r") as oas_file:
+            service = Service.objects.create(
+                label="Test",
+                api_type=APITypes.drc,
+                api_root="https://foo.bar",
+                oas_file=File(oas_file, name="schema.yaml"),
+                client_certificate=certificate,
+            )
+
+        with self.assertRaises(ProtectedError):
+            Certificate.objects.filter(id=certificate.id).delete()
