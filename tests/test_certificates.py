@@ -2,7 +2,8 @@ import os
 from datetime import datetime
 
 from django.core.files import File
-from django.test import TestCase
+from django.db.models.deletion import ProtectedError
+from django.test import TestCase, TransactionTestCase
 
 import requests_mock
 from privates.test import temp_private_root
@@ -254,3 +255,43 @@ class ServiceWithCertificateTests(TestCase):
         self.assertEqual(
             self.server_certificate.public_certificate.path, request_with_tls.verify
         )
+
+    def test_certificate_deletion_with_services(self):
+        oas_path = os.path.join(os.path.dirname(__file__), "schemas/drc.yaml")
+
+        with open(os.path.join(TEST_FILES, "test.certificate"), "r") as certificate_f:
+            certificate = Certificate.objects.create(
+                label="Test client certificate",
+                type=CertificateTypes.cert_only,
+                public_certificate=File(certificate_f, name="test.certificate"),
+            )
+
+        with open(oas_path, "r") as oas_file:
+            Service.objects.create(
+                label="Test",
+                api_type=APITypes.drc,
+                api_root="https://foo.bar",
+                oas_file=File(oas_file, name="schema.yaml"),
+                client_certificate=certificate,
+            )
+
+        with self.assertRaises(ProtectedError):
+            certificate.delete()
+
+
+@temp_private_root()
+class TestCertificateFilesDeletion(TransactionTestCase):
+    def test_certificate_deletion_deletes_files(self):
+        with open(os.path.join(TEST_FILES, "test.certificate"), "r") as certificate_f:
+            certificate = Certificate.objects.create(
+                label="Test client certificate",
+                type=CertificateTypes.cert_only,
+                public_certificate=File(certificate_f, name="test.certificate"),
+            )
+
+        file_path = certificate.public_certificate.path
+        storage = certificate.public_certificate.storage
+
+        certificate.delete()
+
+        self.assertFalse(storage.exists(file_path))
