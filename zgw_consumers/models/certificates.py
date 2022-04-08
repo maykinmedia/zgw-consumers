@@ -44,6 +44,9 @@ class Certificate(DeleteFileFieldFilesMixin, models.Model):
     _certificate_obj = None
     _private_key_obj = None
 
+    def __str__(self):
+        return self.label
+
     @property
     def _certificate(self):
         if not self._certificate_obj:
