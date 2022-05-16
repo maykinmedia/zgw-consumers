@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.translation import gettext_lazy as _
 
 from privates.admin import PrivateMediaMixin
 from solo.admin import SingletonModelAdmin
@@ -39,6 +40,20 @@ class CertificateAdmin(PrivateMediaMixin, admin.ModelAdmin):
     search_fields = ("label", "type")
 
     private_media_fields = ("public_certificate", "private_key")
+
+    def expiry_date(self, obj=None):
+        # alias model property to catch file not found errors
+        try:
+            return obj.expiry_date
+        except FileNotFoundError:
+            return _("file not found")
+
+    def is_valid_key_pair(self, obj=None):
+        # alias model method to catch file not found errors
+        try:
+            return obj.is_valid_key_pair()
+        except FileNotFoundError:
+            return _("file not found")
 
 
 class ListZaaktypenMixin:
