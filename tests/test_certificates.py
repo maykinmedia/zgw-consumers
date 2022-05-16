@@ -117,15 +117,18 @@ class CertificateTests(TestCase):
 
     def test_admin_changelist_doesnt_crash_on_missing_files(self):
         # Github #39
-        client_certificate_f = open(os.path.join(TEST_FILES, "test.certificate"), "r")
-        key_f = open(os.path.join(TEST_FILES, "test.key"), "r")
+        with open(
+            os.path.join(TEST_FILES, "test.certificate"), "r"
+        ) as client_certificate_f, open(
+            os.path.join(TEST_FILES, "test.key"), "r"
+        ) as key_f:
+            certificate = Certificate.objects.create(
+                label="Test certificate",
+                type=CertificateTypes.key_pair,
+                public_certificate=File(client_certificate_f, name="test.certificate"),
+                private_key=File(key_f, name="test.key"),
+            )
 
-        certificate = Certificate.objects.create(
-            label="Test certificate",
-            type=CertificateTypes.key_pair,
-            public_certificate=File(client_certificate_f, name="test.certificate"),
-            private_key=File(key_f, name="test.key"),
-        )
         # delete the physical files from media storage
         os.unlink(certificate.public_certificate.path)
         os.unlink(certificate.private_key.path)
