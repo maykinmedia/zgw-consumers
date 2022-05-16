@@ -1,13 +1,16 @@
 import os
 from datetime import datetime
 
+from django.contrib.admin import AdminSite
+from django.contrib.auth.models import User
 from django.core.files import File
 from django.db.models.deletion import ProtectedError
-from django.test import TestCase, TransactionTestCase
+from django.test import RequestFactory, TestCase, TransactionTestCase
 
 import requests_mock
 from privates.test import temp_private_root
 
+from zgw_consumers.admin import CertificateAdmin
 from zgw_consumers.constants import APITypes, CertificateTypes
 from zgw_consumers.forms import CertificateAdminForm
 from zgw_consumers.models import Certificate, Service
@@ -111,6 +114,33 @@ class CertificateTests(TestCase):
             )
 
         self.assertIsNone(certificate.is_valid_key_pair())
+
+    def test_admin_changelist_doesnt_crash_on_missing_files(self):
+        # Github #39
+        client_certificate_f = open(os.path.join(TEST_FILES, "test.certificate"), "r")
+        key_f = open(os.path.join(TEST_FILES, "test.key"), "r")
+
+        certificate = Certificate.objects.create(
+            label="Test certificate",
+            type=CertificateTypes.key_pair,
+            public_certificate=File(client_certificate_f, name="test.certificate"),
+            private_key=File(key_f, name="test.key"),
+        )
+        # delete the physical files from media storage
+        os.unlink(certificate.public_certificate.path)
+        os.unlink(certificate.private_key.path)
+
+        certificate_admin = CertificateAdmin(model=Certificate, admin_site=AdminSite())
+
+        # fake a superuser admin request to changelist
+        request = RequestFactory().get("/dummy")
+        request.user = User.objects.create_user(is_superuser=True, username="admin")
+        response = certificate_admin.changelist_view(request)
+
+        # calling .render() to force actual rendering and trigger issue
+        response.render()
+
+        self.assertEqual(response.status_code, 200)
 
 
 @temp_private_root()
