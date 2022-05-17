@@ -76,4 +76,7 @@ TEMPLATES = [
 
 ROOT_URLCONF = "testapp.urls"
 
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = "/media/"
+
 ZGW_CONSUMERS_OAS_CACHE = "oas"

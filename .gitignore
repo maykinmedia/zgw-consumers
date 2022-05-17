@@ -47,6 +47,7 @@ coverage.xml
 .hypothesis/
 .pytest_cache/
 /reports/
+/testapp/media
 
 # Translations
 *.pot
