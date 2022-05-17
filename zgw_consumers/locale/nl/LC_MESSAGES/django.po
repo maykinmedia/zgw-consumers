@@ -1,0 +1,290 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-05-17 09:38+0200\n"
+"PO-Revision-Date: 2022-05-17 09:40+02:00\n"
+"Last-Translator: Sergei Maertens <sergei@maykinmedia.nl>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: Dutch\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: admin.py:49 admin.py:56
+msgid "file not found"
+msgstr "bestand bestaat niet"
+
+#: admin_fields.py:96
+msgid "No NLX"
+msgstr "Geen NLX"
+
+#: api_models/constants.py:81
+msgid "Vervolg"
+msgstr ""
+
+#: api_models/constants.py:82
+msgid "Bijdrage"
+msgstr ""
+
+#: api_models/constants.py:83
+msgid "Onderwerp"
+msgstr ""
+
+#: constants.py:7
+msgid "AC (Authorizations)"
+msgstr "AC (Autorisaties API)"
+
+#: constants.py:8
+msgid "NRC (Notifications)"
+msgstr "NRC (Notificaties API)"
+
+#: constants.py:10
+msgid "ZRC (Zaken)"
+msgstr "ZRC (Zaken API)"
+
+#: constants.py:11
+msgid "ZTC (Zaaktypen)"
+msgstr "ZTC (Catalogi API)"
+
+#: constants.py:12
+msgid "DRC (Informatieobjecten)"
+msgstr "DRC (Documenten API)"
+
+#: constants.py:13
+msgid "BRC (Besluiten)"
+msgstr "BRC (Besluiten API)"
+
+#: constants.py:15
+msgid "Contactmomenten API"
+msgstr ""
+
+#: constants.py:16
+msgid "Klanten API"
+msgstr ""
+
+#: constants.py:17
+msgid "Verzoeken API"
+msgstr ""
+
+#: constants.py:19
+msgid "ORC (Overige)"
+msgstr ""
+
+#: constants.py:23
+msgid "No authorization"
+msgstr "Geen authorisatie"
+
+#: constants.py:24
+msgid "API key"
+msgstr "API sleutel"
+
+#: constants.py:25
+msgid "ZGW client_id + secret"
+msgstr "ZGW client_id en secret"
+
+#: constants.py:29
+msgid "Demo"
+msgstr ""
+
+#: constants.py:30
+msgid "Pre-prod"
+msgstr ""
+
+#: constants.py:31
+msgid "Prod"
+msgstr ""
+
+#: constants.py:35
+msgid "Key-pair"
+msgstr "Sleutelpaar"
+
+#: constants.py:36
+msgid "Certificate only"
+msgstr "Enkel certificaat"
+
+#: forms.py:26
+msgid "Invalid certificate"
+msgstr "Ongeldig certificaat"
+
+#: models/abstract.py:7 models/certificates.py:16
+msgid "label"
+msgstr "label"
+
+#: models/abstract.py:15
+msgid "OAS url"
+msgstr ""
+
+#: models/abstract.py:15
+msgid "URL to OAS yaml file"
+msgstr "URL naar het OAS-bestand (YAML-formaat)"
+
+#: models/abstract.py:18
+msgid "OAS file"
+msgstr "OAS-bestand"
+
+#: models/abstract.py:20
+msgid "OAS yaml file"
+msgstr "OAS YAML-bestand"
+
+#: models/certificates.py:18
+msgid "Recognisable label for the certificate"
+msgstr "Label om het certificaat mee te identificeren"
+
+#: models/certificates.py:21 models/services.py:25
+msgid "type"
+msgstr "type"
+
+#: models/certificates.py:25
+msgid "Is this only a certificate or is there an associated private key?"
+msgstr "Gaat het enkel om het certificaat, of is er ook een bijhorende privésleutel?"
+
+#: models/certificates.py:29
+msgid "public certificate"
+msgstr "publiek certificaat"
+
+#: models/certificates.py:30
+msgid "The content of the certificate"
+msgstr "De inhoud van het certificaat, in PEM-formaat"
+
+#: models/certificates.py:34
+msgid "private key"
+msgstr "privésleutel"
+
+#: models/certificates.py:35
+msgid "The content of the private key"
+msgstr "De inhoud van de privésleutel, in PEM-formaat"
+
+#: models/certificates.py:41
+msgid "certificate"
+msgstr "certificaat"
+
+#: models/certificates.py:42
+msgid "certificates"
+msgstr "certificaten"
+
+#: models/certificates.py:48
+msgid "(missing label)"
+msgstr "(label ontbreekt)"
+
+#: models/services.py:26
+msgid "api root url"
+msgstr "basisurl van de API"
+
+#: models/services.py:32
+msgid "authorization type"
+msgstr "authorisatietype"
+
+#: models/services.py:37
+msgid "header key"
+msgstr "header sleutel"
+
+#: models/services.py:38
+msgid "header value"
+msgstr "header waarde"
+
+#: models/services.py:40
+msgid "NLX url"
+msgstr "NLX-url"
+
+#: models/services.py:40
+msgid "NLX (outway) address"
+msgstr "NLX-outway adres"
+
+#: models/services.py:43
+msgid "user ID"
+msgstr "gebruikers-ID"
+
+#: models/services.py:47
+msgid ""
+"User ID to use for the audit trail. Although these external API credentials "
+"are typically used bythis API itself instead of a user, the user ID is "
+"required."
+msgstr ""
+
+#: models/services.py:52
+msgid "user representation"
+msgstr "gebruikersweergave"
+
+#: models/services.py:55
+msgid "Human readable representation of the user."
+msgstr "Weergave van de gebruikersidentiteit voor mensen."
+
+#: models/services.py:61
+msgid "The SSL/TLS certificate of the client"
+msgstr "Het SSL/TLS-certificaat van de client"
+
+#: models/services.py:69
+msgid "The SSL/TLS certificate of the server"
+msgstr "Het SSL/TLS-certificaat van de server"
+
+#: models/services.py:77
+msgid "service"
+msgstr "service"
+
+#: models/services.py:78
+msgid "services"
+msgstr "services"
+
+#: models/services.py:100
+msgid "If header_key is set, header_value must also be set"
+msgstr "Als de header_key opgegeven is, dan moet je ook een header-waarde opgeven"
+
+#: models/services.py:106
+msgid "If header_value is set, header_key must also be set"
+msgstr "Als de header_value opgegeven is, dan moet je ook een header-sleutel opgeven"
+
+#: models/services.py:112 models/services.py:113
+msgid "Set either oas or oas_file, not both"
+msgstr "Geef de OAS URL of het OAS-bestand op, niet beide"
+
+#: models/services.py:119 models/services.py:120
+msgid "Set either oas or oas_file"
+msgstr "Geef de OAS URL of het OAS-bestand op"
+
+#: models/services.py:205
+msgid "NLX directory"
+msgstr "NLX directory"
+
+#: models/services.py:208
+msgid "NLX outway address"
+msgstr "NLX-outway adres"
+
+#: models/services.py:210
+msgid "Example: http://my-outway.nlx:8080"
+msgstr "Voorbeeld: http://mijn-outway.nl:8080"
+
+#: models/services.py:216
+msgid ""
+"Your organization TLS certificate for the NLX network. This is used to fetch "
+"the list of available services from the NLX directory API."
+msgstr ""
+"Het TLS-certificaat van jouw organisatie voor het NLX-netwerk. Dit wordt gebruikt "
+"om de lijst van beschikbare services uit de NLX directory API op te halen."
+
+#: models/services.py:223
+msgid ""
+"Your organization TLS private key for the NLX network. This is used to fetch "
+"the list of available services from the NLX directory API."
+msgstr ""
+"De TLS-privésleutel voor het NLX-netwerk. Dit wordt gebruikt "
+"om de lijst van beschikbare services uit de NLX directory API op te halen."
+
+#: models/services.py:230
+msgid "NLX configuration"
+msgstr "NLX-configuratie"
+
+#: models/services.py:261
+msgid "Connection refused. Please provide a correct address."
+msgstr "Verbinding geweigerd. Geef een valide adres op."
+
+#: templates/admin/widgets/clearable_no_download_private_file_input.html:3
+msgid "No download allowed"
+msgstr "Geen download toegestaan"
