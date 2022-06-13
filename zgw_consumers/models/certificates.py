@@ -1,7 +1,8 @@
 from datetime import date, datetime
+from typing import Optional
 
 from django.db import models
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _
 
 from OpenSSL import SSL, crypto
 from privates.fields import PrivateMediaFileField
@@ -45,7 +46,7 @@ class Certificate(DeleteFileFieldFilesMixin, models.Model):
     _private_key_obj = None
 
     def __str__(self):
-        return self.label or _("(missing label)")
+        return self.label or gettext("(missing label)")
 
     @property
     def _certificate(self):
@@ -71,16 +72,16 @@ class Certificate(DeleteFileFieldFilesMixin, models.Model):
         return datetime.strptime(expiry.decode("utf-8"), "%Y%m%d%H%M%SZ")
 
     @property
-    def issuer(self):
+    def issuer(self) -> str:
         issuer_x509name = self._certificate.get_issuer()
         return pretty_print_certificate_components(issuer_x509name)
 
     @property
-    def subject(self):
+    def subject(self) -> str:
         subject_x509name = self._certificate.get_subject()
         return pretty_print_certificate_components(subject_x509name)
 
-    def is_valid_key_pair(self):
+    def is_valid_key_pair(self) -> Optional[bool]:
         if not self.private_key:
             return None
 
