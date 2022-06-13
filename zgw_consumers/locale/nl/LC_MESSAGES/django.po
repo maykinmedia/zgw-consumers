@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.18.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-05-17 09:38+0200\n"
+"POT-Creation-Date: 2022-06-13 10:08-0500\n"
 "PO-Revision-Date: 2022-05-17 09:40+02:00\n"
 "Last-Translator: Sergei Maertens <sergei@maykinmedia.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,9 +18,21 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: admin.py:49 admin.py:56
+#: admin.py:47 models/abstract.py:7 models/certificates.py:17
+msgid "label"
+msgstr "label"
+
+#: admin.py:55
 msgid "file not found"
 msgstr "bestand bestaat niet"
+
+#: admin.py:57
+msgid "expiry date"
+msgstr "vervaldatum"
+
+#: admin.py:66
+msgid "valid key pair"
+msgstr "geldig sleutelpaar"
 
 #: admin_fields.py:96
 msgid "No NLX"
@@ -114,10 +126,6 @@ msgstr "Enkel certificaat"
 msgid "Invalid certificate"
 msgstr "Ongeldig certificaat"
 
-#: models/abstract.py:7 models/certificates.py:16
-msgid "label"
-msgstr "label"
-
 #: models/abstract.py:15
 msgid "OAS url"
 msgstr ""
@@ -134,43 +142,44 @@ msgstr "OAS-bestand"
 msgid "OAS yaml file"
 msgstr "OAS YAML-bestand"
 
-#: models/certificates.py:18
+#: models/certificates.py:19
 msgid "Recognisable label for the certificate"
 msgstr "Label om het certificaat mee te identificeren"
 
-#: models/certificates.py:21 models/services.py:25
+#: models/certificates.py:22 models/services.py:25
 msgid "type"
 msgstr "type"
 
-#: models/certificates.py:25
+#: models/certificates.py:26
 msgid "Is this only a certificate or is there an associated private key?"
-msgstr "Gaat het enkel om het certificaat, of is er ook een bijhorende privésleutel?"
+msgstr ""
+"Gaat het enkel om het certificaat, of is er ook een bijhorende privésleutel?"
 
-#: models/certificates.py:29
+#: models/certificates.py:30
 msgid "public certificate"
 msgstr "publiek certificaat"
 
-#: models/certificates.py:30
+#: models/certificates.py:31
 msgid "The content of the certificate"
 msgstr "De inhoud van het certificaat, in PEM-formaat"
 
-#: models/certificates.py:34
+#: models/certificates.py:35
 msgid "private key"
 msgstr "privésleutel"
 
-#: models/certificates.py:35
+#: models/certificates.py:36
 msgid "The content of the private key"
 msgstr "De inhoud van de privésleutel, in PEM-formaat"
 
-#: models/certificates.py:41
+#: models/certificates.py:42
 msgid "certificate"
 msgstr "certificaat"
 
-#: models/certificates.py:42
+#: models/certificates.py:43
 msgid "certificates"
 msgstr "certificaten"
 
-#: models/certificates.py:48
+#: models/certificates.py:49
 msgid "(missing label)"
 msgstr "(label ontbreekt)"
 
@@ -235,11 +244,13 @@ msgstr "services"
 
 #: models/services.py:100
 msgid "If header_key is set, header_value must also be set"
-msgstr "Als de header_key opgegeven is, dan moet je ook een header-waarde opgeven"
+msgstr ""
+"Als de header_key opgegeven is, dan moet je ook een header-waarde opgeven"
 
 #: models/services.py:106
 msgid "If header_value is set, header_key must also be set"
-msgstr "Als de header_value opgegeven is, dan moet je ook een header-sleutel opgeven"
+msgstr ""
+"Als de header_value opgegeven is, dan moet je ook een header-sleutel opgeven"
 
 #: models/services.py:112 models/services.py:113
 msgid "Set either oas or oas_file, not both"
@@ -266,16 +277,17 @@ msgid ""
 "Your organization TLS certificate for the NLX network. This is used to fetch "
 "the list of available services from the NLX directory API."
 msgstr ""
-"Het TLS-certificaat van jouw organisatie voor het NLX-netwerk. Dit wordt gebruikt "
-"om de lijst van beschikbare services uit de NLX directory API op te halen."
+"Het TLS-certificaat van jouw organisatie voor het NLX-netwerk. Dit wordt "
+"gebruikt om de lijst van beschikbare services uit de NLX directory API op te "
+"halen."
 
 #: models/services.py:223
 msgid ""
 "Your organization TLS private key for the NLX network. This is used to fetch "
 "the list of available services from the NLX directory API."
 msgstr ""
-"De TLS-privésleutel voor het NLX-netwerk. Dit wordt gebruikt "
-"om de lijst van beschikbare services uit de NLX directory API op te halen."
+"De TLS-privésleutel voor het NLX-netwerk. Dit wordt gebruikt om de lijst van "
+"beschikbare services uit de NLX directory API op te halen."
 
 #: models/services.py:230
 msgid "NLX configuration"
