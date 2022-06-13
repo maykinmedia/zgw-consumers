@@ -1,6 +1,11 @@
 Changes
 =======
 
+0.18.2 (2022-06-13)
+-------------------
+
+* Fixed admin crash when certificate label is empty
+
 0.18.1 (2022-05-17)
 -------------------
 
