@@ -1,4 +1,5 @@
 from .certificates import Certificate
+from .fields import ServiceUrlField
 from .services import NLXConfig, Service
 
 __all__ = [
