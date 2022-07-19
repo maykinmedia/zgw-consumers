@@ -1,4 +1,3 @@
-import os
 import re
 from datetime import datetime
 
@@ -10,7 +9,7 @@ DATE_RE = re.compile(r"[0-9]{4}-[0-9]{2}-[0-9]{2}")
 
 
 def test_component_generation(settings):
-    settings.ZGW_CONSUMERS_TEST_SCHEMA_DIRS = [os.path.join(TESTS_DIR, "schemas")]
+    settings.ZGW_CONSUMERS_TEST_SCHEMA_DIRS = [TESTS_DIR / "schemas"]
 
     component = generate_oas_component("drc", "schemas/EnkelvoudigInformatieObject")
 

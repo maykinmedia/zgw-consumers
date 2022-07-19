@@ -1,5 +1,5 @@
-import os
 import zipfile
+from pathlib import Path
 
 from django.core.files import File
 from django.core.management import call_command
@@ -11,7 +11,7 @@ from privates.test import temp_private_root
 from zgw_consumers.constants import CertificateTypes
 from zgw_consumers.models import Certificate
 
-TEST_FILES = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
+TEST_FILES = Path(__file__).parent / "data"
 
 
 @freeze_time("2022-01-01")
@@ -21,33 +21,27 @@ class CertificateDumpTests(TestCase):
         super().setUp()
 
         def remove_certs_archive():
-            if os.path.exists("certificates.zip"):
-                os.remove("certificates.zip")
+            Path("certificates.zip").unlink()
 
         self.addCleanup(remove_certs_archive)
 
     def test_dump_certificate_files(self):
-        client_certificate_f = open(os.path.join(TEST_FILES, "test.certificate"), "r")
-        key_f = open(os.path.join(TEST_FILES, "test.key"), "r")
-        certificate1 = Certificate.objects.create(
-            label="Test certificate",
-            type=CertificateTypes.key_pair,
-            public_certificate=File(client_certificate_f, name="test.certificate"),
-            private_key=File(key_f, name="test.key"),
-        )
-        client_certificate_f.close()
-        key_f.close()
+        with open(TEST_FILES / "test.certificate", "r") as client_certificate_f, open(
+            TEST_FILES / "test.key", "r"
+        ) as key_f:
+            certificate1 = Certificate.objects.create(
+                label="Test certificate",
+                type=CertificateTypes.key_pair,
+                public_certificate=File(client_certificate_f, name="test.certificate"),
+                private_key=File(key_f, name="test.key"),
+            )
 
-        client_certificate_f = open(os.path.join(TEST_FILES, "test.certificate"), "r")
-        key_f = open(os.path.join(TEST_FILES, "test.key"), "r")
-        certificate2 = Certificate.objects.create(
-            label="Test certificate2",
-            type=CertificateTypes.key_pair,
-            public_certificate=File(client_certificate_f, name="test.certificate2"),
-            private_key=File(key_f, name="test.key2"),
-        )
-        client_certificate_f.close()
-        key_f.close()
+            certificate2 = Certificate.objects.create(
+                label="Test certificate2",
+                type=CertificateTypes.key_pair,
+                public_certificate=File(client_certificate_f, name="test.certificate2"),
+                private_key=File(key_f, name="test.key2"),
+            )
 
         call_command("dump_certs")
 
