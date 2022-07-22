@@ -1,31 +1,40 @@
-.. zgw_consumers documentation master file, created by startproject.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
-Welcome to ZGW-Consumer's documentation!
-========================================
+ZGW Consumers
+=============
 
 |build-status| |coverage| |linting|
 
 |python-versions| |django-versions| |pypi-version|
 
-Manage your external API's to consume.
+ZGW Consumers allows you to manage your external services through the Django admin.
 
 Features
-========
+--------
 
 * Store services with their configuration in the database
+* Manage (mutual) TLS certificates
 * Integrate with OpenAPI 3.0 specifications
-* Built in NLX_ support
+* NLX support
 * Declare data/domain objects as modern Python dataclasses
+
+Developed for use in Dutch government software where data exchange with external
+services is run of the mill, this library provides flexibility in configuring your
+environment(s).
+
+ZGW Consumers allows you to centralize the location, credentials, TLS certificate... to
+connect to HTTP-based services. There is first class support for OpenAPI 3
+specifications, but you are not limited to "modern" RESTful services! SOAP/XML services
+can still leverage the utilities offered by ZGW Consumers.
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
    quickstart
-
-
+   settings
+   models
+   commands
+   drf
+   testing
 
 Indices and tables
 ==================
@@ -33,6 +42,8 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
+
 
 .. |build-status| image:: https://github.com/maykinmedia/zgw-consumers/workflows/Run%20CI/badge.svg
     :target: https://github.com/maykinmedia/zgw-consumers/actions?query=workflow%3A%22Run+CI%22
@@ -52,5 +63,3 @@ Indices and tables
 
 .. |pypi-version| image:: https://img.shields.io/pypi/v/zgw_consumers.svg
     :target: https://pypi.org/project/zgw_consumers/
-
-.. _NLX: https://nlx.io
