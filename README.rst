@@ -112,7 +112,7 @@ package for inspiration.
     :target: https://github.com/maykinmedia/zgw-consumers/actions?query=workflow%3A%22Code+quality+checks%22
     :alt: Code linting
 
-.. |coverage| image:: https://codecov.io/gh/maykinmedia/zgw-consumers/branch/master/graph/badge.svg
+.. |coverage| image:: https://codecov.io/gh/maykinmedia/zgw-consumers/branch/main/graph/badge.svg
     :target: https://codecov.io/gh/maykinmedia/zgw-consumers
     :alt: Coverage status
 
