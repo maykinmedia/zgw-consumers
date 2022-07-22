@@ -1,6 +1,13 @@
 Changes
 =======
 
+0.19.0 (2022-07-22)
+-------------------
+
+* Added management command to dump certificates to .zip archive
+* Added docs (published on readthedocs.io)
+* Updated package meta information
+
 0.18.2 (2022-06-13)
 -------------------
 
