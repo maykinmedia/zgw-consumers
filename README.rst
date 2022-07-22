@@ -10,7 +10,7 @@ Welcome to ZGW Consumers' documentation!
 :Keywords: OpenAPI, Zaakgericht Werken, Common Ground, NLX
 :PythonVersion: 3.7, 3.8, 3.9
 
-|build-status| |coverage| |linting|
+|build-status| |coverage| |linting| |docs|
 
 |python-versions| |django-versions| |pypi-version|
 
@@ -115,6 +115,10 @@ package for inspiration.
 .. |coverage| image:: https://codecov.io/gh/maykinmedia/zgw-consumers/branch/main/graph/badge.svg
     :target: https://codecov.io/gh/maykinmedia/zgw-consumers
     :alt: Coverage status
+
+.. |docs| image:: https://readthedocs.org/projects/zgw-consumers/badge/?version=latest
+    :target: https://zgw-consumers.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
 
 .. |python-versions| image:: https://img.shields.io/pypi/pyversions/zgw_consumers.svg
 
