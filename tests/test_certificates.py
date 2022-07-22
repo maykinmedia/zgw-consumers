@@ -1,5 +1,5 @@
-import os
 from datetime import datetime
+from pathlib import Path
 
 from django.contrib.admin import AdminSite
 from django.contrib.auth.models import User
@@ -15,24 +15,21 @@ from zgw_consumers.constants import APITypes, CertificateTypes
 from zgw_consumers.forms import CertificateAdminForm
 from zgw_consumers.models import Certificate, Service
 
-TEST_FILES = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
+TEST_FILES = Path(__file__).parent / "data"
 
 
 @temp_private_root()
 class CertificateTests(TestCase):
     def test_calculated_properties(self):
-        client_certificate_f = open(os.path.join(TEST_FILES, "test.certificate"), "r")
-        key_f = open(os.path.join(TEST_FILES, "test.key"), "r")
-
-        certificate = Certificate.objects.create(
-            label="Test certificate",
-            type=CertificateTypes.key_pair,
-            public_certificate=File(client_certificate_f, name="test.certificate"),
-            private_key=File(key_f, name="test.key"),
-        )
-
-        client_certificate_f.close()
-        key_f.close()
+        with open(TEST_FILES / "test.certificate", "r") as client_certificate_f, open(
+            TEST_FILES / "test.key", "r"
+        ) as key_f:
+            certificate = Certificate.objects.create(
+                label="Test certificate",
+                type=CertificateTypes.key_pair,
+                public_certificate=File(client_certificate_f, name="test.certificate"),
+                private_key=File(key_f, name="test.key"),
+            )
 
         self.assertEqual(datetime(2023, 2, 21, 14, 26, 51), certificate.expiry_date)
         self.assertEqual(
@@ -43,9 +40,7 @@ class CertificateTests(TestCase):
         )
 
     def test_admin_validation_invalid_certificate(self):
-        with open(
-            os.path.join(TEST_FILES, "invalid.certificate"), "r"
-        ) as client_certificate_f:
+        with open(TEST_FILES / "invalid.certificate", "r") as client_certificate_f:
             form = CertificateAdminForm(
                 {
                     "label": "Test invalid certificate",
@@ -57,9 +52,7 @@ class CertificateTests(TestCase):
         self.assertFalse(form.is_valid())
 
     def test_admin_validation_valid_certificate(self):
-        with open(
-            os.path.join(TEST_FILES, "test.certificate"), "r"
-        ) as client_certificate_f:
+        with open(TEST_FILES / "test.certificate", "r") as client_certificate_f:
             form = CertificateAdminForm(
                 {
                     "label": "Test invalid certificate",
@@ -71,42 +64,33 @@ class CertificateTests(TestCase):
         self.assertTrue(form.is_valid())
 
     def test_invalid_key_pair(self):
-        client_certificate_f = open(os.path.join(TEST_FILES, "test.certificate"), "r")
-        # Valid key that belongs to another certificate
-        key_f = open(os.path.join(TEST_FILES, "test2.key"), "r")
-
-        certificate = Certificate.objects.create(
-            label="Test certificate",
-            type=CertificateTypes.key_pair,
-            public_certificate=File(client_certificate_f, name="test.certificate"),
-            private_key=File(key_f, name="test2.key"),
-        )
-
-        client_certificate_f.close()
-        key_f.close()
+        with open(TEST_FILES / "test.certificate", "r") as client_certificate_f, open(
+            TEST_FILES / "test2.key", "r"
+        ) as key_f:
+            certificate = Certificate.objects.create(
+                label="Test certificate",
+                type=CertificateTypes.key_pair,
+                public_certificate=File(client_certificate_f, name="test.certificate"),
+                private_key=File(key_f, name="test2.key"),
+            )
 
         self.assertFalse(certificate.is_valid_key_pair())
 
     def test_valid_key_pair(self):
-        client_certificate_f = open(os.path.join(TEST_FILES, "test.certificate"), "r")
-        key_f = open(os.path.join(TEST_FILES, "test.key"), "r")
-
-        certificate = Certificate.objects.create(
-            label="Test certificate",
-            type=CertificateTypes.key_pair,
-            public_certificate=File(client_certificate_f, name="test.certificate"),
-            private_key=File(key_f, name="test.key"),
-        )
-
-        client_certificate_f.close()
-        key_f.close()
+        with open(TEST_FILES / "test.certificate", "r") as client_certificate_f, open(
+            TEST_FILES / "test.key", "r"
+        ) as key_f:
+            certificate = Certificate.objects.create(
+                label="Test certificate",
+                type=CertificateTypes.key_pair,
+                public_certificate=File(client_certificate_f, name="test.certificate"),
+                private_key=File(key_f, name="test.key"),
+            )
 
         self.assertTrue(certificate.is_valid_key_pair())
 
     def test_valid_key_pair_missing_key(self):
-        with open(
-            os.path.join(TEST_FILES, "test.certificate"), "r"
-        ) as client_certificate_f:
+        with open(TEST_FILES / "test.certificate", "r") as client_certificate_f:
             certificate = Certificate.objects.create(
                 label="Test certificate",
                 type=CertificateTypes.key_pair,
@@ -117,10 +101,8 @@ class CertificateTests(TestCase):
 
     def test_admin_changelist_doesnt_crash_on_missing_files(self):
         # Github #39
-        with open(
-            os.path.join(TEST_FILES, "test.certificate"), "r"
-        ) as client_certificate_f, open(
-            os.path.join(TEST_FILES, "test.key"), "r"
+        with open(TEST_FILES / "test.certificate", "r") as client_certificate_f, open(
+            TEST_FILES / "test.key", "r"
         ) as key_f:
             certificate = Certificate.objects.create(
                 label="Test certificate",
@@ -130,8 +112,8 @@ class CertificateTests(TestCase):
             )
 
         # delete the physical files from media storage
-        os.unlink(certificate.public_certificate.path)
-        os.unlink(certificate.private_key.path)
+        Path(certificate.public_certificate.path).unlink()
+        Path(certificate.private_key.path).unlink()
 
         certificate_admin = CertificateAdmin(model=Certificate, admin_site=AdminSite())
 
@@ -150,9 +132,9 @@ class CertificateTests(TestCase):
 class ServiceWithCertificateTests(TestCase):
     @classmethod
     def setUpTestData(cls):
-        client_certificate_f = open(os.path.join(TEST_FILES, "test.certificate"), "r")
-        server_certificate_f = open(os.path.join(TEST_FILES, "test2.certificate"), "r")
-        key_f = open(os.path.join(TEST_FILES, "test.key"), "r")
+        client_certificate_f = open(TEST_FILES / "test.certificate", "r")
+        server_certificate_f = open(TEST_FILES / "test2.certificate", "r")
+        key_f = open(TEST_FILES / "test.key", "r")
 
         cls.client_certificate = Certificate.objects.create(
             label="Test client certificate",
@@ -176,7 +158,7 @@ class ServiceWithCertificateTests(TestCase):
         key_f.close()
 
     def test_build_client_with_server_and_client_certificates(self):
-        oas_path = os.path.join(os.path.dirname(__file__), "schemas/drc.yaml")
+        oas_path = Path(__file__).parent / "schemas/drc.yaml"
 
         with open(oas_path, "r") as oas_file:
             service = Service.objects.create(
@@ -209,7 +191,7 @@ class ServiceWithCertificateTests(TestCase):
         )
 
     def test_build_client_with_only_client_certificates(self):
-        oas_path = os.path.join(os.path.dirname(__file__), "schemas/drc.yaml")
+        oas_path = Path(__file__).parent / "schemas/drc.yaml"
 
         with open(oas_path, "r") as oas_file:
             service = Service.objects.create(
@@ -239,7 +221,7 @@ class ServiceWithCertificateTests(TestCase):
         self.assertTrue(request_with_tls.verify)
 
     def test_build_client_with_only_client_certificates_no_key(self):
-        oas_path = os.path.join(os.path.dirname(__file__), "schemas/drc.yaml")
+        oas_path = Path(__file__).parent / "schemas/drc.yaml"
 
         with open(oas_path, "r") as oas_file:
             service = Service.objects.create(
@@ -265,7 +247,7 @@ class ServiceWithCertificateTests(TestCase):
         self.assertTrue(request_with_tls.verify)
 
     def test_build_client_with_only_server_certificates(self):
-        oas_path = os.path.join(os.path.dirname(__file__), "schemas/drc.yaml")
+        oas_path = Path(__file__).parent / "schemas/drc.yaml"
 
         with open(oas_path, "r") as oas_file:
             service = Service.objects.create(
@@ -290,9 +272,9 @@ class ServiceWithCertificateTests(TestCase):
         )
 
     def test_certificate_deletion_with_services(self):
-        oas_path = os.path.join(os.path.dirname(__file__), "schemas/drc.yaml")
+        oas_path = Path(__file__).parent / "schemas/drc.yaml"
 
-        with open(os.path.join(TEST_FILES, "test.certificate"), "r") as certificate_f:
+        with open(TEST_FILES / "test.certificate", "r") as certificate_f:
             certificate = Certificate.objects.create(
                 label="Test client certificate",
                 type=CertificateTypes.cert_only,
@@ -315,7 +297,7 @@ class ServiceWithCertificateTests(TestCase):
 @temp_private_root()
 class TestCertificateFilesDeletion(TransactionTestCase):
     def test_certificate_deletion_deletes_files(self):
-        with open(os.path.join(TEST_FILES, "test.certificate"), "r") as certificate_f:
+        with open(TEST_FILES / "test.certificate", "r") as certificate_f:
             certificate = Certificate.objects.create(
                 label="Test client certificate",
                 type=CertificateTypes.cert_only,

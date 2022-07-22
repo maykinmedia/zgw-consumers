@@ -2,7 +2,8 @@
 Test using a local OAS
 """
 
-import os
+# import os
+from pathlib import Path
 
 from django.core.exceptions import ValidationError
 from django.core.files.base import File
@@ -14,12 +15,12 @@ from zgw_consumers.models import Service
 
 pytestmark = pytest.mark.django_db()
 
+OAS_PATH = Path(__file__).parent / "schemas/drc.yaml"
+
 
 def test_use_local_oas_file(settings, tmp_path):
     settings.MEDIA_ROOT = tmp_path
-    oas_path = os.path.join(os.path.dirname(__file__), "schemas/drc.yaml")
-
-    with open(oas_path, "r") as oas_file:
+    with open(OAS_PATH, "r") as oas_file:
         service = Service.objects.create(
             label="Test",
             api_type=APITypes.drc,
@@ -41,9 +42,7 @@ def test_use_local_oas_file(settings, tmp_path):
 
 def test_require_exclusively_oas_url_or_file(settings, tmp_path):
     settings.MEDIA_ROOT = tmp_path
-    oas_path = os.path.join(os.path.dirname(__file__), "schemas/drc.yaml")
-
-    with open(oas_path, "r") as oas_file:
+    with open(OAS_PATH, "r") as oas_file:
         service = Service(
             label="Test",
             api_type=APITypes.drc,
@@ -64,8 +63,7 @@ def test_require_exclusively_oas_url_or_file(settings, tmp_path):
 
 
 def test_require_either_oas_url_or_file():
-    oas_path = os.path.join(os.path.dirname(__file__), "schemas/drc.yaml")
-    with open(oas_path, "r") as oas_file:
+    with open(OAS_PATH, "r"):
         service = Service(
             label="Test",
             api_type=APITypes.drc,
