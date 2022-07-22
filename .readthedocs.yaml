@@ -6,6 +6,11 @@ version: 2
 
 sphinx:
   configuration: docs/conf.py
+  install:
+    - method: pip
+      path: .
+      extra_requirements:
+        - drf
 
 python:
   version: 3.8
