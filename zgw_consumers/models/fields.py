@@ -6,8 +6,6 @@ from django.core.exceptions import FieldDoesNotExist
 from django.db.models import ForeignKey, Model, query_utils
 from django.utils.functional import cached_property
 
-from zgw_consumers.models import Service
-
 
 class ServiceUrlField(query_utils.RegisterLookupMixin):
     """
@@ -134,10 +132,12 @@ class ServiceUrlField(query_utils.RegisterLookupMixin):
     def attname(self) -> str:
         return self.name
 
-    def get_base_url(self, base_val: Optional[Service]) -> str:
+    def get_base_url(self, base_val) -> str:
         return getattr(base_val, "api_root", None)
 
-    def get_base_val(self, detail_url: str) -> Optional[Service]:
+    def get_base_val(self, detail_url: str):
+        from zgw_consumers.models import Service
+
         return Service.get_service(detail_url)
 
     def __get__(self, instance: Model, cls=None) -> Optional[str]:
@@ -165,8 +165,10 @@ class ServiceUrlField(query_utils.RegisterLookupMixin):
                 raise TypeError("Only string values are supported")
 
             base_val = self.get_base_val(value)
-            if base_val:
-                relative_val = value[len(self.get_base_url(base_val)) :]
+            if not base_val:
+                raise ValueError("The base part of url is not found in 'Service' data")
+
+            relative_val = value[len(self.get_base_url(base_val)) :]
 
         setattr(instance, self.base_field, base_val)
         setattr(instance, self.relative_field, relative_val)

@@ -6,5 +6,6 @@ class ZgwConsumersConfig(AppConfig):
 
     def ready(self):
         from .cache import install_schema_fetcher_cache
+        from .models import lookups
 
         install_schema_fetcher_cache()
