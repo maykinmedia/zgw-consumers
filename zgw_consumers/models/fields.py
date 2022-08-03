@@ -3,7 +3,7 @@ from urllib.parse import urljoin
 
 from django.core import checks
 from django.core.exceptions import FieldDoesNotExist
-from django.db.models import ForeignKey, Model, query_utils, CharField
+from django.db.models import CharField, ForeignKey, Model, query_utils
 from django.utils.functional import cached_property
 
 
