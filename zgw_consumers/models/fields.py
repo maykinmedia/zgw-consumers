@@ -3,7 +3,7 @@ from urllib.parse import urljoin
 
 from django.core import checks
 from django.core.exceptions import FieldDoesNotExist
-from django.db.models import ForeignKey, Model, query_utils
+from django.db.models import ForeignKey, Model, query_utils, CharField
 from django.utils.functional import cached_property
 
 
@@ -54,6 +54,14 @@ class ServiceUrlField(query_utils.RegisterLookupMixin):
         model = self.model
         return "%s.%s" % (model._meta.label, self.name)
 
+    @property
+    def _base_field(self) -> ForeignKey:
+        return self.model._meta.get_field(self.base_field)
+
+    @property
+    def _relative_field(self) -> CharField:
+        return self.model._meta.get_field(self.relative_field)
+
     def check(self, **kwargs):
         return [
             *self._check_field_name(),
@@ -89,6 +97,8 @@ class ServiceUrlField(query_utils.RegisterLookupMixin):
                 )
             ]
         else:
+            from zgw_consumers.models import Service
+
             if not isinstance(field, ForeignKey):
                 return [
                     checks.Error(
