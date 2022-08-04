@@ -3,11 +3,57 @@ from urllib.parse import urljoin
 
 from django.core import checks
 from django.core.exceptions import FieldDoesNotExist
-from django.db.models import CharField, ForeignKey, Model, query_utils
-from django.utils.functional import cached_property
+from django.db.models import CharField, Field, ForeignKey, Model
 
 
-class ServiceUrlField(query_utils.RegisterLookupMixin):
+class ServiceUrlDescriptor:
+    def __init__(self, field):
+        self.field = field
+
+    def get_base_url(self, base_val) -> str:
+        return getattr(base_val, "api_root", None)
+
+    def get_base_val(self, detail_url: str):
+        from zgw_consumers.models import Service
+
+        return Service.get_service(detail_url)
+
+    def __get__(self, instance: Model, cls=None) -> Optional[str]:
+        if instance is None:
+            return None
+
+        base_val = getattr(instance, self.field.base_field)
+        base_url = self.get_base_url(base_val)
+        relative_val = getattr(instance, self.field.relative_field)
+
+        # todo cache value
+        return urljoin(base_url, relative_val)
+
+    def __set__(self, instance: Model, value: Optional[str]):
+        if value is None and not self.field.null:
+            raise ValueError(
+                "A 'None'-value is not allowed. Make the field "
+                "nullable if empty values should be supported."
+            )
+
+        base_val = None
+        relative_val = None
+        if value:
+            if not isinstance(value, str):
+                raise TypeError("Only string values are supported")
+
+            base_val = self.get_base_val(value)
+            if not base_val:
+                raise ValueError("The base part of url is not found in 'Service' data")
+
+            relative_val = value[len(self.get_base_url(base_val)) :]
+
+        setattr(instance, self.field.base_field, base_val)
+        setattr(instance, self.field.relative_field, relative_val)
+        # todo cache value
+
+
+class ServiceUrlField(Field):
     """
     Composite field to store the base and relative parts of the url separately.
 
@@ -16,20 +62,10 @@ class ServiceUrlField(query_utils.RegisterLookupMixin):
 
     # field flags
     name = None
-    is_relation = False
-    many_to_many = False
-    primary_key = False
-    db_column = None
-    remote_field = None
     concrete = False
+    descriptor_class = ServiceUrlDescriptor
 
-    def __init__(
-        self,
-        base_field: str,
-        relative_field: str,
-        blank: bool = False,
-        null: bool = False,
-    ):
+    def __init__(self, base_field: str, relative_field: str, **kwargs):
         """
         :param str base_field: name of ForeignKey field to the Service model
         used for the base part of the url
@@ -39,20 +75,19 @@ class ServiceUrlField(query_utils.RegisterLookupMixin):
         """
         self.base_field = base_field
         self.relative_field = relative_field
-        self.blank = blank
-        self.null = null
+
+        super().__init__(**kwargs)
 
     def contribute_to_class(self, cls, name, private_only=False):
         self.name = name
         self.model = cls
         cls._meta.add_field(self, private=True)
 
-        # todo can be changed to separate descriptor
-        setattr(cls, name, self)
+        setattr(cls, name, self.descriptor_class(self))
 
-    def __str__(self):
-        model = self.model
-        return "%s.%s" % (model._meta.label, self.name)
+    @property
+    def attname(self) -> str:
+        return self.name
 
     @property
     def _base_field(self) -> ForeignKey:
@@ -137,72 +172,3 @@ class ServiceUrlField(query_utils.RegisterLookupMixin):
             ]
         else:
             return []
-
-    @property
-    def attname(self) -> str:
-        return self.name
-
-    def get_base_url(self, base_val) -> str:
-        return getattr(base_val, "api_root", None)
-
-    def get_base_val(self, detail_url: str):
-        from zgw_consumers.models import Service
-
-        return Service.get_service(detail_url)
-
-    def __get__(self, instance: Model, cls=None) -> Optional[str]:
-        if instance is None:
-            return None
-
-        base_val = getattr(instance, self.base_field)
-        base_url = self.get_base_url(base_val)
-        relative_val = getattr(instance, self.relative_field)
-
-        # todo cache value
-        return urljoin(base_url, relative_val)
-
-    def __set__(self, instance: Model, value: Optional[str]):
-        if value is None and not self.null:
-            raise ValueError(
-                "A 'None'-value is not allowed. Make the field "
-                "nullable if empty values should be supported."
-            )
-
-        base_val = None
-        relative_val = None
-        if value:
-            if not isinstance(value, str):
-                raise TypeError("Only string values are supported")
-
-            base_val = self.get_base_val(value)
-            if not base_val:
-                raise ValueError("The base part of url is not found in 'Service' data")
-
-            relative_val = value[len(self.get_base_url(base_val)) :]
-
-        setattr(instance, self.base_field, base_val)
-        setattr(instance, self.relative_field, relative_val)
-
-        # todo cache value
-
-    def get_col(self, alias, output_field=None):
-        if output_field is None:
-            output_field = self
-        if alias != self.model._meta.db_table or output_field != self:
-            from django.db.models.expressions import Col
-
-            return Col(alias, self, output_field)
-        else:
-            return self.cached_col
-
-    @cached_property
-    def cached_col(self):
-        from django.db.models.expressions import Col
-
-        return Col(self.model._meta.db_table, self)
-
-    def get_internal_type(self):
-        return self.__class__.__name__
-
-    def db_type(self, connection):
-        return None
