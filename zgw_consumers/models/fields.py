@@ -63,6 +63,9 @@ class ServiceUrlField(Field):
     # field flags
     name = None
     concrete = False
+    column = None
+    db_column = None
+
     descriptor_class = ServiceUrlDescriptor
 
     def __init__(self, base_field: str, relative_field: str, **kwargs):
@@ -88,6 +91,9 @@ class ServiceUrlField(Field):
     @property
     def attname(self) -> str:
         return self.name
+
+    def get_attname_column(self):
+        return self.attname, None
 
     @property
     def _base_field(self) -> ForeignKey:
