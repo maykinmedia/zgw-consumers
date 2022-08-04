@@ -24,7 +24,7 @@ class ServiceValidator:
 
 
 class ServiceUrlApiField(fields.URLField):
-    """ Serializer field for database ServiceUrlField field """
+    """Serializer field for database ServiceUrlField field"""
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
