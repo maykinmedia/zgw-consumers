@@ -22,7 +22,7 @@ The DRF serializer is included and picked up automatically.
 Usage
 *****
 
-For example you have a case which type is defined in the external API "Casetypes" http://example.org/casetypes/ .
+For example you have a case which type is defined in the external API "Casetypes".
 The credentials to access this API are already stored in the ``Service`` model:
 
 .. code-block:: python
