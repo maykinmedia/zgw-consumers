@@ -84,7 +84,7 @@ class ServiceUrlField(Field):
     def contribute_to_class(self, cls, name, private_only=False):
         self.name = name
         self.model = cls
-        cls._meta.add_field(self, private=True)
+        cls._meta.add_field(self, private=private_only)
 
         setattr(cls, name, self.descriptor_class(self))
 
