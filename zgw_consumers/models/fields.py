@@ -95,6 +95,16 @@ class ServiceUrlField(Field):
     def get_attname_column(self):
         return self.attname, None
 
+    def deconstruct(self):
+        path = "%s.%s" % (self.__class__.__module__, self.__class__.__qualname__)
+        keywords = {
+            "base_field": self.base_field,
+            "relative_field": self.relative_field,
+            "blank": self.blank,
+            "null": self.null,
+        }
+        return self.name, path, [], keywords
+
     @property
     def _base_field(self) -> ForeignKey:
         return self.model._meta.get_field(self.base_field)
