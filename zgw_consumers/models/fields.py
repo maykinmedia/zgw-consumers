@@ -44,7 +44,9 @@ class ServiceUrlDescriptor:
 
             base_val = self.get_base_val(value)
             if not base_val:
-                raise ValueError("The base part of url is not found in 'Service' data")
+                raise ValueError(
+                    "The base part of url %s is not found in 'Service' data" % value
+                )
 
             relative_val = value[len(self.get_base_url(base_val)) :]
 

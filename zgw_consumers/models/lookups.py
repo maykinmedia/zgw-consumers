@@ -52,13 +52,13 @@ class ServiceUrlFieldMixin:
 
             # convert model instances to int for FK fields
             base_normalized_value = get_normalized_value(base_value, base_lhs)[0]
-            relative__normalized_value = get_normalized_value(
+            relative_normalized_value = get_normalized_value(
                 relative_value, relative_lhs
             )[0]
             prepared_values.append(
                 [
                     target._base_field.get_prep_value(base_normalized_value),
-                    target._relative_field.get_prep_value(relative__normalized_value),
+                    target._relative_field.get_prep_value(relative_normalized_value),
                 ]
             )
 
