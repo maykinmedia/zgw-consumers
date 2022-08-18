@@ -24,7 +24,6 @@ Features
 ========
 
 * Store services with their configuration in the database
-* Manage (mutual) TLS certificates
 * Integrate with OpenAPI 3.0 specifications
 * NLX support
 * Declare data/domain objects as modern Python dataclasses

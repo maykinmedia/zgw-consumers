@@ -18,8 +18,7 @@ Installation
 2. Add ``zgw_consumers`` to the ``INSTALLED_APPS`` setting.
 3. Run ``python src/manage.py migrate`` to create the necessary database tables
 4. Configure `django-privates <https://django-privates.readthedocs.io/en/latest/quickstart.html>`_
-   correctly - the TLS certificates and keys are stored outside of ``settings.MEDIA_ROOT``
-   for security reasons.
+   correctly
 
 
 Usage
@@ -28,7 +27,6 @@ Usage
 In the Django admin, you can create:
 
 * ``Service`` instances to define your external APIs.
-* ``Certificate`` instances to (re-)use (mutual) TLS configuration
 * ``NLXConfig`` configuration for your `NLX <https://nlx.io/>`_ outway.
 
 Constructing an OpenAPI 3 client

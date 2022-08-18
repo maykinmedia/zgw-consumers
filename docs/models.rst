@@ -25,16 +25,6 @@ specification. It supports:
    .. automethod:: get_auth_header
 
 
-**Certificate**
-
-The ``Certificate`` model holds your TLS certificates. Files on disk are deleted when
-model instances are deleted.
-
-.. autoclass:: zgw_consumers.models.Certificate
-   :members:
-   :exclude-members: DoesNotExist, MultipleObjectsReturned, clean, save
-
-
 Abstract
 --------
 

@@ -5,7 +5,6 @@ from privates.admin import PrivateMediaMixin
 from solo.admin import SingletonModelAdmin
 
 from .admin_fields import get_nlx_field, get_zaaktype_field
-
 from .models.services import NLXConfig, Service
 from .widgets import NoDownloadPrivateFileWidget
 

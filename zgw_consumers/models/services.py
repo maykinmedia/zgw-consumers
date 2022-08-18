@@ -12,12 +12,12 @@ from privates.fields import PrivateMediaFileField
 from solo.models import SingletonModel
 from zds_client import ClientAuth
 
+from simple_certmanager.models import Certificate
 from zgw_consumers import settings as zgw_settings
 
 from ..client import ZGWClient, get_client_class
 from ..constants import APITypes, AuthTypes, NLXDirectories
 from ..query import ServiceManager
-from simple_certmanager.models import Certificate
 from .abstract import RestAPIService
 
 
