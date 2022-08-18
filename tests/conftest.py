@@ -1,4 +1,5 @@
 import pytest
+from rest_framework.test import APIClient
 from zds_client.oas import schema_fetcher
 
 SCHEMA = """
@@ -26,3 +27,9 @@ def oas(requests_mock):
 
     # cleanup
     schema_fetcher.cache.clear()
+
+
+@pytest.fixture()
+def api_client(request) -> APIClient:
+    client = APIClient()
+    return client

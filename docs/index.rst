@@ -32,6 +32,7 @@ can still leverage the utilities offered by ZGW Consumers.
    quickstart
    settings
    models
+   model_fields
    commands
    drf
    testing
