@@ -1,9 +1,10 @@
 Changes
 =======
 
-0.20.0 (2022-08-23)
+0.20.0 (2022-8-22)
 -------------------
 
+* Moving TLS certificate management to another library called``django-simple-certmanager``. Managing Certificates with this library remains possible for now, but please consider to update your project.
 * Added database field ServiceUrlField
 
 0.19.0 (2022-07-22)
