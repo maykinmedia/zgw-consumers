@@ -24,5 +24,3 @@ class cache_on_request:
             setattr(self.request, self.key, value)
             cached_value = value
         return cached_value
-
-

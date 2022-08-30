@@ -9,10 +9,10 @@ from django.db.models.functions import Length
 from django.utils.translation import gettext_lazy as _
 
 from privates.fields import PrivateMediaFileField
+from simple_certmanager.models import Certificate
 from solo.models import SingletonModel
 from zds_client import ClientAuth
 
-from simple_certmanager.models import Certificate
 from zgw_consumers import settings as zgw_settings
 
 from ..client import ZGWClient, get_client_class

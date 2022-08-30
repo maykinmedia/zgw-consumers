@@ -29,5 +29,3 @@ class NLXDirectories(DjangoChoices):
     demo = ChoiceItem("demo", _("Demo"))
     preprod = ChoiceItem("preprod", _("Pre-prod"))
     prod = ChoiceItem("prod", _("Prod"))
-
-
