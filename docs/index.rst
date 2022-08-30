@@ -19,7 +19,7 @@ Developed for use in Dutch government software where data exchange with external
 services is run of the mill, this library provides flexibility in configuring your
 environment(s).
 
-ZGW Consumers allows you to centralize the location, credentials... to
+ZGW Consumers allows you to centralize the location, credentials, API schema information... to
 connect to HTTP-based services. There is first class support for OpenAPI 3
 specifications, but you are not limited to "modern" RESTful services! SOAP/XML services
 can still leverage the utilities offered by ZGW Consumers.

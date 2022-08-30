@@ -60,4 +60,17 @@ class Migration(migrations.Migration):
             ),
         ),
         migrations.RunPython(migrations.RunPython.noop, get_operation(forwards=False)),
+        migrations.DeleteModel(
+            name="Certificate",
+        ),
+        migrations.CreateModel(
+            name="Certificate",
+            fields=[],
+            options={
+                "proxy": True,
+                "indexes": [],
+                "constraints": [],
+            },
+            bases=("simple_certmanager.certificate",),
+        ),
     ]
