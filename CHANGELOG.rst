@@ -1,12 +1,31 @@
 Changes
 =======
 
-0.21.0 (2022-8-30)
+0.21.0 (2022-08-31)
 -------------------
 
-* Moving TLS certificate management to another library called``django-simple-certmanager``. Managing Certificates with this library remains possible for now, but please consider to update your project.
+💥 Breaking changes release!
 
-0.20.0 (2022-8-22)
+TLS certificate management has been split off into the django-simple-certmanager_
+library, which is now a dependency of this project. You should update the following
+references in your own code:
+
+* ``zgw_consumers.constants.CertificateTypes`` -> ``simple_certmanager.constants.CertificateTypes``
+* ``zgw_consumers.models.Certificate`` -> ``simple_certmanager.models.Certificate``
+
+The ``Certificate`` model is identical to the one shipped in zgw-consumers before
+0.21.0. As a convenience, ``zgw_consumers.Certifcate`` is still provided, which is a
+proxy model to ``simple_certmanager.Certificate``.
+
+**Other changes**
+
+* Dropped support for Django 2.2. Only Django 3.2 and upwards are supported.
+* The minimum version of gemma-zds-client_ has been bumped to the 1.0.x series
+
+.. _django-simple-certmanager: https://pypi.org/project/django-simple-certmanager/
+.. _gemma-zds-client: https://pypi.org/project/gemma-zds-client/
+
+0.20.0 (2022-08-22)
 -------------------
 
 * Added database field ServiceUrlField
