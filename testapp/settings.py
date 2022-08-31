@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.admin",
     "zgw_consumers",
+    "simple_certmanager",
     "testapp",
 ]
 

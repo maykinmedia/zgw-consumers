@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.20.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-06-13 10:08-0500\n"
+"POT-Creation-Date: 2022-08-30 05:40-0500\n"
 "PO-Revision-Date: 2022-05-17 09:40+02:00\n"
 "Last-Translator: Sergei Maertens <sergei@maykinmedia.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,22 +17,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
-#: admin.py:47 models/abstract.py:7 models/certificates.py:17
-msgid "label"
-msgstr "label"
-
-#: admin.py:55
-msgid "file not found"
-msgstr "bestand bestaat niet"
-
-#: admin.py:57
-msgid "expiry date"
-msgstr "vervaldatum"
-
-#: admin.py:66
-msgid "valid key pair"
-msgstr "geldig sleutelpaar"
 
 #: admin_fields.py:96
 msgid "No NLX"
@@ -114,17 +98,13 @@ msgstr ""
 msgid "Prod"
 msgstr ""
 
-#: constants.py:35
-msgid "Key-pair"
-msgstr "Sleutelpaar"
+#: drf/fields.py:14
+msgid "The url service is unknown."
+msgstr ""
 
-#: constants.py:36
-msgid "Certificate only"
-msgstr "Enkel certificaat"
-
-#: forms.py:26
-msgid "Invalid certificate"
-msgstr "Ongeldig certificaat"
+#: models/abstract.py:7
+msgid "label"
+msgstr "label"
 
 #: models/abstract.py:15
 msgid "OAS url"
@@ -142,46 +122,9 @@ msgstr "OAS-bestand"
 msgid "OAS yaml file"
 msgstr "OAS YAML-bestand"
 
-#: models/certificates.py:19
-msgid "Recognisable label for the certificate"
-msgstr "Label om het certificaat mee te identificeren"
-
-#: models/certificates.py:22 models/services.py:25
+#: models/services.py:25
 msgid "type"
 msgstr "type"
-
-#: models/certificates.py:26
-msgid "Is this only a certificate or is there an associated private key?"
-msgstr ""
-"Gaat het enkel om het certificaat, of is er ook een bijhorende privésleutel?"
-
-#: models/certificates.py:30
-msgid "public certificate"
-msgstr "publiek certificaat"
-
-#: models/certificates.py:31
-msgid "The content of the certificate"
-msgstr "De inhoud van het certificaat, in PEM-formaat"
-
-#: models/certificates.py:35
-msgid "private key"
-msgstr "privésleutel"
-
-#: models/certificates.py:36
-msgid "The content of the private key"
-msgstr "De inhoud van de privésleutel, in PEM-formaat"
-
-#: models/certificates.py:42
-msgid "certificate"
-msgstr "certificaat"
-
-#: models/certificates.py:43
-msgid "certificates"
-msgstr "certificaten"
-
-#: models/certificates.py:49
-msgid "(missing label)"
-msgstr "(label ontbreekt)"
 
 #: models/services.py:26
 msgid "api root url"
@@ -300,3 +243,50 @@ msgstr "Verbinding geweigerd. Geef een valide adres op."
 #: templates/admin/widgets/clearable_no_download_private_file_input.html:3
 msgid "No download allowed"
 msgstr "Geen download toegestaan"
+
+#~ msgid "file not found"
+#~ msgstr "bestand bestaat niet"
+
+#~ msgid "expiry date"
+#~ msgstr "vervaldatum"
+
+#~ msgid "valid key pair"
+#~ msgstr "geldig sleutelpaar"
+
+#~ msgid "Key-pair"
+#~ msgstr "Sleutelpaar"
+
+#~ msgid "Certificate only"
+#~ msgstr "Enkel certificaat"
+
+#~ msgid "Invalid certificate"
+#~ msgstr "Ongeldig certificaat"
+
+#~ msgid "Recognisable label for the certificate"
+#~ msgstr "Label om het certificaat mee te identificeren"
+
+#~ msgid "Is this only a certificate or is there an associated private key?"
+#~ msgstr ""
+#~ "Gaat het enkel om het certificaat, of is er ook een bijhorende "
+#~ "privésleutel?"
+
+#~ msgid "public certificate"
+#~ msgstr "publiek certificaat"
+
+#~ msgid "The content of the certificate"
+#~ msgstr "De inhoud van het certificaat, in PEM-formaat"
+
+#~ msgid "private key"
+#~ msgstr "privésleutel"
+
+#~ msgid "The content of the private key"
+#~ msgstr "De inhoud van de privésleutel, in PEM-formaat"
+
+#~ msgid "certificate"
+#~ msgstr "certificaat"
+
+#~ msgid "certificates"
+#~ msgstr "certificaten"
+
+#~ msgid "(missing label)"
+#~ msgstr "(label ontbreekt)"

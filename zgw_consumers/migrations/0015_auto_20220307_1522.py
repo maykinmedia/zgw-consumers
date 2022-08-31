@@ -6,8 +6,6 @@ from django.db import migrations, models
 import privates.fields
 import privates.storages
 
-import zgw_consumers.mixins
-
 
 class Migration(migrations.Migration):
 
@@ -72,7 +70,6 @@ class Migration(migrations.Migration):
                 "verbose_name": "certificate",
                 "verbose_name_plural": "certificates",
             },
-            bases=(zgw_consumers.mixins.DeleteFileFieldFilesMixin, models.Model),
         ),
         migrations.AddField(
             model_name="service",
