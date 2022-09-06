@@ -20,7 +20,7 @@ def decompose_value(value: str) -> Tuple[Optional[Service], Optional[str]]:
 class ServiceUrlFieldMixin:
     def split_lhs(self, compiler, connection) -> Tuple[str, tuple, str, tuple]:
         target = self.lhs.target
-        alias = target.model._meta.db_table
+        alias = self.lhs.alias
 
         base_lhs = target._base_field.get_col(alias)
         relative_lhs = target._relative_field.get_col(alias)
