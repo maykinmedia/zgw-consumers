@@ -85,3 +85,19 @@ def test_queryset_in_no_base():
     qs = Case.objects.filter(casetype__in=[f"{CASETYPE_API_ROOT}casetype/1"])
 
     assert qs.count() == 0
+
+
+def test_queryset_subquery():
+    """
+    test that ServiceUrlField can be safely used in subqueries
+    """
+    service = Service.objects.create(api_type=APITypes.ztc, api_root=CASETYPE_API_ROOT)
+    Case.objects.create(casetype=f"{CASETYPE_API_ROOT}casetype/1")
+
+    service_ids = Case.objects.filter(
+        casetype=f"{CASETYPE_API_ROOT}casetype/1"
+    ).values_list("_casetype_api", flat=True)
+    qs = Service.objects.filter(id__in=service_ids)
+
+    assert qs.count() == 1
+    assert qs.get() == service
