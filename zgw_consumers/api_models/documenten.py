@@ -8,29 +8,30 @@ from .constants import VertrouwelijkheidsAanduidingen
 
 @dataclass
 class Document(ZGWModel):
-    url: str
-    auteur: str
-    identificatie: str
-    beschrijving: str
-    bestandsnaam: str
-    bestandsomvang: int
+    url: str  # bug: not required according to OAS
+    identificatie: str  # bug: not required according to OAS
     bronorganisatie: str
     creatiedatum: date
-    formaat: str  # noqa
-    indicatie_gebruiksrecht: Optional[dict]
-    informatieobjecttype: str
-    inhoud: str
-    integriteit: dict
-    link: str
-    ondertekening: Optional[dict]
-    ontvangstdatum: Optional[date]
-    status: str
-    taal: str
     titel: str
-    versie: int
-    vertrouwelijkheidaanduiding: str
-    verzenddatum: Optional[date]
-    locked: bool
+    vertrouwelijkheidaanduiding: str  # bug: not required according to OAS
+    auteur: str
+    taal: str
+    informatieobjecttype: str
+
+    beschrijving: str = ""
+    bestandsnaam: str = ""
+    bestandsomvang: Optional[int] = None
+    formaat: str = ""  # noqa
+    indicatie_gebruiksrecht: Optional[dict] = None
+    inhoud: Optional[str] = None
+    integriteit: Optional[dict] = None
+    link: str = ""
+    ondertekening: Optional[dict] = None
+    ontvangstdatum: Optional[date] = None
+    status: str = ""
+    versie: int = 1
+    verzenddatum: Optional[date] = None
+    locked: bool = False
 
     def get_vertrouwelijkheidaanduiding_display(self):
         return VertrouwelijkheidsAanduidingen.values[self.vertrouwelijkheidaanduiding]
