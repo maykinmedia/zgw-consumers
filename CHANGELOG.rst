@@ -1,6 +1,11 @@
 Changes
 =======
 
+0.21.1 (2022-09-07)
+-------------------
+
+* Fixed the usage of ServiceUrlField in nested queries.
+
 0.21.0 (2022-08-31)
 -------------------
 
