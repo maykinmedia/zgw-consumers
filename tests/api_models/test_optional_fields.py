@@ -2,6 +2,8 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional
 
+import pytest
+
 from zgw_consumers.api_models.base import Model, factory
 from zgw_consumers.api_models.catalogi import ZaakType
 from zgw_consumers.api_models.zaken import Zaak
@@ -34,10 +36,10 @@ def test_absent_keys_for_zaaktype() -> None:
         "url": "https://uniek-url",
         "vertrouwelijkheidaanduiding": "openbaar",
     }
-    instance = factory(ZaakType, data)
 
-    assert instance.omschrijving == "Aangeven"
-    assert instance.omschrijving_generiek is None
+    # multiple keys are missing that are required in the API spec
+    with pytest.raises(TypeError):
+        factory(ZaakType, data)
 
 
 def test_absent_keys_for_zaak() -> None:
@@ -53,7 +55,7 @@ def test_absent_keys_for_zaak() -> None:
         "verantwoordelijkeOrganisatie": "CHANGEME",
         "zaaktype": "https://uniek-url",
     }
-    instance = factory(Zaak, data)
 
-    assert instance.bronorganisatie == "CHANGEME"
-    assert instance.toelichting is None
+    # 'vertrouwelijkheidaanduiding' is missing
+    with pytest.raises(TypeError):
+        factory(Zaak, data)
