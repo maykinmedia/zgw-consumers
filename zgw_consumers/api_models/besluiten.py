@@ -8,21 +8,22 @@ from .constants import VervalRedenen
 
 @dataclass
 class Besluit(ZGWModel):
-    url: str
-    identificatie: str
+    url: str  # bug: not required according to OAS
+    identificatie: str  # bug: not required according to OAS
     verantwoordelijke_organisatie: str
     besluittype: str
-    zaak: str
     datum: date
-    toelichting: str
-    bestuursorgaan: str
     ingangsdatum: date
-    vervaldatum: Optional[date]
-    vervalreden: str
-    vervalreden_weergave: str
-    publicatiedatum: Optional[date]
-    verzenddatum: Optional[date]
-    uiterlijke_reactiedatum: Optional[date]
+
+    zaak: str = ""
+    toelichting: str = ""
+    bestuursorgaan: str = ""
+    vervaldatum: Optional[date] = None
+    vervalreden: str = ""
+    vervalreden_weergave: str = ""
+    publicatiedatum: Optional[date] = None
+    verzenddatum: Optional[date] = None
+    uiterlijke_reactiedatum: Optional[date] = None
 
     def get_vervalreden_display(self) -> str:
         return VervalRedenen.labels[self.vervalreden]
@@ -30,6 +31,6 @@ class Besluit(ZGWModel):
 
 @dataclass
 class BesluitDocument(ZGWModel):
-    url: str
+    url: str  # bug: not required according to OAS
     informatieobject: str
     besluit: str

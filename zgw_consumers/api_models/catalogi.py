@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import date, datetime
 from decimal import Decimal
 from typing import List, Optional, Union
@@ -11,100 +11,102 @@ from .base import Model, ZGWModel, factory
 
 @dataclass
 class Catalogus(ZGWModel):
-    url: str
+    url: str  # bug: not required according to OAS
     domein: str
     rsin: str
-    contactpersoon_beheer_emailadres: str
     contactpersoon_beheer_naam: str
-    contactpersoon_beheer_telefoonnummer: str
-    besluittypen: list
-    informatieobjecttypen: list
-    zaaktypen: list
+    contactpersoon_beheer_emailadres: str = ""
+    contactpersoon_beheer_telefoonnummer: str = ""
+    besluittypen: list = field(default_factory=list)
+    informatieobjecttypen: list = field(default_factory=list)
+    zaaktypen: list = field(default_factory=list)
 
 
 @dataclass
 class ZaakType(ZGWModel):
-    url: str
+    url: str  # bug: not required according to OAS
     catalogus: str
-    identificatie: str
+    identificatie: str  # bug: not required according to OAS
     omschrijving: str
-    omschrijving_generiek: str
     vertrouwelijkheidaanduiding: str
     doel: str
     aanleiding: str
-    toelichting: str
     indicatie_intern_of_extern: str
     handeling_initiator: str
     onderwerp: str
     handeling_behandelaar: str
     doorlooptijd: relativedelta
-    servicenorm: Optional[relativedelta]
     opschorting_en_aanhouding_mogelijk: bool
     verlenging_mogelijk: bool
-    verlengingstermijn: Optional[relativedelta]
-    trefwoorden: list
     publicatie_indicatie: bool
-    publicatietekst: str
-    verantwoordingsrelatie: list
     producten_of_diensten: list
-    # selectielijst_procestype: ProcesType
-    statustypen: list
-    resultaattypen: list
-    eigenschappen: list
-    informatieobjecttypen: list
-    roltypen: list
     besluittypen: list
-    deelzaaktypen: list
-
     begin_geldigheid: date
-    einde_geldigheid: Optional[date]
     versiedatum: date
-    concept: bool
+
+    omschrijving_generiek: str = ""
+    toelichting: str = ""
+    servicenorm: Optional[relativedelta] = None
+    verlengingstermijn: Optional[relativedelta] = None
+    trefwoorden: list = field(default_factory=list)
+    publicatietekst: str = ""
+    verantwoordingsrelatie: list = field(default_factory=list)
+    # selectielijst_procestype: ProcesType
+    statustypen: list = field(default_factory=list)
+    resultaattypen: list = field(default_factory=list)
+    eigenschappen: list = field(default_factory=list)
+    informatieobjecttypen: list = field(default_factory=list)
+    roltypen: list = field(default_factory=list)
+    deelzaaktypen: list = field(default_factory=list)
+
+    einde_geldigheid: Optional[date] = None
+    concept: bool = False
 
 
 @dataclass
 class StatusType(ZGWModel):
-    url: str
+    url: str  # bug: not required according to OAS
     zaaktype: str
     omschrijving: str
-    omschrijving_generiek: str
-    statustekst: str
     volgnummer: int
-    is_eindstatus: bool
+    omschrijving_generiek: str = ""
+    statustekst: str = ""
+    is_eindstatus: bool = False
 
 
 @dataclass
 class InformatieObjectType(ZGWModel):
-    url: str
+    url: str  # bug: not required according to OAS
     catalogus: str
     omschrijving: str
     vertrouwelijkheidaanduiding: str
     begin_geldigheid: date
-    einde_geldigheid: Optional[date]
-    concept: bool
+    einde_geldigheid: Optional[date] = None
+    concept: bool = False
 
 
 @dataclass
 class ResultaatType(ZGWModel):
-    url: str
+    url: str  # bug: not required according to OAS
     zaaktype: str
     omschrijving: str
     resultaattypeomschrijving: str
-    omschrijving_generiek: str
     selectielijstklasse: str
-    toelichting: str
-    archiefnominatie: str
-    archiefactietermijn: Optional[relativedelta]
-    brondatum_archiefprocedure: dict
+
+    omschrijving_generiek: str = ""
+    toelichting: str = ""
+    archiefnominatie: str = ""
+    archiefactietermijn: Optional[relativedelta] = None
+    brondatum_archiefprocedure: Optional[dict] = None
 
 
 @dataclass
 class EigenschapSpecificatie(Model):
-    groep: str
     formaat: str
     lengte: str
     kardinaliteit: str
-    waardenverzameling: list  # List[str]
+    groep: str = ""
+    waardenverzameling: list = field(default_factory=list)
 
 
 EIGENSCHAP_FORMATEN = {
@@ -117,12 +119,12 @@ EIGENSCHAP_FORMATEN = {
 
 @dataclass
 class Eigenschap(ZGWModel):
-    url: str
+    url: str  # bug: not required according to OAS
     zaaktype: str
     naam: str
     definitie: str
     specificatie: dict
-    toelichting: str
+    toelichting: str = ""
 
     def __post_init__(self):
         super().__post_init__()
@@ -141,7 +143,7 @@ class Eigenschap(ZGWModel):
 
 @dataclass
 class RolType(ZGWModel):
-    url: str
+    url: str  # bug: not required according to OAS
     zaaktype: str
     omschrijving: str
     omschrijving_generiek: str
@@ -149,18 +151,19 @@ class RolType(ZGWModel):
 
 @dataclass
 class BesluitType(ZGWModel):
-    url: str
+    url: str  # bug: not required according to OAS
     catalogus: str
-    omschrijving: str
-    omschrijving_generiek: str
-    besluitcategorie: str
-    reactietermijn: Optional[relativedelta]
-    publicatie_indicatie: bool
-    publicatietekst: str
-    publicatietermijn: Optional[relativedelta]
-    toelichting: str
     zaaktypen: List[str]
+    publicatie_indicatie: bool
     informatieobjecttypen: List[str]
     begin_geldigheid: date
-    einde_geldigheid: Optional[date]
-    concept: bool
+
+    omschrijving: str = ""
+    omschrijving_generiek: str = ""
+    besluitcategorie: str = ""
+    reactietermijn: Optional[relativedelta] = None
+    publicatietekst: str = ""
+    publicatietermijn: Optional[relativedelta] = None
+    toelichting: str = ""
+    einde_geldigheid: Optional[date] = None
+    concept: bool = False

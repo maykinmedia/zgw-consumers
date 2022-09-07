@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import date, datetime
 from typing import Any, Optional
 
@@ -9,23 +9,25 @@ from .constants import RolOmschrijving, RolTypes, VertrouwelijkheidsAanduidingen
 
 @dataclass
 class Zaak(ZGWModel):
-    url: str
-    identificatie: str
+    url: str  # bug: not required according to OAS
     bronorganisatie: str
-    omschrijving: str
-    toelichting: str
     zaaktype: str
-    registratiedatum: date
+    identificatie: str  # bug: not required according to OAS
+    registratiedatum: date  # bug: not required according to OAS
+    verantwoordelijke_organisatie: str
     startdatum: date
-    einddatum: Optional[date]
-    einddatum_gepland: Optional[date]
-    uiterlijke_einddatum_afdoening: Optional[date]
-    publicatiedatum: Optional[date]
-    vertrouwelijkheidaanduiding: str
-    status: str
-    resultaat: str
-    relevante_andere_zaken: list
-    zaakgeometrie: dict
+    vertrouwelijkheidaanduiding: str  # bug: not required according to OAS
+
+    omschrijving: str = ""
+    toelichting: str = ""
+    einddatum: Optional[date] = None
+    einddatum_gepland: Optional[date] = None
+    uiterlijke_einddatum_afdoening: Optional[date] = None
+    publicatiedatum: Optional[date] = None
+    status: Optional[str] = None
+    resultaat: Optional[str] = None
+    relevante_andere_zaken: list = field(default_factory=list)
+    zaakgeometrie: dict = field(default_factory=dict)
 
     def get_vertrouwelijkheidaanduiding_display(self):
         return VertrouwelijkheidsAanduidingen.values[self.vertrouwelijkheidaanduiding]
@@ -33,32 +35,32 @@ class Zaak(ZGWModel):
 
 @dataclass
 class Status(ZGWModel):
-    url: str
+    url: str  # bug: not required according to OAS
     zaak: str
     statustype: str
     datum_status_gezet: datetime
-    statustoelichting: str
+    statustoelichting: str = ""
 
 
 @dataclass
 class ZaakObject(ZGWModel):
-    url: str
+    url: str  # bug: not required according to OAS
     zaak: str
-    object: str
     object_type: str
-    object_type_overige: str
-    relatieomschrijving: str
-    object_identificatie: Optional[dict]
+    object: str = ""
+    object_type_overige: str = ""
+    relatieomschrijving: str = ""
+    object_identificatie: dict = field(default_factory=dict)
 
 
 @dataclass
 class ZaakEigenschap(ZGWModel):
-    url: str
+    url: str  # bug: not required according to OAS
     # uuid: uuid.UUID
     zaak: str
     eigenschap: str
-    naam: str
     waarde: str
+    naam: str = ""
 
     def get_waarde(self) -> Any:
         assert isinstance(
@@ -69,25 +71,25 @@ class ZaakEigenschap(ZGWModel):
 
 @dataclass
 class Resultaat(ZGWModel):
-    url: str
+    url: str  # bug: not required according to OAS
     zaak: str
     resultaattype: str
-    toelichting: str
+    toelichting: str = ""
 
 
 @dataclass
 class Rol(ZGWModel):
-    url: str
+    url: str  # bug: not required according to OAS
     zaak: str
-    betrokkene: str
     betrokkene_type: str
     roltype: str
-    omschrijving: str
-    omschrijving_generiek: str
     roltoelichting: str
-    registratiedatum: datetime
-    indicatie_machtiging: str
-    betrokkene_identificatie: Optional[dict]
+    betrokkene: str = ""
+    omschrijving: str = ""
+    omschrijving_generiek: str = ""
+    registratiedatum: Optional[datetime] = None
+    indicatie_machtiging: str = ""
+    betrokkene_identificatie: dict = field(default_factory=dict)
 
     def get_betrokkene_type_display(self):
         return RolTypes.values[self.betrokkene_type]
@@ -98,10 +100,10 @@ class Rol(ZGWModel):
 
 @dataclass
 class ZaakInformatieObject(ZGWModel):
-    url: str
+    url: str  # bug: not required according to OAS
     informatieobject: str
     zaak: str
-    aard_relatie_weergave: str
-    titel: str
-    beschrijving: str
-    registratiedatum: datetime
+    aard_relatie_weergave: str = ""
+    titel: str = ""
+    beschrijving: str = ""
+    registratiedatum: Optional[datetime] = None

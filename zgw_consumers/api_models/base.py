@@ -7,7 +7,7 @@ import uuid
 from dataclasses import Field, fields
 from datetime import date, datetime
 from functools import partial
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Type, TypeVar, Union, overload
 
 from dateutil.parser import parse
 from dateutil.relativedelta import relativedelta
@@ -38,6 +38,9 @@ CONVERTERS = {
 
 
 class Model:
+    def __init__(self, *args, **kwargs):
+        pass
+
     def __post_init__(self):
         self._type_cast()
 
@@ -81,6 +84,9 @@ class Model:
             setattr(self, attr, converter(value))
 
 
+M = TypeVar("M", bound=Model)
+
+
 class ZGWModel(Model):
     @property
     def uuid(self) -> uuid.UUID:
@@ -95,9 +101,19 @@ def get_model_fields(model: Union[type, Model]) -> Dict[str, Field]:
     return {field.name: field for field in fields(model)}
 
 
+@overload
+def factory(model: Type[M], data: JSONObject) -> M:
+    ...
+
+
+@overload
+def factory(model: Type[M], data: List[JSONObject]) -> List[M]:
+    ...
+
+
 def factory(
-    model: type, data: Union[JSONObject, List[JSONObject]]
-) -> Union[type, List[type]]:
+    model: Type[M], data: Union[JSONObject, List[JSONObject]]
+) -> Union[M, List[M]]:
     _is_collection = isinstance(data, list)
 
     model_fields = get_model_fields(model)
