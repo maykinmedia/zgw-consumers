@@ -1,6 +1,14 @@
 Changes
 =======
 
+0.21.2 (2022-09-07)
+-------------------
+
+Fixed the API models to be more compliant with the ZGW API standards.
+
+(Most) fields that are not required in the API schema can now effectively be omitted
+from the response and still work with the API models.
+
 0.21.1 (2022-09-07)
 -------------------
 
