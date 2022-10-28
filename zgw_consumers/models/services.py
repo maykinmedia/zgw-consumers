@@ -1,5 +1,6 @@
 import socket
 import uuid
+import warnings
 from typing import Optional
 from urllib.parse import urlparse, urlsplit, urlunsplit
 
@@ -131,11 +132,18 @@ class Service(RestAPIService):
         if self.nlx:
             api_root = api_root.replace(self.api_root, self.nlx, 1)
 
-        dummy_detail_url = f"{api_root}dummy/{_uuid}"
         Client = get_client_class()
-        client = Client.from_url(dummy_detail_url)
-        client.schema_url = self.oas
-        client.schema_file = self.oas_file
+        # legacy flow
+        if hasattr(Client, "from_url"):
+            warnings.warn(
+                "Support for zds-client < 2.0 is deprecated", DeprecationWarning
+            )
+            dummy_detail_url = f"{api_root}dummy/{_uuid}"
+            client = Client.from_url(dummy_detail_url)
+            client.schema_url = self.oas
+            client.schema_file = self.oas_file
+        else:  # 2.0.0+
+            client = Client(api_root, schema_url=self.oas, schema_file=self.oas_file)
 
         if self.server_certificate:
             client.server_certificate_path = (

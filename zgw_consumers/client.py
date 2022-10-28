@@ -1,16 +1,21 @@
 import logging
+import warnings
+from dataclasses import dataclass
 from typing import IO, Any, Dict, List, Optional, Union
 from urllib.parse import urljoin
 
 from django.utils.module_loading import import_string
 
 import yaml
+import zds_client
 from zds_client import Client
 from zds_client.oas import schema_fetcher
 
 from .settings import get_setting
 
 logger = logging.getLogger(__name__)
+
+IS_OLD_ZDS_CLIENT = zds_client.__version__ < "2.0.0"
 
 Object = Dict[str, Any]
 
@@ -26,6 +31,7 @@ def load_schema_file(file: IO):
     return spec
 
 
+@dataclass
 class ZGWClient(Client):
     auth_value: Optional[Dict[str, str]] = None
     schema_url: str = ""
@@ -44,15 +50,30 @@ class ZGWClient(Client):
             logger.info("Fetching schema at '%s'", url)
             self._schema = schema_fetcher.fetch(url, {"v": "3"})
 
-    def pre_request(self, method, url, **kwargs):
+    def pre_request(
+        self, method: str, url: str, kwargs: Optional[dict] = None, **old_kwargs
+    ):
         """
         Add authorization header to requests for APIs without jwt.
         """
+        kwargs = kwargs or {}
+        if old_kwargs:
+            warnings.warn(
+                "Keyword argument unpacking is removed in zds-client 2.0.",
+                DeprecationWarning,
+            )
+            kwargs.update(old_kwargs)
+
         if not self.auth and self.auth_value:
             headers = kwargs.get("headers", {})
             headers.update(self.auth_value)
 
-        return super().pre_request(method, url, **kwargs)
+        if IS_OLD_ZDS_CLIENT:
+            super_kwargs = kwargs
+        else:
+            super_kwargs = {"kwargs": kwargs}
+
+        return super().pre_request(method, url, **super_kwargs)
 
     @property
     def auth_header(self) -> dict:
