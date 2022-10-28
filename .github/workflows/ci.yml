@@ -22,8 +22,9 @@ jobs:
       matrix:
         python: ['3.7', '3.8', '3.9', '3.10']
         django: ['3.2']
+        zdsclient: ['1.0', '2.0']
 
-    name: Run the test suite (Python ${{ matrix.python }}, Django ${{ matrix.django }})
+    name: Run the test suite (Python ${{ matrix.python }}, Django ${{ matrix.django }}, zds-client ${{ matrix.zdsclient }})
 
     services:
       postgres:
@@ -40,22 +41,23 @@ jobs:
           - 6379:6379
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python }}
 
       - name: Install dependencies
-        run: pip install tox codecov
+        run: pip install tox tox-gh-actions codecov
 
       - name: Run tests
         run: |
-          export TOXENV=py${PYTHON_VERSION/./}-django${DJANGO/./}
+          export TOXENV=py${PYTHON_VERSION/./}-django${DJANGO/./}-zdsclient${ZDS_CLIENT/./}
           tox
-          codecov -e TOXENV,DJANGO --file reports/coverage-${TOXENV}.xml
+          codecov -e TOXENV,DJANGO,ZDS_CLIENT --file reports/coverage-${TOXENV}.xml
         env:
           PYTHON_VERSION: ${{ matrix.python }}
           DJANGO: ${{ matrix.django }}
+          ZDS_CLIENT: ${{ matrix.zdsclient }}
 
   publish:
     name: Publish package to PyPI
@@ -65,8 +67,8 @@ jobs:
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags')
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
         with:
           python-version: '3.9'
 
