@@ -1,6 +1,20 @@
 Changes
 =======
 
+0.23.0 (2022-11-15)
+-------------------
+
+Feature release
+
+* ``ServiceUrlField`` now creates check constraints to guarantee data consistency
+
+0.22.0 (2022-10-28)
+-------------------
+
+Feature release
+
+* Added support for zds-client 2.0
+
 0.21.2 (2022-09-07)
 -------------------
 
