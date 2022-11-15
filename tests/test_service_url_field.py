@@ -1,3 +1,5 @@
+from django.db.utils import IntegrityError
+
 import pytest
 
 from testapp.models import Case
@@ -29,6 +31,22 @@ def test_model_create_empty():
 def test_model_create_no_base():
     with pytest.raises(ValueError):
         Case.objects.create(casetype=f"{CASETYPE_API_ROOT}casetype/1")
+
+
+def test_model_create_base_filled_relative_empty():
+    service = Service.objects.create(api_type=APITypes.ztc, api_root=CASETYPE_API_ROOT)
+
+    with pytest.raises(IntegrityError) as exc_info:
+        Case.objects.create(_casetype_api=service)
+
+    assert "_casetype_api_and__casetype_relative_filled" in exc_info.value.args[0]
+
+
+def test_model_create_base_empty_relative_filled():
+    with pytest.raises(IntegrityError) as exc_info:
+        Case.objects.create(_casetype_relative="casetype/1")
+
+    assert "_casetype_api_and__casetype_relative_filled" in exc_info.value.args[0]
 
 
 def test_model_access():

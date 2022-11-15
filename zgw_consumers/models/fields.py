@@ -3,7 +3,8 @@ from urllib.parse import urljoin
 
 from django.core import checks
 from django.core.exceptions import FieldDoesNotExist
-from django.db.models import CharField, Field, ForeignKey, Model
+from django.db.models import CharField, CheckConstraint, Field, ForeignKey, Model, Q
+from django.db.models.base import Options
 
 
 class ServiceUrlDescriptor:
@@ -87,8 +88,46 @@ class ServiceUrlField(Field):
         self.name = name
         self.model = cls
         cls._meta.add_field(self, private=private_only)
+        self._add_check_constraint(cls._meta)
 
         setattr(cls, name, self.descriptor_class(self))
+
+    def _add_check_constraint(
+        self, options: Options, name: str = "{base_field}_and_{relative_field}_filled"
+    ) -> None:
+        """
+        Create the DB constraints and add them if they're not present yet.
+        Check that base_field and relative_field should be both empty or filled
+        """
+        # during migrations, the FK fields are added later, causing the constraint SQL
+        # building to blow up. We can ignore this at that time.
+        if self.model.__module__ == "__fake__":
+            return
+
+        empty_base_field = Q(**{f"{self.base_field}__isnull": True})
+        empty_relative_field = Q(**{f"{self.relative_field}__isnull": True}) | Q(
+            **{self.relative_field: ""}
+        )
+        both_empty = empty_base_field & empty_relative_field
+        both_filled = ~empty_base_field & ~empty_relative_field
+        constraint_name = name.format(
+            prefix=f"{options.app_label}_{options.model_name}_",
+            base_field=self.base_field,
+            relative_field=self.relative_field,
+        )
+
+        if self.null:
+            constraint = CheckConstraint(
+                name=constraint_name, check=both_empty | both_filled
+            )
+        else:
+            constraint = CheckConstraint(name=constraint_name, check=both_filled)
+
+        options.constraints.append(constraint)
+        # ensure this can be picked up by migrations by making it "explicitly defined"
+        if "constraints" not in options.original_attrs:
+            options.original_attrs["constraints"] = options.constraints
+        return
 
     @property
     def attname(self) -> str:
