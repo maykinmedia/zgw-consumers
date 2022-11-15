@@ -39,14 +39,20 @@ def test_model_create_base_filled_relative_empty():
     with pytest.raises(IntegrityError) as exc_info:
         Case.objects.create(_casetype_api=service)
 
-    assert "_casetype_api_and__casetype_relative_filled" in exc_info.value.args[0]
+    assert (
+        "testapp_case__casetype_api_and__casetype_relative_filled"
+        in exc_info.value.args[0]
+    )
 
 
 def test_model_create_base_empty_relative_filled():
     with pytest.raises(IntegrityError) as exc_info:
         Case.objects.create(_casetype_relative="casetype/1")
 
-    assert "_casetype_api_and__casetype_relative_filled" in exc_info.value.args[0]
+    assert (
+        "testapp_case__casetype_api_and__casetype_relative_filled"
+        in exc_info.value.args[0]
+    )
 
 
 def test_model_access():

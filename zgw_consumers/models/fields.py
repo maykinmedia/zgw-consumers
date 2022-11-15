@@ -93,7 +93,9 @@ class ServiceUrlField(Field):
         setattr(cls, name, self.descriptor_class(self))
 
     def _add_check_constraint(
-        self, options: Options, name: str = "{base_field}_and_{relative_field}_filled"
+        self,
+        options: Options,
+        name: str = "{prefix}{base_field}_and_{relative_field}_filled",
     ) -> None:
         """
         Create the DB constraints and add them if they're not present yet.
