@@ -1,6 +1,11 @@
 Changes
 =======
 
+0.23.1 (2022-11-16)
+-------------------
+
+Fixed missing prefix in default constraint name
+
 0.23.0 (2022-11-15)
 -------------------
 
