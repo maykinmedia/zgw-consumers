@@ -1,0 +1,12 @@
+openapi: 3.0.0
+name: books
+paths:
+  /books:
+    get:
+      operationId: book_list
+      parameters:
+      - name: name
+        in: query
+        required: false
+        schema:
+          type: string
