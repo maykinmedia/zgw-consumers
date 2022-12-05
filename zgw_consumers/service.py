@@ -17,7 +17,8 @@ def get_paginated_results(
     *args,
     **kwargs
 ) -> list:
-    query_params = kwargs.get("query_params", {})
+    request_kwargs = kwargs.get("request_kwargs", {})
+    request_params = request_kwargs.get("params", {})
 
     results = []
     response = client.list(resource, *args, **kwargs)
@@ -37,8 +38,11 @@ def get_paginated_results(
         next_url = urlparse(response["next"])
         query = parse_qs(next_url.query)
         new_page = int(query["page"][0])
-        query_params["page"] = [new_page]
-        kwargs["query_params"] = query_params
+
+        request_params["page"] = [new_page]
+        request_kwargs["params"] = request_params
+        kwargs["request_kwargs"] = request_kwargs
+
         response = client.list(resource, *args, **kwargs)
         results += _get_results(response)
 
