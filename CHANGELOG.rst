@@ -1,6 +1,12 @@
 Changes
 =======
 
+0.23.2 (2022-12-06)
+-------------------
+
+* Fixed bug in ``get_paginated_results`` function
+* Fixed bug in compatibility layer for zds-client v1/v2
+
 0.23.1 (2022-11-16)
 -------------------
 
