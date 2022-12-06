@@ -31,14 +31,26 @@ def load_schema_file(file: IO):
     return spec
 
 
-@dataclass
 class ZGWClient(Client):
-    auth_value: Optional[Dict[str, str]] = None
-    schema_url: str = ""
-    schema_file: IO = None
-    client_certificate_path = None
-    client_private_key_path = None
-    server_certificate_path = None
+    def __init__(
+        self,
+        *args,
+        auth_value: Optional[Dict[str, str]] = None,
+        schema_url: str = "",
+        schema_file: IO = None,
+        client_certificate_path=None,
+        client_private_key_path=None,
+        server_certificate_path=None,
+        **kwargs,
+    ):
+        super().__init__(*args, **kwargs)
+
+        self.auth_value = auth_value
+        self.schema_url = schema_url
+        self.schema_file = schema_file
+        self.client_certificate_path = client_certificate_path
+        self.client_private_key_path = client_private_key_path
+        self.server_certificate_path = server_certificate_path
 
     def fetch_schema(self) -> None:
         """support custom OAS resolution"""
