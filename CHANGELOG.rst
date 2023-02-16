@@ -1,6 +1,15 @@
 Changes
 =======
 
+0.24.0 (2023-02-16)
+-------------------
+
+Small maintenance release
+
+* Replaced django-choices with models.TextChoices
+* Confirmed support for Django 4.1
+* Formatted code with latest black version
+
 0.23.2 (2022-12-06)
 -------------------
 
