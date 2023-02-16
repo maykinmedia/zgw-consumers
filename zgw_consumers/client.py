@@ -103,7 +103,6 @@ class ZGWClient(Client):
         request_kwargs: Optional[dict] = None,
         **kwargs,
     ) -> Union[List[Object], Object]:
-
         if self.server_certificate_path:
             kwargs.update({"verify": self.server_certificate_path})
 
