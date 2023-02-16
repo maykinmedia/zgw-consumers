@@ -6,7 +6,6 @@ import zgw_consumers.models.fields
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("testapp", "0001_initial"),
     ]

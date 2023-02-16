@@ -1,31 +1,30 @@
+from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from djchoices import ChoiceItem, DjangoChoices
+
+class APITypes(models.TextChoices):
+    ac = "ac", _("AC (Authorizations)")
+    nrc = "nrc", _("NRC (Notifications)")
+
+    zrc = "zrc", _("ZRC (Zaken)")
+    ztc = "ztc", _("ZTC (Zaaktypen)")
+    drc = "drc", _("DRC (Informatieobjecten)")
+    brc = "brc", _("BRC (Besluiten)")
+
+    cmc = "cmc", _("Contactmomenten API")
+    kc = "kc", _("Klanten API")
+    vrc = "vrc", _("Verzoeken API")
+
+    orc = "orc", _("ORC (Overige)")
 
 
-class APITypes(DjangoChoices):
-    ac = ChoiceItem("ac", _("AC (Authorizations)"))
-    nrc = ChoiceItem("nrc", _("NRC (Notifications)"))
-
-    zrc = ChoiceItem("zrc", _("ZRC (Zaken)"))
-    ztc = ChoiceItem("ztc", _("ZTC (Zaaktypen)"))
-    drc = ChoiceItem("drc", _("DRC (Informatieobjecten)"))
-    brc = ChoiceItem("brc", _("BRC (Besluiten)"))
-
-    cmc = ChoiceItem("cmc", _("Contactmomenten API"))
-    kc = ChoiceItem("kc", _("Klanten API"))
-    vrc = ChoiceItem("vrc", _("Verzoeken API"))
-
-    orc = ChoiceItem("orc", _("ORC (Overige)"))
+class AuthTypes(models.TextChoices):
+    no_auth = "no_auth", _("No authorization")
+    api_key = "api_key", _("API key")
+    zgw = "zgw", _("ZGW client_id + secret")
 
 
-class AuthTypes(DjangoChoices):
-    no_auth = ChoiceItem("no_auth", _("No authorization"))
-    api_key = ChoiceItem("api_key", _("API key"))
-    zgw = ChoiceItem("zgw", _("ZGW client_id + secret"))
-
-
-class NLXDirectories(DjangoChoices):
-    demo = ChoiceItem("demo", _("Demo"))
-    preprod = ChoiceItem("preprod", _("Pre-prod"))
-    prod = ChoiceItem("prod", _("Prod"))
+class NLXDirectories(models.TextChoices):
+    demo = "demo", _("Demo")
+    preprod = "preprod", _("Pre-prod")
+    prod = "prod", _("Prod")

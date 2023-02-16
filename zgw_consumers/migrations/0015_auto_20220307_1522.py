@@ -8,7 +8,6 @@ import privates.storages
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("zgw_consumers", "0014_auto_20211217_1557"),
     ]

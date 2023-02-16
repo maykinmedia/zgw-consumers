@@ -1,83 +1,56 @@
+from django.db import models
 from django.utils.translation import gettext as _
 
-from djchoices import ChoiceItem, DjangoChoices
+
+class VertrouwelijkheidsAanduidingen(models.TextChoices):
+    openbaar = "openbaar", "Openbaar"
+    beperkt_openbaar = "beperkt_openbaar", "Beperkt openbaar"
+    intern = "intern", "Intern"
+    zaakvertrouwelijk = "zaakvertrouwelijk", "Zaakvertrouwelijk"
+    vertrouwelijk = "vertrouwelijk", "Vertrouwelijk"
+    confidentieel = "confidentieel", "Confidentieel"
+    geheim = "geheim", "Geheim"
+    zeer_geheim = "zeer_geheim", "Zeer geheim"
 
 
-class VertrouwelijkheidsAanduidingen(DjangoChoices):
-    openbaar = ChoiceItem("openbaar", label="Openbaar")
-    beperkt_openbaar = ChoiceItem("beperkt_openbaar", label="Beperkt openbaar")
-    intern = ChoiceItem("intern", label="Intern")
-    zaakvertrouwelijk = ChoiceItem("zaakvertrouwelijk", label="Zaakvertrouwelijk")
-    vertrouwelijk = ChoiceItem("vertrouwelijk", label="Vertrouwelijk")
-    confidentieel = ChoiceItem("confidentieel", label="Confidentieel")
-    geheim = ChoiceItem("geheim", label="Geheim")
-    zeer_geheim = ChoiceItem("zeer_geheim", label="Zeer geheim")
+class RolTypes(models.TextChoices):
+    natuurlijk_persoon = "natuurlijk_persoon", "Natuurlijk persoon"
+    niet_natuurlijk_persoon = "niet_natuurlijk_persoon", "Niet-natuurlijk persoon"
+    vestiging = "vestiging", "Vestiging"
+    organisatorische_eenheid = "organisatorische_eenheid", "Organisatorische eenheid"
+    medewerker = "medewerker", "Medewerker"
 
 
-class RolTypes(DjangoChoices):
-    natuurlijk_persoon = ChoiceItem("natuurlijk_persoon", "Natuurlijk persoon")
-    niet_natuurlijk_persoon = ChoiceItem(
-        "niet_natuurlijk_persoon", "Niet-natuurlijk persoon"
-    )
-    vestiging = ChoiceItem("vestiging", "Vestiging")
-    organisatorische_eenheid = ChoiceItem(
-        "organisatorische_eenheid", "Organisatorische eenheid"
-    )
-    medewerker = ChoiceItem("medewerker", "Medewerker")
+class RolOmschrijving(models.TextChoices):
+    # "Kennis in dienst stellen van de behandeling van (een deel van) een zaak."
+    adviseur = "adviseur", "Adviseur"
+    # "De vakinhoudelijke behandeling doen van (een deel van) een zaak."
+    behandelaar = "behandelaar", "Behandelaar"
+    # "Vanuit eigen en objectief belang rechtstreeks betrokken "
+    # "zijn bij de behandeling en/of de uitkomst van een zaak."
+    belanghebbende = "belanghebbende", "Belanghebbende"
+    # "Nemen van besluiten die voor de uitkomst van een zaak noodzakelijk zijn."
+    beslisser = "beslisser", "Beslisser"
+    # "Aanleiding geven tot de start van een zaak .."
+    initiator = "initiator", "Initiator"
+    # "Het eerste aanspreekpunt zijn voor vragen van burgers en bedrijven .."
+    klantcontacter = "klantcontacter", "Klantcontacter"
+    # "Er voor zorg dragen dat de behandeling van de zaak in samenhang "
+    # "uitgevoerd wordt conform de daarover gemaakte afspraken."
+    zaakcoordinator = "zaakcoordinator", "Zaakcoördinator"
+    medeinitiator = "mede_initiator", "Mede-initiator"
 
 
-class RolOmschrijving(DjangoChoices):
-    adviseur = ChoiceItem(
-        "adviseur",
-        "Adviseur",
-        description="Kennis in dienst stellen van de behandeling van (een deel van) een zaak.",
-    )
-    behandelaar = ChoiceItem(
-        "behandelaar",
-        "Behandelaar",
-        description="De vakinhoudelijke behandeling doen van (een deel van) een zaak.",
-    )
-    belanghebbende = ChoiceItem(
-        "belanghebbende",
-        "Belanghebbende",
-        description="Vanuit eigen en objectief belang rechtstreeks betrokken "
-        "zijn bij de behandeling en/of de uitkomst van een zaak.",
-    )
-    beslisser = ChoiceItem(
-        "beslisser",
-        "Beslisser",
-        description="Nemen van besluiten die voor de uitkomst van een zaak noodzakelijk zijn.",
-    )
-    initiator = ChoiceItem(
-        "initiator",
-        "Initiator",
-        description="Aanleiding geven tot de start van een zaak ..",
-    )
-    klantcontacter = ChoiceItem(
-        "klantcontacter",
-        "Klantcontacter",
-        description="Het eerste aanspreekpunt zijn voor vragen van burgers en bedrijven ..",
-    )
-    zaakcoordinator = ChoiceItem(
-        "zaakcoordinator",
-        "Zaakcoördinator",
-        description="Er voor zorg dragen dat de behandeling van de zaak in samenhang "
-        "uitgevoerd wordt conform de daarover gemaakte afspraken.",
-    )
-    medeinitiator = ChoiceItem("mede_initiator", "Mede-initiator", description="")
-
-
-class VervalRedenen(DjangoChoices):
-    tijdelijk = ChoiceItem("tijdelijk", "Besluit met tijdelijke werking")
-    ingetrokken_overheid = ChoiceItem(
-        "ingetrokken_overheid", "Besluit ingetrokken door overheid"
-    )
-    ingetrokken_belanghebbende = ChoiceItem(
-        "ingetrokken_belanghebbende", "Besluit ingetrokken o.v.v. belanghebbende"
+class VervalRedenen(models.TextChoices):
+    tijdelijk = "tijdelijk", "Besluit met tijdelijke werking"
+    ingetrokken_overheid = "ingetrokken_overheid", "Besluit ingetrokken door overheid"
+    ingetrokken_belanghebbende = (
+        "ingetrokken_belanghebbende",
+        "Besluit ingetrokken o.v.v. belanghebbende",
     )
 
 
-class AardRelatieChoices(DjangoChoices):
-    vervolg = ChoiceItem("vervolg", _("Vervolg"))
-    bijdrage = ChoiceItem("bijdrage", _("Bijdrage"))
-    onderwerp = ChoiceItem("onderwerp", _("Onderwerp"))
+class AardRelatieChoices(models.TextChoices):
+    vervolg = "vervolg", _("Vervolg")
+    bijdrage = "bijdrage", _("Bijdrage")
+    onderwerp = "onderwerp", _("Onderwerp")
