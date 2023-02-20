@@ -34,7 +34,7 @@ def get_paginated_results(
     if minimum and len(results) >= minimum:
         return results
 
-    while response["next"]:
+    while response.get("next"):
         next_url = urlparse(response["next"])
         query = parse_qs(next_url.query)
         new_page = int(query["page"][0])

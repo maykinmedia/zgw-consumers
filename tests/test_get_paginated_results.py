@@ -50,3 +50,29 @@ def test_paginated_results(settings, requests_mock):
     result = get_paginated_results(client, "book")
 
     assert result == [{"name": "A"}, {"name": "B"}]
+
+
+def test_paginated_results_without_next(settings, requests_mock):
+    """
+    check that function doesn't crash if next-link is missing
+    """
+    settings.ZGW_CONSUMERS_TEST_SCHEMA_DIRS = [TESTS_DIR / "schemas"]
+    mock_service_oas_get(requests_mock, BOOK_API_ROOT, "books")
+    requests_mock.get(
+        f"{BOOK_API_ROOT}books",
+        complete_qs=True,
+        json={
+            "count": 2,
+            "results": [{"name": "A"}],
+        },
+    )
+    service = Service.objects.create(
+        api_type=APITypes.orc,
+        api_root=BOOK_API_ROOT,
+        oas=f"{BOOK_API_ROOT}schema/openapi.yaml?v=3",
+    )
+    client = service.build_client()
+
+    result = get_paginated_results(client, "book")
+
+    assert result == [{"name": "A"}]
