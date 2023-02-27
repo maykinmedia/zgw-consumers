@@ -1,6 +1,14 @@
 Changes
 =======
 
+
+0.25.0 (2023-02-27)
+-------------------
+
+Small compatibility release
+
+* Hardened ``get_paginated_results()`` function to accept missing 'next'-link
+
 0.24.0 (2023-02-16)
 -------------------
 
