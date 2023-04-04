@@ -12,7 +12,7 @@ from .widgets import NoDownloadPrivateFileWidget
 class ServiceAdmin(admin.ModelAdmin):
     list_display = ("label", "api_type", "api_root", "nlx", "auth_type")
     list_filter = ("api_type", "auth_type")
-    search_fields = ("label", "api_root", "nlx")
+    search_fields = ("label", "api_root", "nlx", "uuid")
 
     def formfield_for_dbfield(self, db_field, request, **kwargs):
         if db_field.name == "nlx":

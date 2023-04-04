@@ -23,6 +23,7 @@ from .abstract import RestAPIService
 
 
 class Service(RestAPIService):
+    uuid = models.UUIDField(_("UUID"), default=uuid.uuid4)
     api_type = models.CharField(_("type"), max_length=20, choices=APITypes.choices)
     api_root = models.CharField(_("api root url"), max_length=255, unique=True)
 
