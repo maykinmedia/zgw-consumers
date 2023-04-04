@@ -69,7 +69,7 @@ def get_zaaktype_field(db_field: Field, request: HttpRequest, **kwargs):
     except HTTPError as exc:
         error_message = exc.args[0]
         choices = []
-        messages.error(request, f"{error_message}")
+        messages.error(request, error_message)
     else:
 
         def _get_choice(zaaktype: dict) -> Tuple[str, str]:
