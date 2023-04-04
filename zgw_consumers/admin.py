@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.utils.translation import gettext_lazy as _
 
 from privates.admin import PrivateMediaMixin
 from solo.admin import SingletonModelAdmin

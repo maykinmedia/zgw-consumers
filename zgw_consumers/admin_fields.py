@@ -4,10 +4,14 @@ from typing import Any, Dict, List, Tuple
 from urllib.parse import parse_qs, urlparse
 
 from django import forms
+from django.contrib import messages
 from django.contrib.admin import widgets
 from django.db.models import Field
 from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
+
+from requests.exceptions import HTTPError
+from zds_client.client import ClientError
 
 from .constants import APITypes
 from .models.services import NLXConfig, Service
@@ -45,21 +49,42 @@ def get_zaaktypen() -> Dict[Service, List[Dict[str, Any]]]:
 
 
 def get_zaaktype_field(db_field: Field, request: HttpRequest, **kwargs):
-    zaaktypen = get_zaaktypen()
-
-    def _get_choice(zaaktype: dict) -> Tuple[str, str]:
-        return (
-            zaaktype["url"],
-            f"{zaaktype['identificatie']} - {zaaktype['omschrijving']}",
+    try:
+        zaaktypen = get_zaaktypen()
+    except ClientError as exc:
+        error_message = exc.args[0]
+        messages.error(
+            request,
+            _(
+                "Failed to retrieve available zaaktypen "
+                "(got {http_status} - {detail}). "
+                "The cause of this exception was: {cause}"
+            ).format(
+                http_status=error_message["status"],
+                detail=error_message["detail"],
+                cause=exc.__cause__,
+            ),
         )
+        choices = []
+    except HTTPError as exc:
+        error_message = exc.args[0]
+        choices = []
+        messages.error(request, f"{error_message}")
+    else:
 
-    choices = [
-        (
-            f"Service: {service.label}",
-            [_get_choice(zaaktype) for zaaktype in _zaaktypen],
-        )
-        for service, _zaaktypen in zaaktypen.items()
-    ]
+        def _get_choice(zaaktype: dict) -> Tuple[str, str]:
+            return (
+                zaaktype["url"],
+                f"{zaaktype['identificatie']} - {zaaktype['omschrijving']}",
+            )
+
+        choices = [
+            (
+                f"Service: {service.label}",
+                [_get_choice(zaaktype) for zaaktype in _zaaktypen],
+            )
+            for service, _zaaktypen in zaaktypen.items()
+        ]
 
     return forms.ChoiceField(
         label=db_field.verbose_name.capitalize(),
