@@ -1,6 +1,15 @@
 Changes
 =======
 
+0.26.0 (2023-04-04)
+-------------------
+
+Feature/support release
+
+* Catch HTTP 4xx and 5xx errors when using ZaaktypeField in the admin and display a
+  meaningful message to the end user
+* Added ``Service.uuid`` model field
+* Confirmed support for Django 4.2 and Python 3.11
 
 0.25.0 (2023-02-27)
 -------------------
