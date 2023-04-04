@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.25.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-08-30 05:40-0500\n"
+"POT-Creation-Date: 2023-04-04 04:39-0500\n"
 "PO-Revision-Date: 2022-05-17 09:40+02:00\n"
 "Last-Translator: Sergei Maertens <sergei@maykinmedia.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,83 +18,92 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: admin_fields.py:96
+#: admin_fields.py:59
+#, python-brace-format
+msgid ""
+"Failed to retrieve available zaaktypen (got {http_status} - {detail}). The "
+"cause of this exception was: {cause}"
+msgstr ""
+"Fout bij het ophalen van de beschikbare zaaktypen (fout {http_status} - {detail}). De "
+"oorzaak van deze fout was: {cause}"
+
+#: admin_fields.py:121
 msgid "No NLX"
 msgstr "Geen NLX"
 
-#: api_models/constants.py:81
+#: api_models/constants.py:54
 msgid "Vervolg"
 msgstr ""
 
-#: api_models/constants.py:82
+#: api_models/constants.py:55
 msgid "Bijdrage"
 msgstr ""
 
-#: api_models/constants.py:83
+#: api_models/constants.py:56
 msgid "Onderwerp"
 msgstr ""
 
-#: constants.py:7
+#: constants.py:6
 msgid "AC (Authorizations)"
 msgstr "AC (Autorisaties API)"
 
-#: constants.py:8
+#: constants.py:7
 msgid "NRC (Notifications)"
 msgstr "NRC (Notificaties API)"
 
-#: constants.py:10
+#: constants.py:9
 msgid "ZRC (Zaken)"
 msgstr "ZRC (Zaken API)"
 
-#: constants.py:11
+#: constants.py:10
 msgid "ZTC (Zaaktypen)"
 msgstr "ZTC (Catalogi API)"
 
-#: constants.py:12
+#: constants.py:11
 msgid "DRC (Informatieobjecten)"
 msgstr "DRC (Documenten API)"
 
-#: constants.py:13
+#: constants.py:12
 msgid "BRC (Besluiten)"
 msgstr "BRC (Besluiten API)"
 
-#: constants.py:15
+#: constants.py:14
 msgid "Contactmomenten API"
 msgstr ""
 
-#: constants.py:16
+#: constants.py:15
 msgid "Klanten API"
 msgstr ""
 
-#: constants.py:17
+#: constants.py:16
 msgid "Verzoeken API"
 msgstr ""
 
-#: constants.py:19
+#: constants.py:18
 msgid "ORC (Overige)"
 msgstr ""
 
-#: constants.py:23
+#: constants.py:22
 msgid "No authorization"
 msgstr "Geen authorisatie"
 
-#: constants.py:24
+#: constants.py:23
 msgid "API key"
 msgstr "API sleutel"
 
-#: constants.py:25
+#: constants.py:24
 msgid "ZGW client_id + secret"
 msgstr "ZGW client_id en secret"
 
-#: constants.py:29
+#: constants.py:28
 msgid "Demo"
 msgstr ""
 
-#: constants.py:30
+#: constants.py:29
 msgid "Pre-prod"
 msgstr ""
 
-#: constants.py:31
+#: constants.py:30
 msgid "Prod"
 msgstr ""
 
@@ -122,100 +131,100 @@ msgstr "OAS-bestand"
 msgid "OAS yaml file"
 msgstr "OAS YAML-bestand"
 
-#: models/services.py:25
+#: models/services.py:26
 msgid "type"
 msgstr "type"
 
-#: models/services.py:26
+#: models/services.py:27
 msgid "api root url"
 msgstr "basisurl van de API"
 
-#: models/services.py:32
+#: models/services.py:33
 msgid "authorization type"
 msgstr "authorisatietype"
 
-#: models/services.py:37
+#: models/services.py:38
 msgid "header key"
 msgstr "header sleutel"
 
-#: models/services.py:38
+#: models/services.py:39
 msgid "header value"
 msgstr "header waarde"
 
-#: models/services.py:40
+#: models/services.py:41
 msgid "NLX url"
 msgstr "NLX-url"
 
-#: models/services.py:40
+#: models/services.py:41
 msgid "NLX (outway) address"
 msgstr "NLX-outway adres"
 
-#: models/services.py:43
+#: models/services.py:44
 msgid "user ID"
 msgstr "gebruikers-ID"
 
-#: models/services.py:47
+#: models/services.py:48
 msgid ""
 "User ID to use for the audit trail. Although these external API credentials "
 "are typically used bythis API itself instead of a user, the user ID is "
 "required."
 msgstr ""
 
-#: models/services.py:52
+#: models/services.py:53
 msgid "user representation"
 msgstr "gebruikersweergave"
 
-#: models/services.py:55
+#: models/services.py:56
 msgid "Human readable representation of the user."
 msgstr "Weergave van de gebruikersidentiteit voor mensen."
 
-#: models/services.py:61
+#: models/services.py:62
 msgid "The SSL/TLS certificate of the client"
 msgstr "Het SSL/TLS-certificaat van de client"
 
-#: models/services.py:69
+#: models/services.py:70
 msgid "The SSL/TLS certificate of the server"
 msgstr "Het SSL/TLS-certificaat van de server"
 
-#: models/services.py:77
+#: models/services.py:78
 msgid "service"
 msgstr "service"
 
-#: models/services.py:78
+#: models/services.py:79
 msgid "services"
 msgstr "services"
 
-#: models/services.py:100
+#: models/services.py:101
 msgid "If header_key is set, header_value must also be set"
 msgstr ""
 "Als de header_key opgegeven is, dan moet je ook een header-waarde opgeven"
 
-#: models/services.py:106
+#: models/services.py:107
 msgid "If header_value is set, header_key must also be set"
 msgstr ""
 "Als de header_value opgegeven is, dan moet je ook een header-sleutel opgeven"
 
-#: models/services.py:112 models/services.py:113
+#: models/services.py:113 models/services.py:114
 msgid "Set either oas or oas_file, not both"
 msgstr "Geef de OAS URL of het OAS-bestand op, niet beide"
 
-#: models/services.py:119 models/services.py:120
+#: models/services.py:120 models/services.py:121
 msgid "Set either oas or oas_file"
 msgstr "Geef de OAS URL of het OAS-bestand op"
 
-#: models/services.py:205
+#: models/services.py:213
 msgid "NLX directory"
 msgstr "NLX directory"
 
-#: models/services.py:208
+#: models/services.py:216
 msgid "NLX outway address"
 msgstr "NLX-outway adres"
 
-#: models/services.py:210
+#: models/services.py:218
 msgid "Example: http://my-outway.nlx:8080"
 msgstr "Voorbeeld: http://mijn-outway.nl:8080"
 
-#: models/services.py:216
+#: models/services.py:224
 msgid ""
 "Your organization TLS certificate for the NLX network. This is used to fetch "
 "the list of available services from the NLX directory API."
@@ -224,7 +233,7 @@ msgstr ""
 "gebruikt om de lijst van beschikbare services uit de NLX directory API op te "
 "halen."
 
-#: models/services.py:223
+#: models/services.py:231
 msgid ""
 "Your organization TLS private key for the NLX network. This is used to fetch "
 "the list of available services from the NLX directory API."
@@ -232,11 +241,11 @@ msgstr ""
 "De TLS-privésleutel voor het NLX-netwerk. Dit wordt gebruikt om de lijst van "
 "beschikbare services uit de NLX directory API op te halen."
 
-#: models/services.py:230
+#: models/services.py:238
 msgid "NLX configuration"
 msgstr "NLX-configuratie"
 
-#: models/services.py:261
+#: models/services.py:269
 msgid "Connection refused. Please provide a correct address."
 msgstr "Verbinding geweigerd. Geef een valide adres op."
 
