@@ -8,7 +8,7 @@ def populate_uuids(apps, _):
     Service = apps.get_model("zgw_consumers", "Service")
     for service in Service.objects.all():
         service.uuid = uuid4()
-        service.save(updated_fields=["uuid"])
+        service.save(update_fields=["uuid"])
 
 
 class Migration(migrations.Migration):
