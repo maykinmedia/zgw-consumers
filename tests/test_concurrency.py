@@ -24,7 +24,6 @@ def get_num_connections() -> int:
     test database otherwise.
     """
     handler = ConnectionHandler({"default": settings.POSTGRES_CONN_PARAMS})
-    handler.ensure_defaults("default")
     connection = handler["default"]
 
     app_user = settings.DATABASES["default"]["USER"]
