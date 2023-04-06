@@ -1,6 +1,11 @@
 Changes
 =======
 
+0.26.1 (2023-04-06)
+-------------------
+
+Fixed a data migration crash after introducing the ``Service.uuid`` field.
+
 0.26.0 (2023-04-04)
 -------------------
 
