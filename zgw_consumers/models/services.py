@@ -89,11 +89,6 @@ class Service(RestAPIService):
         if self.nlx and not self.nlx.endswith("/"):
             self.nlx = f"{self.nlx}/"
 
-        if self.api_type == APITypes.ztc:
-            from zgw_consumers.admin_fields import get_zaaktypen
-
-            get_zaaktypen.cache_clear()
-
         super().save(*args, **kwargs)
 
     def clean(self):
