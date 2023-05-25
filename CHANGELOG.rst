@@ -1,6 +1,14 @@
 Changes
 =======
 
+0.26.2 (2023-05-25)
+-------------------
+
+Bugfix release
+
+Removed the ``lru_cache`` of ``zgw_consumers.admin_fields.get_zaaktypen`` to prevent
+stale data being returned on configuration changes or changes in remote API data.
+
 0.26.1 (2023-04-06)
 -------------------
 
