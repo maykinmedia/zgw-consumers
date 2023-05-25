@@ -1,5 +1,4 @@
 import logging
-from functools import lru_cache
 from typing import Any, Dict, List, Tuple
 from urllib.parse import parse_qs, urlparse
 
@@ -22,7 +21,6 @@ logger = logging.getLogger(__name__)
 
 
 # TODO: parallelize
-@lru_cache()
 def get_zaaktypen() -> Dict[Service, List[Dict[str, Any]]]:
     services = Service.objects.filter(api_type=APITypes.ztc)
 
