@@ -27,7 +27,6 @@ def get_operation(forwards: bool = True):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("simple_certmanager", "0001_initial"),
         ("zgw_consumers", "0015_auto_20220307_1522"),

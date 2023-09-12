@@ -7,7 +7,6 @@ import privates.storages
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("zgw_consumers", "0013_oas_field"),
     ]
