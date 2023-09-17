@@ -8,7 +8,7 @@ ServiceUrlField
 
 ``ServiceUrlField`` handles storage and access to the external urls.
 
-If you need to store external API urls in the database and you already use ``zgw_consumers.Serivce`` model
+If you need to store external API urls in the database and you already use ``zgw_consumers.Service`` model
 consider using ``ServiceUrlField`` instead of regular Django ``UrlField``. ``ServiceUrlField`` separates
 url into base and relative parts and stores them in two database fields:
 
