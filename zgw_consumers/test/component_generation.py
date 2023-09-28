@@ -1,5 +1,6 @@
 import logging
 import random
+from functools import lru_cache
 from typing import Any, Dict
 
 from django.utils import timezone
@@ -14,6 +15,11 @@ logger = logging.getLogger(__name__)
 fake = Faker()
 
 
+@lru_cache(maxsize=None)
+def load_schema(service: str):
+    return yaml.safe_load(read_schema(service))
+
+
 def generate_oas_component(
     service: str,
     component: str,
@@ -24,7 +30,7 @@ def generate_oas_component(
 
     Any extra kwargs passed in are used as explicit values for properties.
     """
-    schema = yaml.safe_load(read_schema(service))
+    schema = load_schema(service)
 
     definition = schema["components"]
     for bit in component.split("/"):
