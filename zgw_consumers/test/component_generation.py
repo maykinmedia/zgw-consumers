@@ -60,6 +60,9 @@ def generate_object(schema: dict, definition: dict, **properties):
 
 
 def generate_prop(schema: dict, prop_definition: dict) -> Any:
+    if "allOf" in prop_definition:
+        prop_definition = prop_definition["allOf"][0]
+
     if "$ref" in prop_definition:
         ref_bits = prop_definition["$ref"].replace("#/", "", 1).split("/")
         prop_definition = schema
