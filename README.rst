@@ -48,7 +48,7 @@ Install
 
     pip install zgw-consumers
 
-2. Add ``zgw_consumers`` to the ``INSTALLED_APPS`` setting.
+2. Add ``zgw_consumers`` and ``simple_certmanager`` to the ``INSTALLED_APPS`` setting.
 
 3. Optionally override ``ZGW_CONSUMERS_CLIENT_CLASS`` to a custom client class.
 
