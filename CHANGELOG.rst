@@ -6,6 +6,13 @@ Changes
 
 💥 Breaking changes release!
 
+``zgw_consumers`` now recommends using ``ape-pie`` as an HTTP client. The old ``ZGWClient``
+is still made available under the ``zgw_consumers.legacy`` module. and is planned to be removed
+in the next major version.
+Bump the minimum supported Python version to ``3.10``. Note that before this release, no explicit
+version was pinned in the ``setup.cfg`` file.
+Added a ``ServiceFactory`` in the ``zgw_consumers.test.factories`` module.
+
 0.27.0 (2023-10-10)
 -------------------
 
