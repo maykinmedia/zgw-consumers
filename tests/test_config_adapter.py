@@ -2,7 +2,7 @@ import pytest
 import requests_mock
 from ape_pie import APIClient
 from simple_certmanager.constants import CertificateTypes
-from simple_certmanager_ext.tests.factories import CertificateFactory
+from simple_certmanager.tests.factories import CertificateFactory
 
 from zgw_consumers.client import ServiceConfigAdapter
 from zgw_consumers.constants import AuthTypes
