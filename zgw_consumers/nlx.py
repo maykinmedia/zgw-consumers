@@ -6,10 +6,10 @@ from requests import JSONDecodeError
 from requests.models import PreparedRequest, Request, Response
 from requests.utils import guess_json_utf
 
-# For backwards compatibility:
-# TODO Move `Rewriter` and `get_nlx_services` from the legacy module to this one
-# (`Rewriter` is still being used by `nlx_rewrite_hook`).
-from .legacy.nlx import NLXClientMixin, Organization, Rewriter, ServiceType, get_nlx_services
+# TODO Move these imports from the legacy module to this one
+# (`Rewriter` is still being used by `nlx_rewrite_hook`, and `get_nlx_services`
+# is still relevant and not related to the old client stuff).
+from .legacy.nlx import Organization, Rewriter, ServiceType, get_nlx_services
 
 logger = logging.getLogger(__name__)
 

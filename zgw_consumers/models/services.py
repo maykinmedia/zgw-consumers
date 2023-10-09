@@ -1,7 +1,7 @@
 import socket
 import uuid
 import warnings
-from typing import TYPE_CHECKING, Optional
+from typing import Optional
 from urllib.parse import urlparse, urlsplit, urlunsplit
 
 from django.core.exceptions import ValidationError
@@ -17,12 +17,9 @@ from zds_client import ClientAuth
 from zgw_consumers import settings as zgw_settings
 
 from ..constants import APITypes, AuthTypes, NLXDirectories
+from ..legacy.client import ZGWClient, get_client_class
 from ..query import ServiceManager
 from .abstract import RestAPIService
-
-if TYPE_CHECKING:
-    # Avoid circular import
-    from ..client import ZGWClient
 
 
 class Service(RestAPIService):
@@ -142,8 +139,6 @@ class Service(RestAPIService):
         if self.nlx:
             api_root = api_root.replace(self.api_root, self.nlx, 1)
 
-        from ..client import get_client_class
-
         Client = get_client_class()
         # legacy flow
         if hasattr(Client, "from_url"):
@@ -204,7 +199,7 @@ class Service(RestAPIService):
         return None
 
     @classmethod
-    def get_client(cls, url: str, **kwargs) -> Optional["ZGWClient"]:
+    def get_client(cls, url: str, **kwargs) -> Optional[ZGWClient]:
         service = cls.get_service(url)
         if not service:
             return None

@@ -2,6 +2,7 @@ import logging
 from dataclasses import dataclass, field
 from typing import Any, TypeVar
 
+from ape_pie import APIClient
 from requests.auth import AuthBase
 from requests.models import PreparedRequest
 from zds_client import ClientAuth
@@ -9,14 +10,12 @@ from zds_client import ClientAuth
 from zgw_consumers.constants import AuthTypes
 from zgw_consumers.models import Service
 
-# For backwards compatibility:
-from .legacy.client import UnknownService, ZGWClient, get_client_class, load_schema_file
 from .nlx import NLXClient
 
 logger = logging.getLogger(__name__)
 
 
-ClientT = TypeVar("ClientT", bound=NLXClient)
+ClientT = TypeVar("ClientT", bound=APIClient)
 
 
 def build_client(
@@ -25,15 +24,15 @@ def build_client(
     """
     Build a client for a given :class:`zgw_consumers.models.Service`.
     """
-    config_provider = ServiceConfigProvider(service)
+    config_adapter = ServiceConfigAdapter(service)
     return client_factory.configure_from(
-        config_provider, nlx_base_url=service.nlx, **kwargs
+        config_adapter, nlx_base_url=service.nlx, **kwargs
     )
 
 
 @dataclass
-class ServiceConfigProvider:
-    """An ``ape-pie`` config provider that will extract session kwargs
+class ServiceConfigAdapter:
+    """An ``ape-pie`` config adapter that will extract session kwargs
     from a given :class:`zgw_consumers.models.Service`.
     """
 
@@ -60,13 +59,14 @@ class ServiceConfigProvider:
                 else client_cert_path
             )
 
-        if self.service.auth_type is AuthTypes.api_key:
-            kwargs["auth"] = APIKeyAuth(
-                header=self.service.header_key,
-                key=self.service.header_value,
-            )
-        elif self.service.auth_type is AuthTypes.zgw:
-            kwargs["auth"] = ZGWAuth(service=self.service)
+        match self.service.auth_type:
+            case AuthTypes.api_key:
+                kwargs["auth"] = APIKeyAuth(
+                    header=self.service.header_key,
+                    key=self.service.header_value,
+                )
+            case AuthTypes.zgw:
+                kwargs["auth"] = ZGWAuth(service=self.service)
 
         return kwargs
 
