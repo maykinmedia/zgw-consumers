@@ -1,7 +1,7 @@
 import socket
 import uuid
 import warnings
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
 from urllib.parse import urlparse, urlsplit, urlunsplit
 
 from django.core.exceptions import ValidationError
@@ -16,10 +16,13 @@ from zds_client import ClientAuth
 
 from zgw_consumers import settings as zgw_settings
 
-from ..client import ZGWClient, get_client_class
 from ..constants import APITypes, AuthTypes, NLXDirectories
 from ..query import ServiceManager
 from .abstract import RestAPIService
+
+if TYPE_CHECKING:
+    # Avoid circular import
+    from ..client import ZGWClient
 
 
 class Service(RestAPIService):
@@ -127,11 +130,19 @@ class Service(RestAPIService):
         """
         Build an API client from the service configuration.
         """
+        warnings.warn(
+            "The `build_client` method is deprecated and will be removed in the next major release. "
+            "Instead, use the new `ape_pie.APIClient` or `zgw_consumers.NLXClient`.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
         _uuid = uuid.uuid4()
 
         api_root = self.api_root
         if self.nlx:
             api_root = api_root.replace(self.api_root, self.nlx, 1)
+
+        from ..client import get_client_class
 
         Client = get_client_class()
         # legacy flow
@@ -193,7 +204,7 @@ class Service(RestAPIService):
         return None
 
     @classmethod
-    def get_client(cls, url: str, **kwargs) -> Optional[ZGWClient]:
+    def get_client(cls, url: str, **kwargs) -> Optional["ZGWClient"]:
         service = cls.get_service(url)
         if not service:
             return None

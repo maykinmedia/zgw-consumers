@@ -1,128 +1,99 @@
 import logging
-import warnings
-from dataclasses import dataclass
-from typing import IO, Any, Dict, List, Optional, Union
-from urllib.parse import urljoin
+from dataclasses import dataclass, field
+from typing import Any, TypeVar
 
-from django.utils.module_loading import import_string
+from requests.auth import AuthBase
+from requests.models import PreparedRequest
+from zds_client import ClientAuth
 
-import yaml
-import zds_client
-from zds_client import Client
-from zds_client.oas import schema_fetcher
+from zgw_consumers.constants import AuthTypes
+from zgw_consumers.models import Service
 
-from .settings import get_setting
+# For backwards compatibility:
+from .legacy.client import UnknownService, ZGWClient, get_client_class, load_schema_file
+from .nlx import NLXClient
 
 logger = logging.getLogger(__name__)
 
-IS_OLD_ZDS_CLIENT = zds_client.__version__ < "2.0.0"
 
-Object = Dict[str, Any]
-
-
-def get_client_class() -> type:
-    client_class = get_setting("ZGW_CONSUMERS_CLIENT_CLASS")
-    Client = import_string(client_class)
-    return Client
+ClientT = TypeVar("ClientT", bound=NLXClient)
 
 
-def load_schema_file(file: IO):
-    spec = yaml.safe_load(file)
-    return spec
+def build_client(
+    service: Service, client_factory: type[ClientT] = NLXClient, **kwargs
+) -> ClientT:
+    """
+    Build a client for a given :class:`zgw_consumers.models.Service`.
+    """
+    config_provider = ServiceConfigProvider(service)
+    return client_factory.configure_from(
+        config_provider, nlx_base_url=service.nlx, **kwargs
+    )
 
 
-class ZGWClient(Client):
-    def __init__(
-        self,
-        *args,
-        auth_value: Optional[Dict[str, str]] = None,
-        schema_url: str = "",
-        schema_file: IO = None,
-        client_certificate_path=None,
-        client_private_key_path=None,
-        server_certificate_path=None,
-        **kwargs,
-    ):
-        super().__init__(*args, **kwargs)
+@dataclass
+class ServiceConfigProvider:
+    """An ``ape-pie`` config provider that will extract session kwargs
+    from a given :class:`zgw_consumers.models.Service`.
+    """
 
-        self.auth_value = auth_value
-        self.schema_url = schema_url
-        self.schema_file = schema_file
-        self.client_certificate_path = client_certificate_path
-        self.client_private_key_path = client_private_key_path
-        self.server_certificate_path = server_certificate_path
+    service: Service
 
-    def fetch_schema(self) -> None:
-        """support custom OAS resolution"""
-        if self.schema_file:
-            logger.info("Loaded schema from file '%s'", self.schema_file)
-            self._schema = load_schema_file(self.schema_file)
-        else:
-            url = self.schema_url or urljoin(self.base_url, "schema/openapi.yaml")
-            logger.info("Fetching schema at '%s'", url)
-            self._schema = schema_fetcher.fetch(url, {"v": "3"})
+    def get_client_base_url(self) -> str:
+        return self.service.api_root
 
-    def pre_request(
-        self, method: str, url: str, kwargs: Optional[dict] = None, **old_kwargs
-    ):
-        """
-        Add authorization header to requests for APIs without jwt.
-        """
-        kwargs = kwargs or {}
-        if old_kwargs:
-            warnings.warn(
-                "Keyword argument unpacking is removed in zds-client 2.0.",
-                DeprecationWarning,
+    def get_client_session_kwargs(self) -> dict[str, Any]:
+        kwargs = {}
+
+        # mTLS: verify server certificate if configured
+        if server_cert := self.service.server_certificate:
+            # NOTE: this only works with a file-system based storage!
+            kwargs["verify"] = server_cert.public_certificate.path
+
+        # mTLS: offer client certificate if configured
+        if client_cert := self.service.client_certificate:
+            client_cert_path = client_cert.public_certificate.path
+            # decide between single cert or cert,key tuple variant
+            kwargs["cert"] = (
+                (client_cert_path, privkey.path)
+                if (privkey := client_cert.private_key)
+                else client_cert_path
             )
-            kwargs.update(old_kwargs)
 
-        if not self.auth and self.auth_value:
-            headers = kwargs.get("headers", {})
-            headers.update(self.auth_value)
+        if self.service.auth_type is AuthTypes.api_key:
+            kwargs["auth"] = APIKeyAuth(
+                header=self.service.header_key,
+                key=self.service.header_value,
+            )
+        elif self.service.auth_type is AuthTypes.zgw:
+            kwargs["auth"] = ZGWAuth(service=self.service)
 
-        if IS_OLD_ZDS_CLIENT:
-            super_kwargs = kwargs
-        else:
-            super_kwargs = {"kwargs": kwargs}
+        return kwargs
 
-        return super().pre_request(method, url, **super_kwargs)
 
-    @property
-    def auth_header(self) -> dict:
-        if self.auth:
-            return self.auth.credentials()
+@dataclass
+class APIKeyAuth(AuthBase):
+    header: str
+    key: str
 
-        return self.auth_value or {}
+    def __call__(self, request: PreparedRequest):
+        request.headers[self.header] = self.key
+        return request
 
-    def request(
-        self,
-        path: str,
-        operation: str,
-        method="GET",
-        expected_status=200,
-        request_kwargs: Optional[dict] = None,
-        **kwargs,
-    ) -> Union[List[Object], Object]:
-        if self.server_certificate_path:
-            kwargs.update({"verify": self.server_certificate_path})
 
-        if self.client_certificate_path:
-            if self.client_private_key_path:
-                kwargs.update(
-                    {
-                        "cert": (
-                            self.client_certificate_path,
-                            self.client_private_key_path,
-                        )
-                    }
-                )
-            else:
-                kwargs.update({"cert": self.client_certificate_path})
+@dataclass
+class ZGWAuth(AuthBase):
+    service: Service
+    auth: ClientAuth = field(init=False)
 
-        return super().request(
-            path, operation, method, expected_status, request_kwargs, **kwargs
+    def __post_init__(self):
+        self.auth = ClientAuth(
+            client_id=self.service.client_id,
+            secret=self.service.secret,
+            user_id=self.service.user_id,
+            user_representation=self.service.user_representation,
         )
 
-
-class UnknownService(Exception):
-    pass
+    def __call__(self, request: PreparedRequest):
+        request.headers.update(self.auth.credentials())
+        return request
