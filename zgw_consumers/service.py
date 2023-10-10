@@ -1,9 +1,10 @@
 from typing import List, Optional, Type
 from urllib.parse import parse_qs, urlparse
 
+from zds_client import Client
+
 from .api_models.base import ZGWModel, factory
 from .api_models.catalogi import Catalogus, InformatieObjectType
-from .client import Client
 from .concurrent import parallel
 from .constants import APITypes
 from .models import Service

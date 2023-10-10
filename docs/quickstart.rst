@@ -29,8 +29,40 @@ In the Django admin, you can create:
 * ``Service`` instances to define your external APIs.
 * ``NLXConfig`` configuration for your `NLX <https://nlx.io/>`_ outway.
 
-Constructing an OpenAPI 3 client
-********************************
+Using ``ape-pie`` to interact with your service
+***********************************************
+
+From a service, you can construct an `APIClient <https://ape-pie.readthedocs.io/en/latest/>`_ instance
+(which is nothing more than an extension to the `requests.Session <https://requests.readthedocs.io/en/latest/user/advanced/#session-objects>`_ object).
+
+.. code-block:: python
+
+    from zgw_consumers.client import build_client
+    from zgw_consumers.models import Service
+
+    my_service = Service.objects.get(api_root="https://api.example.com/")
+    client = build_client(my_service)
+
+    with client:
+        # The preferred way to use the client is within a context manager
+        client.get("relative/url")
+
+The resulting client will have certificate and authentication automatically configured from the database configuration.
+
+.. note::
+
+    By default, ``build_client`` will return an instance of an ``zgw_consumers.nlx.NLXClient``, which will take care of rewriting URLs.
+    You can customize this behavior by using the ``client_factory`` argument.
+
+    If you want to customize how configuration is extracted from the ``Service``, you can
+    make use of the ``zgw_consumers.client.ServiceConfigAdapter`` directly.
+
+
+Constructing an OpenAPI 3 client with the legacy client
+*******************************************************
+
+.. deprecated:: 0.28.x
+    The legacy client is deprecated and will be removed in the next major release.
 
 From a service, you can construct a `client <https://pypi.org/project/gemma-zds-client/>`_
 instance which is driven by the API schema. There are two common scenario's:

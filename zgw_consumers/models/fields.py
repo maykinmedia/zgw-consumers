@@ -4,7 +4,7 @@ from urllib.parse import urljoin
 from django.core import checks
 from django.core.exceptions import FieldDoesNotExist
 from django.db.models import CharField, CheckConstraint, Field, ForeignKey, Model, Q
-from django.db.models.base import Options
+from django.db.models.options import Options
 
 
 class ServiceUrlDescriptor:

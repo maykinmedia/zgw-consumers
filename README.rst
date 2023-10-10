@@ -8,7 +8,6 @@ Welcome to ZGW Consumers' documentation!
 :Version: 0.27.0
 :Source: https://github.com/maykinmedia/zgw-consumers
 :Keywords: OpenAPI, Zaakgericht Werken, Common Ground, NLX
-:PythonVersion: 3.7, 3.8, 3.9
 
 |build-status| |coverage| |linting| |docs|
 
@@ -34,9 +33,9 @@ Installation
 Requirements
 ------------
 
-* Python 3.6 or newer
+* Python 3.10 or newer
 * setuptools 30.3.0 or newer
-* Django 2.2 or newer
+* Django 3.2 or newer
 
 
 Install

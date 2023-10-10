@@ -16,8 +16,8 @@ from zds_client import ClientAuth
 
 from zgw_consumers import settings as zgw_settings
 
-from ..client import ZGWClient, get_client_class
 from ..constants import APITypes, AuthTypes, NLXDirectories
+from ..legacy.client import ZGWClient, get_client_class
 from ..query import ServiceManager
 from .abstract import RestAPIService
 
@@ -127,6 +127,12 @@ class Service(RestAPIService):
         """
         Build an API client from the service configuration.
         """
+        warnings.warn(
+            "The `build_client` method is deprecated and will be removed in the next major release. "
+            "Instead, use the new `ape_pie.APIClient` or `zgw_consumers.nlx.NLXClient`.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
         _uuid = uuid.uuid4()
 
         api_root = self.api_root

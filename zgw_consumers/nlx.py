@@ -1,16 +1,20 @@
-"""
-Rewrite the URLs in anything that looks like a string, dict or list.
-"""
+import json
+import logging
+from collections.abc import Iterable
 from itertools import groupby
-from typing import Any, Dict, Iterable, List, Optional, Tuple, Union
 
 import requests
-from zds_client.client import Object
+from ape_pie import APIClient
+from requests import JSONDecodeError
+from requests.models import PreparedRequest, Request, Response
+from requests.utils import guess_json_utf
 
 from .models import NLXConfig, Service
 
+logger = logging.getLogger(__name__)
 
-def _rewrite_url(value: str, rewrites: Iterable) -> Optional[str]:
+
+def _rewrite_url(value: str, rewrites: Iterable[tuple[str, str]]) -> str | None:
     for start, replacement in rewrites:
         if not value.startswith(start):
             continue
@@ -22,25 +26,27 @@ def _rewrite_url(value: str, rewrites: Iterable) -> Optional[str]:
 
 class Rewriter:
     def __init__(self):
-        self.rewrites = Service.objects.exclude(nlx="").values_list("api_root", "nlx")
+        self.rewrites: list[tuple[str, str]] = Service.objects.exclude(
+            nlx=""
+        ).values_list("api_root", "nlx")
 
     @property
-    def reverse_rewrites(self):
+    def reverse_rewrites(self) -> list[tuple[str, str]]:
         return [(to_value, from_value) for from_value, to_value in self.rewrites]
 
-    def forwards(self, data: Union[list, dict]):
+    def forwards(self, data: list | dict) -> None:
         """
         Rewrite URLs from from_value to to_value.
         """
         self._rewrite(data, self.rewrites)
 
-    def backwards(self, data: Union[list, dict]):
+    def backwards(self, data: list | dict) -> None:
         """
         Rewrite URLs from to_value to from_value.
         """
         self._rewrite(data, self.reverse_rewrites)
 
-    def _rewrite(self, data: Union[list, dict], rewrites: Iterable) -> None:
+    def _rewrite(self, data: list | dict, rewrites: Iterable[tuple[str, str]]) -> None:
         if isinstance(data, list):
             new_items = []
             for item in data:
@@ -78,63 +84,81 @@ class Rewriter:
                 data[key] = rewritten
 
 
-class NLXClientMixin:
-    """
-    Enable URL rewriting for zds_client.Client clients.
-    """
+def nlx_rewrite_hook(response: Response, *args, **kwargs):
+    try:
+        json_data = response.json()
+    # it may be a different content type than JSON! Checking for application/json
+    # content type header is a bit annoying because there are alternatives like
+    # application/hal+json :(
+    except JSONDecodeError:
+        return response
 
-    def __init__(self, *args, **kwargs):
+    # rewrite the JSON
+    logger.debug(
+        "NLX client: Rewriting response JSON to replace outway URLs",
+        extra={"request": response.request},
+    )
+    # apply similar logic to response.json() itself
+    encoding = (
+        response.encoding
+        or guess_json_utf(response.content)
+        or response.apparent_encoding
+    )
+    assert encoding
+    rewriter = Rewriter()
+    rewriter.backwards(json_data)
+    response._content = json.dumps(json_data).encode(encoding)
+
+    return response
+
+
+class NLXMixin:
+    base_url: str
+
+    def __init__(self, *args, nlx_base_url: str = "", **kwargs):
         super().__init__(*args, **kwargs)
+        self.nlx_base_url = nlx_base_url
 
-        self.rewriter = Rewriter()
+        if self.nlx_base_url:
+            self.hooks["response"].insert(0, nlx_rewrite_hook)  # type: ignore
 
-    # def pre_request(self, method: str, url: str, **kwargs) -> Any:
-    #     """
-    #     Rewrite NLX urls in the request body and params.
+    def prepare_request(self, request: Request) -> PreparedRequest:
+        prepared_request = super().prepare_request(request)  # type: ignore
 
-    #     From NLX -> canonical.
-    #     """
-    #     json = kwargs.get("json")
-    #     if json:
-    #         self.rewriter.backwards(json)
+        if not self.nlx_base_url:
+            return prepared_request
 
-    #     params = kwargs.get("params")
-    #     if params:
-    #         self.rewriter.backwards(params)
-
-    #     return super().pre_request(method, url, **kwargs)
-
-    def request(
-        self, path: str, operation: str, method="GET", expected_status=200, **kwargs
-    ) -> Union[List[Object], Object]:
-        """
-        Make the actual HTTP request.
-        """
-        # intercept canonical URLs and rewrite to NLX
-        _paths = [path]
-        self.rewriter.forwards(_paths)
-        path = _paths[0]
-
-        return super().request(
-            path, operation, method=method, expected_status=expected_status, **kwargs
+        # change the actual URL being called so that it uses NLX
+        # XXX: it would be really nice if at some point NLX would be just a normal HTTP
+        # proxy so we can instead just map DB configuration to proxy setup.
+        new_url = (original := prepared_request.url).replace(
+            self.base_url, self.nlx_base_url, 1
         )
+        logger.debug(
+            "NLX client: URL %s rewritten to %s",
+            original,
+            new_url,
+            extra={
+                "original_url": original,
+                "base_url": self.base_url,
+                "nlx_base_url": self.nlx_base_url,
+                "client": self,
+            },
+        )
+        prepared_request.url = new_url
 
-    def post_response(
-        self, pre_id: Any, response_data: Optional[Union[dict, list]] = None
-    ) -> None:
-        """
-        Rewrite from NLX -> canonical.
-        """
-        if response_data:
-            self.rewriter.backwards(response_data)
-        super().post_response(pre_id, response_data)
+        return prepared_request
 
 
-Organization = Dict[str, str]
-ServiceType = Dict[str, str]
+class NLXClient(NLXMixin, APIClient):
+    pass
 
 
-def get_nlx_services() -> List[Tuple[Organization, List[ServiceType]]]:
+Organization = dict[str, str]
+ServiceType = dict[str, str]
+
+
+def get_nlx_services() -> list[tuple[Organization, list[ServiceType]]]:
     config = NLXConfig.get_solo()
     if not config.outway or not config.directory_url:
         return []
