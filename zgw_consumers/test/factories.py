@@ -1,24 +1,26 @@
 import factory
+from faker.providers.internet import Provider as InternetProvider
 
 from zgw_consumers.models import Service
 
 
-class UrlTrailingFaker(factory.Faker):
-    def __init__(self, **kwargs):
-        super().__init__("url", **kwargs)
-
-    def generate(self, extra_kwargs=None):
-        url: str = super().generate(extra_kwargs)
+class ApiRootProvider(InternetProvider):
+    def api_root(self) -> str:
+        base = self.url()
         # faker generates them with a trailing slash, but let's make sure this stays true
         # zgw_consumers.Service normalizes api_root to append missing trailing slashes
-        if not url.endswith("/"):
-            url = f"{url}/"
-        return url
+        if not base.endswith("/"):
+            base = f"{base}/"
+        page = self.uri_page()
+        return f"{base}{page}"
+
+
+factory.Faker.add_provider(ApiRootProvider)
 
 
 class ServiceFactory(factory.django.DjangoModelFactory):
     label = factory.Sequence(lambda n: f"API-{n}")
-    api_root = UrlTrailingFaker()
+    api_root = factory.Faker("api_root")
 
     class Meta:
         model = Service
