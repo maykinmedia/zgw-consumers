@@ -140,17 +140,7 @@ class Service(RestAPIService):
             api_root = api_root.replace(self.api_root, self.nlx, 1)
 
         Client = get_client_class()
-        # legacy flow
-        if hasattr(Client, "from_url"):
-            warnings.warn(
-                "Support for zds-client < 2.0 is deprecated", DeprecationWarning
-            )
-            dummy_detail_url = f"{api_root}dummy/{_uuid}"
-            client = Client.from_url(dummy_detail_url)
-            client.schema_url = self.oas
-            client.schema_file = self.oas_file
-        else:  # 2.0.0+
-            client = Client(api_root, schema_url=self.oas, schema_file=self.oas_file)
+        client = Client(api_root, schema_url=self.oas, schema_file=self.oas_file)
 
         if self.server_certificate:
             client.server_certificate_path = (

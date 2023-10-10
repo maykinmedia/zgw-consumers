@@ -22,12 +22,11 @@ jobs:
       matrix:
         python: ['3.10', '3.11']
         django: ['3.2', '4.1', '4.2']
-        zdsclient: ['1.0', '2.0']
         exclude:
           - python: '3.11'
             django: '3.2'
 
-    name: Run the test suite (Python ${{ matrix.python }}, Django ${{ matrix.django }}, zds-client ${{ matrix.zdsclient }})
+    name: Run the test suite (Python ${{ matrix.python }}, Django ${{ matrix.django }}
 
     services:
       postgres:
@@ -54,13 +53,12 @@ jobs:
 
       - name: Run tests
         run: |
-          export TOXENV=py${PYTHON_VERSION/./}-django${DJANGO/./}-zdsclient${ZDS_CLIENT/./}
+          export TOXENV=py${PYTHON_VERSION/./}-django${DJANGO/./}
           tox
-          codecov -e TOXENV,DJANGO,ZDS_CLIENT --file reports/coverage-${TOXENV}.xml
+          codecov -e TOXENV,DJANGO --file reports/coverage-${TOXENV}.xml
         env:
           PYTHON_VERSION: ${{ matrix.python }}
           DJANGO: ${{ matrix.django }}
-          ZDS_CLIENT: ${{ matrix.zdsclient }}
 
   publish:
     name: Publish package to PyPI
