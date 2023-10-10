@@ -8,7 +8,7 @@ from zgw_consumers.client import ServiceConfigAdapter
 from zgw_consumers.constants import AuthTypes
 from zgw_consumers.test.factories import ServiceFactory
 
-pytestmark = [pytest.mark.django_db, pytest.mark.usefixtures("temp_private_root")]
+pytestmark = [pytest.mark.usefixtures("temp_private_root")]
 
 
 @pytest.fixture

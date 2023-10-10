@@ -37,17 +37,21 @@ From a service, you can construct an `APIClient <https://ape-pie.readthedocs.io/
 
 .. code-block:: python
 
-    from zgw_consumers.client build_client
+    from zgw_consumers.client import build_client
     from zgw_consumers.models import Service
 
     my_service = Service.objects.get(api_root="https://api.example.com/")
     client = build_client(my_service)
 
-The resulting client will have certificate and authentication automatically configured from the service values.
+    with client:
+        # The preferred way to use the client is within a context manager
+        client.get("relative/url")
+
+The resulting client will have certificate and authentication automatically configured from the database configuration.
 
 .. note::
 
-    By default, ``build_client`` will return an instance of an ``zgw_consumers.nlx.NLXClient``; which will take care of rewriting URLs.
+    By default, ``build_client`` will return an instance of an ``zgw_consumers.nlx.NLXClient``, which will take care of rewriting URLs.
     You can customize this behavior by using the ``client_factory`` argument.
 
     If you want to customize how configuration is extracted from the ``Service``, you can
