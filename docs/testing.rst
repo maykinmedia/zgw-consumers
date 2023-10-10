@@ -2,12 +2,19 @@ Testing utilities
 =================
 
 .. note::
-   The ``zgw_consumers.test`` module requires some additionnal dependencies, that can be installed using ``pip install zgw_consumers[testutils]``.
+   The ``zgw_consumers.test`` module requires some additional dependencies. The easiest way to get them is to
+   install the `testutils` extra:
+   
+   .. code-block:: bash
+   
+       pip install zgw_consumers[testutils]
 
 Using factories
 ---------------
 
-ZGW Consumers provide a ``ServiceFactory`` object under the ``zgw_consumers.test.factories`` module.
+
+.. automodule:: zgw_consumers.test.factories
+   :members:
 
 Other utilities
 ---------------
