@@ -129,7 +129,7 @@ class Service(RestAPIService):
         """
         warnings.warn(
             "The `build_client` method is deprecated and will be removed in the next major release. "
-            "Instead, use the new `ape_pie.APIClient` or `zgw_consumers.NLXClient`.",
+            "Instead, use the new `ape_pie.APIClient` or `zgw_consumers.nlx.NLXClient`.",
             DeprecationWarning,
             stacklevel=2,
         )

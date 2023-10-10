@@ -45,7 +45,7 @@ class ZGWClient(Client):
         super().__init__(*args, **kwargs)
         warnings.warn(
             f"{self.__class__.__name__} is deprecated and will be removed in the next major release. "
-            "Instead, use the new `ape_pie.APIClient` or `zgw_consumers.NLXClient`.",
+            "Instead, use the new `ape_pie.APIClient` or `zgw_consumers.nlx.NLXClient`.",
             DeprecationWarning,
             stacklevel=2,
         )

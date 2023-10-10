@@ -2,13 +2,13 @@ import pytest
 import requests_mock
 from ape_pie import APIClient
 from simple_certmanager.constants import CertificateTypes
-from simple_certmanager.tests.factories import CertificateFactory
+from simple_certmanager.test.factories import CertificateFactory
 
 from zgw_consumers.client import ServiceConfigAdapter
 from zgw_consumers.constants import AuthTypes
 from zgw_consumers.test.factories import ServiceFactory
 
-pytestmark = pytest.mark.django_db
+pytestmark = [pytest.mark.django_db, pytest.mark.usefixtures("temp_private_root")]
 
 
 @pytest.fixture
@@ -37,12 +37,6 @@ def server_cert(db):
         type=CertificateTypes.cert_only,
         public_certificate__filename="server.pem",
     )
-
-
-@pytest.fixture(scope="module")
-def temp_private_root(settings, tmp_path):
-    settings.PRIVATE_MEDIA_ROOT = tmp_path
-    settings.SENDFILE_ROOT = tmp_path
 
 
 def test_no_server_cert_specified():

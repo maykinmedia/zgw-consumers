@@ -1,6 +1,10 @@
+import pytest
+
 from zgw_consumers.client import build_client
 from zgw_consumers.constants import AuthTypes
 from zgw_consumers.test.factories import ServiceFactory
+
+pytestmark = [pytest.mark.django_db]
 
 
 def test_request_url_and_response_data_rewritten(requests_mock):
