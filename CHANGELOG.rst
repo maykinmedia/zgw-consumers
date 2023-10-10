@@ -1,6 +1,19 @@
 Changes
 =======
 
+0.27.0 (2023-10-10)
+-------------------
+
+Backwards compatible 'feature' release.
+
+.. warning:: The next release will have some breaking changes w/r to the API client
+   implementations.
+
+* [#67] Mention simple certmanager in installation instructions
+* Formatted code with black
+* test utilities: added minimal support for 'allOf' schema in generation of OAS properties
+* test utilities: schema loading (YAML parsing) is now cached
+
 0.26.2 (2023-05-25)
 -------------------
 
