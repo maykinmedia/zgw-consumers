@@ -1,17 +1,87 @@
 import json
 import logging
+from collections.abc import Iterable
+from itertools import groupby
 
+import requests
 from ape_pie import APIClient
 from requests import JSONDecodeError
 from requests.models import PreparedRequest, Request, Response
 from requests.utils import guess_json_utf
 
-# TODO Move these imports from the legacy module to this one
-# (`Rewriter` is still being used by `nlx_rewrite_hook`, and `get_nlx_services`
-# is still relevant and not related to the old client stuff).
-from .legacy.nlx import Organization, Rewriter, ServiceType, get_nlx_services
+from .models import NLXConfig, Service
 
 logger = logging.getLogger(__name__)
+
+
+def _rewrite_url(value: str, rewrites: Iterable[tuple[str, str]]) -> str | None:
+    for start, replacement in rewrites:
+        if not value.startswith(start):
+            continue
+
+        return value.replace(start, replacement, 1)
+
+    return None
+
+
+class Rewriter:
+    def __init__(self):
+        self.rewrites: list[tuple[str, str]] = Service.objects.exclude(
+            nlx=""
+        ).values_list("api_root", "nlx")
+
+    @property
+    def reverse_rewrites(self) -> list[tuple[str, str]]:
+        return [(to_value, from_value) for from_value, to_value in self.rewrites]
+
+    def forwards(self, data: list | dict) -> None:
+        """
+        Rewrite URLs from from_value to to_value.
+        """
+        self._rewrite(data, self.rewrites)
+
+    def backwards(self, data: list | dict) -> None:
+        """
+        Rewrite URLs from to_value to from_value.
+        """
+        self._rewrite(data, self.reverse_rewrites)
+
+    def _rewrite(self, data: list | dict, rewrites: Iterable[tuple[str, str]]) -> None:
+        if isinstance(data, list):
+            new_items = []
+            for item in data:
+                if isinstance(item, str):
+                    new_value = _rewrite_url(item, rewrites)
+                    if new_value:
+                        new_items.append(new_value)
+                    else:
+                        new_items.append(item)
+                else:
+                    self._rewrite(item, rewrites=rewrites)
+                    new_items.append(item)
+
+            # replace list elements
+            assert len(new_items) == len(data)
+            for i in range(len(data)):
+                data[i] = new_items[i]
+            return
+
+        if not isinstance(data, dict):
+            return
+
+        for key, value in data.items():
+            if isinstance(value, (dict, list)):
+                self._rewrite(value, rewrites=rewrites)
+                continue
+
+            elif not isinstance(value, str):
+                continue
+
+            assert isinstance(value, str)
+
+            rewritten = _rewrite_url(value, rewrites)
+            if rewritten is not None:
+                data[key] = rewritten
 
 
 def nlx_rewrite_hook(response: Response, *args, **kwargs):
@@ -82,3 +152,33 @@ class NLXMixin:
 
 class NLXClient(NLXMixin, APIClient):
     pass
+
+
+Organization = dict[str, str]
+ServiceType = dict[str, str]
+
+
+def get_nlx_services() -> list[tuple[Organization, list[ServiceType]]]:
+    config = NLXConfig.get_solo()
+    if not config.outway or not config.directory_url:
+        return []
+
+    directory = config.directory_url
+    url = f"{directory}api/directory/list-services"
+
+    cert = (
+        (config.certificate.path, config.certificate_key.path)
+        if (config.certificate and config.certificate_key)
+        else None
+    )
+
+    response = requests.get(url, cert=cert)
+    response.raise_for_status()
+
+    services = response.json()["services"]
+    services.sort(key=lambda s: (s["organization"]["serial_number"], s["name"]))
+
+    services_per_organization = [
+        (k, list(v)) for k, v in groupby(services, key=lambda s: s["organization"])
+    ]
+    return services_per_organization

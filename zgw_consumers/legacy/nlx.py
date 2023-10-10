@@ -1,81 +1,11 @@
 """
 Rewrite the URLs in anything that looks like a string, dict or list.
 """
-from itertools import groupby
-from typing import Any, Dict, Iterable, List, Optional, Tuple, Union
+from typing import Any, List, Optional, Union
 
-import requests
 from zds_client.client import Object
 
-from ..models import NLXConfig, Service
-
-
-def _rewrite_url(value: str, rewrites: Iterable) -> Optional[str]:
-    for start, replacement in rewrites:
-        if not value.startswith(start):
-            continue
-
-        return value.replace(start, replacement, 1)
-
-    return None
-
-
-class Rewriter:
-    def __init__(self):
-        self.rewrites = Service.objects.exclude(nlx="").values_list("api_root", "nlx")
-
-    @property
-    def reverse_rewrites(self):
-        return [(to_value, from_value) for from_value, to_value in self.rewrites]
-
-    def forwards(self, data: Union[list, dict]):
-        """
-        Rewrite URLs from from_value to to_value.
-        """
-        self._rewrite(data, self.rewrites)
-
-    def backwards(self, data: Union[list, dict]):
-        """
-        Rewrite URLs from to_value to from_value.
-        """
-        self._rewrite(data, self.reverse_rewrites)
-
-    def _rewrite(self, data: Union[list, dict], rewrites: Iterable) -> None:
-        if isinstance(data, list):
-            new_items = []
-            for item in data:
-                if isinstance(item, str):
-                    new_value = _rewrite_url(item, rewrites)
-                    if new_value:
-                        new_items.append(new_value)
-                    else:
-                        new_items.append(item)
-                else:
-                    self._rewrite(item, rewrites=rewrites)
-                    new_items.append(item)
-
-            # replace list elements
-            assert len(new_items) == len(data)
-            for i in range(len(data)):
-                data[i] = new_items[i]
-            return
-
-        if not isinstance(data, dict):
-            return
-
-        for key, value in data.items():
-            if isinstance(value, (dict, list)):
-                self._rewrite(value, rewrites=rewrites)
-                continue
-
-            elif not isinstance(value, str):
-                continue
-
-            assert isinstance(value, str)
-
-            rewritten = _rewrite_url(value, rewrites)
-            if rewritten is not None:
-                data[key] = rewritten
+from ..nlx import Rewriter
 
 
 class NLXClientMixin:
@@ -128,33 +58,3 @@ class NLXClientMixin:
         if response_data:
             self.rewriter.backwards(response_data)
         super().post_response(pre_id, response_data)
-
-
-Organization = Dict[str, str]
-ServiceType = Dict[str, str]
-
-
-def get_nlx_services() -> List[Tuple[Organization, List[ServiceType]]]:
-    config = NLXConfig.get_solo()
-    if not config.outway or not config.directory_url:
-        return []
-
-    directory = config.directory_url
-    url = f"{directory}api/directory/list-services"
-
-    cert = (
-        (config.certificate.path, config.certificate_key.path)
-        if (config.certificate and config.certificate_key)
-        else None
-    )
-
-    response = requests.get(url, cert=cert)
-    response.raise_for_status()
-
-    services = response.json()["services"]
-    services.sort(key=lambda s: (s["organization"]["serial_number"], s["name"]))
-
-    services_per_organization = [
-        (k, list(v)) for k, v in groupby(services, key=lambda s: s["organization"])
-    ]
-    return services_per_organization
