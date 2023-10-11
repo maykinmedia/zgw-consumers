@@ -64,9 +64,7 @@ class ZGWClient(Client):
             logger.info("Fetching schema at '%s'", url)
             self._schema = schema_fetcher.fetch(url, {"v": "3"})
 
-    def pre_request(
-        self, method: str, url: str, kwargs: Optional[dict] = None
-    ):
+    def pre_request(self, method: str, url: str, kwargs: Optional[dict] = None):
         """
         Add authorization header to requests for APIs without jwt.
         """
