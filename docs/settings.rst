@@ -15,13 +15,13 @@ default.
 
 ``ZGW_CONSUMERS_CLIENT_CLASS``
     A dotted python path to the client class to use when building clients from services.
-    This class must implement the interface of ``zds_client.Client``. Defaults to
+    This class must implement the interface of :class:`zds_client.client.Client`. Defaults to
     ``"zgw_consumers.legacy.client.ZGWClient"``. For NLX support, you would override this to
     include the ``zgw_consumers.legacy.nlx.NLXClientMixin``.
 
     .. deprecated:: 0.28.x
        The ``ZGWClient`` is deprecated and will be removed in the next major release. Instead,
-       use the new `ape_pie.APIClient <https://ape-pie.readthedocs.io/en/latest/>`_ or ``zgw_consumers.nlx.NLXClient``.
+       use the new :class:`ape_pie.client.APIClient` or :class:`zgw_consumers.nlx.NLXClient`.
 
 
 ``ZGW_CONSUMERS_TEST_SCHEMA_DIRS``
