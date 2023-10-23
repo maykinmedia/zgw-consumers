@@ -32,8 +32,8 @@ In the Django admin, you can create:
 Using ``ape-pie`` to interact with your service
 ***********************************************
 
-From a service, you can construct an `APIClient <https://ape-pie.readthedocs.io/en/latest/>`_ instance
-(which is nothing more than an extension to the `requests.Session <https://requests.readthedocs.io/en/latest/user/advanced/#session-objects>`_ object).
+From a service, you can construct an :class:`ape_pie.APIClient` instance
+(which is nothing more than an extension to the :class:`requests.Session` object).
 
 .. code-block:: python
 
@@ -51,11 +51,11 @@ The resulting client will have certificate and authentication automatically conf
 
 .. note::
 
-    By default, ``build_client`` will return an instance of an ``zgw_consumers.nlx.NLXClient``, which will take care of rewriting URLs.
+    By default, :func:`zgw_consumers.client.build_client` will return an instance of an :class:`zgw_consumers.nlx.NLXClient`, which will take care of rewriting URLs.
     You can customize this behavior by using the ``client_factory`` argument.
 
-    If you want to customize how configuration is extracted from the ``Service``, you can
-    make use of the ``zgw_consumers.client.ServiceConfigAdapter`` directly.
+    If you want to customize how configuration is extracted from the :class:`zgw_consumers.models.Service`, you can
+    make use of the :class:`zgw_consumers.client.ServiceConfigAdapter` directly.
 
 
 Constructing an OpenAPI 3 client with the legacy client
@@ -64,7 +64,7 @@ Constructing an OpenAPI 3 client with the legacy client
 .. deprecated:: 0.28.x
     The legacy client is deprecated and will be removed in the next major release.
 
-From a service, you can construct a `client <https://pypi.org/project/gemma-zds-client/>`_
+From a service, you can construct a :class:`zds_client.client.Client`
 instance which is driven by the API schema. There are two common scenario's:
 
 **If you know upfront which service you need to consume**
@@ -96,7 +96,7 @@ client directly based on the URL and the best ``api_root`` match:
 Obtaining the authentication details
 ************************************
 
-Similar to ``Service.get_client``, you can also invoke ``Service.get_auth_header``:
+Similar to :meth:`Service.get_client <zgw_consumers.models.Service.get_client>`, you can also invoke :meth:`Service.get_auth_header <zgw_consumers.models.Service.get_auth_header>`:
 
 .. code-block:: python
 

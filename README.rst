@@ -68,39 +68,17 @@ To get a client for a given resource, you can use:
 
 .. code-block:: python
 
+    from zgw_consumers.client import build_client
     from zgw_consumers.models import Service
 
-    client = Service.get_client(some_url)
+    my_service = Service.objects.get(api_root="https://api.example.com/")
+    client = build_client(my_service)
 
-Or, to just retrieve the auth header(s):
+    with client:
+        # The preferred way to use the client is within a context manager
+        client.get("relative/url")
 
-.. code-block:: python
-
-    from zgw_consumers.models import Service
-
-    auth = Service.get_auth_header(some_url)
-
-**Data model**
-
-Use ``zgw_consumers.api_models.base.factory`` to turn raw JSON responses into instances
-of domain models:
-
-.. code-block:: python
-
-    from zgw_consumers.api_models.base import factory
-    from zgw_consumers.api_models.zaken import Zaak
-
-    results = client.list("zaak")["results"]
-
-    return factory(Zaak, results)
-
-
-It works for both collections and scalar values, and takes care of the camel-case to
-snake case conversion.
-
-
-You can also define your own data models, take a look at the ``zgw_consumers.api_models``
-package for inspiration.
+The resulting client will have certificate and authentication automatically configured from the database configuration.
 
 .. |build-status| image:: https://github.com/maykinmedia/zgw-consumers/workflows/Run%20CI/badge.svg
     :target: https://github.com/maykinmedia/zgw-consumers/actions?query=workflow%3A%22Run+CI%22

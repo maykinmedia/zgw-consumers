@@ -151,6 +151,10 @@ class NLXMixin:
 
 
 class NLXClient(NLXMixin, APIClient):
+    """A :class:`ape_pie.APIClient` implementation that will take care of rewriting
+    URLs with :external:ref:`an event hook <event-hooks>`.
+    """
+
     pass
 
 

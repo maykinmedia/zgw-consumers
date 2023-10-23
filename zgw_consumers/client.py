@@ -32,7 +32,7 @@ def build_client(
 
 @dataclass
 class ServiceConfigAdapter:
-    """An ``ape-pie`` config adapter that will extract session kwargs
+    """An implementation of :class:`ape_pie.ConfigAdapter` that will extract session kwargs
     from a given :class:`zgw_consumers.models.Service`.
     """
 
@@ -73,6 +73,8 @@ class ServiceConfigAdapter:
 
 @dataclass
 class APIKeyAuth(AuthBase):
+    """API Key based :class:`requests.auth.AuthBase` implementation."""
+
     header: str
     key: str
 
@@ -83,6 +85,8 @@ class APIKeyAuth(AuthBase):
 
 @dataclass
 class ZGWAuth(AuthBase):
+    """:class:`requests.auth.AuthBase` implementation for :class:`zds_client.auth.ClientAuth`."""
+
     service: Service
     auth: ClientAuth = field(init=False)
 
