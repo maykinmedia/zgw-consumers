@@ -65,7 +65,7 @@ def get_zaaktype_field(db_field: Field, request: HttpRequest, **kwargs):
                 http_status=error_message["status"],
                 detail=error_message["detail"],
                 cause=exc.__cause__,
-            ),
+            )
         messages.error(
             request,
             message,
