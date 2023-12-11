@@ -35,11 +35,11 @@ def get_zaaktypen() -> Dict[Service, List[Dict[str, Any]]]:
         while response["next"]:
             next_url = urlparse(response["next"])
             query = parse_qs(next_url.query)
-            new_page = int(query["page"][0]) + 1
+            new_page = int(query["page"][0])
             query["page"] = [new_page]
             response = client.list(
                 "zaaktype",
-                query_params=query,
+                params=query,
             )
             zaaktypen_per_service[service] += response["results"]
 
@@ -51,9 +51,13 @@ def get_zaaktype_field(db_field: Field, request: HttpRequest, **kwargs):
         zaaktypen = get_zaaktypen()
     except ClientError as exc:
         error_message = exc.args[0]
-        messages.error(
-            request,
-            _(
+        if not error_message:
+            message = _(
+                "One of the configured service did not provide a compliant response. "
+                "The cause of this exception was: {cause}"
+            ).format(cause=exc.__cause__)
+        else:
+            message = _(
                 "Failed to retrieve available zaaktypen "
                 "(got {http_status} - {detail}). "
                 "The cause of this exception was: {cause}"
@@ -61,7 +65,10 @@ def get_zaaktype_field(db_field: Field, request: HttpRequest, **kwargs):
                 http_status=error_message["status"],
                 detail=error_message["detail"],
                 cause=exc.__cause__,
-            ),
+            )
+        messages.error(
+            request,
+            message,
         )
         choices = []
     except HTTPError as exc:
