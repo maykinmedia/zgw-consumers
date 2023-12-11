@@ -35,11 +35,11 @@ def get_zaaktypen() -> Dict[Service, List[Dict[str, Any]]]:
         while response["next"]:
             next_url = urlparse(response["next"])
             query = parse_qs(next_url.query)
-            new_page = int(query["page"][0]) + 1
+            new_page = int(query["page"][0])
             query["page"] = [new_page]
             response = client.list(
                 "zaaktype",
-                query_params=query,
+                params=query,
             )
             zaaktypen_per_service[service] += response["results"]
 
