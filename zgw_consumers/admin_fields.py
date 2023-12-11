@@ -51,9 +51,13 @@ def get_zaaktype_field(db_field: Field, request: HttpRequest, **kwargs):
         zaaktypen = get_zaaktypen()
     except ClientError as exc:
         error_message = exc.args[0]
-        messages.error(
-            request,
-            _(
+        if not error_message:
+            message = _(
+                "One of the configured service did not provide a compliant response. "
+                "The cause of this exception was: {cause}"
+            ).format(cause=exc.__cause__)
+        else:
+            message = _(
                 "Failed to retrieve available zaaktypen "
                 "(got {http_status} - {detail}). "
                 "The cause of this exception was: {cause}"
@@ -62,6 +66,9 @@ def get_zaaktype_field(db_field: Field, request: HttpRequest, **kwargs):
                 detail=error_message["detail"],
                 cause=exc.__cause__,
             ),
+        messages.error(
+            request,
+            message,
         )
         choices = []
     except HTTPError as exc:
