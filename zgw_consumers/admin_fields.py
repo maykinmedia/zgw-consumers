@@ -30,7 +30,12 @@ def get_zaaktypen() -> Dict[Service, List[Dict[str, Any]]]:
         client = service.build_client()
         logger.debug("Fetching zaaktype list for service %r", service)
         zaaktypen_per_service[service] = []
-        response = client.list("zaaktype")
+        response = client.operation(
+            url="zaaktypen",
+            operation_id="zaaktype_list",
+            method="GET",
+            data={},
+        )
         zaaktypen_per_service[service] += response["results"]
         while response["next"]:
             next_url = urlparse(response["next"])
