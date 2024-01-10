@@ -1,6 +1,7 @@
+import json
 from pathlib import Path
 
-from django.core.files.base import File
+from django.core.files.base import ContentFile, File
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
@@ -105,3 +106,48 @@ def test_listzaaktypen_mixin_server_error(settings, admin_client, requests_mock)
     # assert that Zaaktype field is present in admin page despite HTTPError
     zaaktypen_label = doc.find("label")
     assert zaaktypen_label.text() == "Zaaktype:"
+
+
+@pytest.mark.django_db
+def test_listzaaktypen_unexpected_operation_id(settings, admin_client, requests_mock):
+    requests_mock.get(
+        f"{API_ROOT}zaaktypen",
+        status_code=200,
+        json={"results": [], "count": 0, "next": None},
+    )
+
+    service = Service.objects.create(
+        label="Test",
+        api_type=APITypes.ztc,
+        api_root=API_ROOT,
+        oas_file=ContentFile(
+            json.dumps(
+                {
+                    "openapi": "3.0.1",
+                    "info": {"title": "Catalogi API 1.0", "version": "1.0"},
+                    "paths": {
+                        "/api/v1/zaaktypen": {
+                            "get": {
+                                "tags": ["ZaakType"],
+                                "summary": "Alle ZAAKTYPEn opvragen.\r\nDeze lijst kan gefilterd wordt met query-string parameters.",
+                                "description": "",
+                                "operationId": "ZaakTypeGetAll",  # Operation ID different from zaaktype_list
+                                "responses": {
+                                    "200": {"description": "OK"},
+                                    "401": {"description": "Unauthorized"},
+                                },
+                            }
+                        }
+                    },
+                }
+            ),
+            name="schema.yaml",
+        ),
+    )
+    service.full_clean()
+
+    # assert that admin page works despite an operation ID different from zaaktype_list
+    url = reverse("admin:testapp_zgwconfig_change")
+    response = admin_client.get(url)
+
+    assert response.status_code == 200
