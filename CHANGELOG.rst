@@ -1,17 +1,26 @@
 Changes
 =======
 
-0.28.x (TBD)
-------------
+0.28.0 (2024-01-11)
+-------------------
 
 💥 Breaking changes release!
 
-* ``zgw_consumers`` now recommends using ``ape-pie`` as an HTTP client. The old ``ZGWClient``
-  is still made available under the ``zgw_consumers.legacy`` module, it is planned to be removed
-  in the next major version.
+* ``zgw_consumers`` now recommends using ``ape-pie`` as an HTTP client. The
+  old ``ZGWClient`` is still made available under the 
+  ``zgw_consumers.legacy`` module. It is planned to be removed in the next 
+  major version.
 * Bump the minimum supported Python version to ``3.10``.
+* Some dependencies that were installed by default are now moved to the 
+  ``testutils`` extra dependency group.
+
+Bugfixes and other cleanups
+
 * Added a ``ServiceFactory`` in the ``zgw_consumers.test.factories`` module.
-* Some depedencies that were installed by default are now moved to the ``testutils`` extra depedency group
+* Fixed an issue that could lead to an infinite loop while parsing response
+  from ZTC services.
+* Fixed zaaktype field crashing if the Catalogi API spec uses non-standard
+  operation ID's.
 
 0.27.0 (2023-10-10)
 -------------------
