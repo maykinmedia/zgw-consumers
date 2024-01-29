@@ -3,8 +3,8 @@ from pathlib import Path
 import pytest
 
 from zgw_consumers.constants import APITypes
+from zgw_consumers.legacy.service import get_paginated_results
 from zgw_consumers.models import Service
-from zgw_consumers.service import get_paginated_results
 from zgw_consumers.test import mock_service_oas_get
 
 pytestmark = pytest.mark.django_db
