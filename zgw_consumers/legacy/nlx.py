@@ -1,6 +1,7 @@
 """
 Rewrite the URLs in anything that looks like a string, dict or list.
 """
+
 from typing import Any, List, Optional, Union
 
 from zds_client.client import Object

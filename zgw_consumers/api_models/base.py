@@ -3,6 +3,7 @@ Datamodels for ZGW resources.
 
 These are NOT django models.
 """
+
 import uuid
 from dataclasses import Field, fields
 from datetime import date, datetime
@@ -102,13 +103,11 @@ def get_model_fields(model: Union[type, Model]) -> Dict[str, Field]:
 
 
 @overload
-def factory(model: Type[M], data: JSONObject) -> M:
-    ...
+def factory(model: Type[M], data: JSONObject) -> M: ...
 
 
 @overload
-def factory(model: Type[M], data: List[JSONObject]) -> List[M]:
-    ...
+def factory(model: Type[M], data: List[JSONObject]) -> List[M]: ...
 
 
 def factory(
