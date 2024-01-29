@@ -1,6 +1,5 @@
-from typing import List, Optional, Type, TypedDict
+from typing import List, Type
 
-from ape_pie.client import APIClient
 from zds_client import Client
 
 from .api_models.base import ZGWModel, factory
@@ -9,38 +8,7 @@ from .client import build_client
 from .concurrent import parallel
 from .constants import APITypes
 from .models import Service
-
-
-class PaginatedResponseData(TypedDict):
-    count: int
-    next: str
-    previous: str
-    results: list
-
-
-def pagination_helper(
-    client: APIClient,
-    paginated_data: PaginatedResponseData,
-    max_requests: Optional[int] = None,
-):
-    """
-    Fetch results from a paginated API endpoint, and optionally limit the number of
-    requests to perform when fetching new pages by specifying the ``max_requests`` argument
-    """
-
-    def _iter(_data, num_requests=0):
-        for result in _data["results"]:
-            yield result
-        if next_url := _data.get("next"):
-            if max_requests and num_requests >= max_requests:
-                return
-            response = client.get(next_url)
-            num_requests += 1
-            response.raise_for_status()
-            data = response.json()
-            yield from _iter(data, num_requests)
-
-    return _iter(paginated_data)
+from .utils import pagination_helper
 
 
 def _get_ztc_clients():

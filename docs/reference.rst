@@ -15,8 +15,8 @@ API reference
     :members: NLXClient, get_nlx_services
     :undoc-members:
 
-``service``
+``utils``
+=========
 
-.. automodule:: zgw_consumers.service
-    :members: PaginatedResponseData, pagination_helper
-    :undoc-members:
+.. automodule:: zgw_consumers.utils
+    :members:
