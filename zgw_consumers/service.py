@@ -25,7 +25,7 @@ def _fetch_list(
         response.raise_for_status()
         data = response.json()
         all_data = pagination_helper(client, data)
-        return all_data
+        return list(all_data)
 
     with parallel() as executor:
         resp_data = executor.map(_fetch, clients)
