@@ -30,6 +30,7 @@ can still leverage the utilities offered by ZGW Consumers.
 
    quickstart
    settings
+   recipes
    models
    model_fields
    drf

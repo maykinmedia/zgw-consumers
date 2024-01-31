@@ -1,6 +1,7 @@
 """
 Wrap around concurrent.futures to add Django-specific cleanup behaviour.
 """
+
 import functools
 import logging
 import threading
