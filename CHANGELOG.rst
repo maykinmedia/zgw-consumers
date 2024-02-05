@@ -1,17 +1,23 @@
 Changes
 =======
 
+0.29.0 (2024-02-05)
+-------------------
+Backwards compatible 'feature' release.
+
+* [#81] Replace get_paginated_results with pagination_helper
+
 0.28.0 (2024-01-11)
 -------------------
 
 💥 Breaking changes release!
 
 * ``zgw_consumers`` now recommends using ``ape-pie`` as an HTTP client. The
-  old ``ZGWClient`` is still made available under the 
-  ``zgw_consumers.legacy`` module. It is planned to be removed in the next 
+  old ``ZGWClient`` is still made available under the
+  ``zgw_consumers.legacy`` module. It is planned to be removed in the next
   major version.
 * Bump the minimum supported Python version to ``3.10``.
-* Some dependencies that were installed by default are now moved to the 
+* Some dependencies that were installed by default are now moved to the
   ``testutils`` extra dependency group.
 
 Bugfixes and other cleanups
