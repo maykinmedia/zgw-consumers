@@ -1,6 +1,16 @@
 Changes
 =======
 
+0.30.0 (2024-02-22)
+-------------------
+
+Feature release
+
+* Added a timeout field (default of 10s) to the service model. The timeout is passed to
+  the API client when using the ``ape-pie`` integration (
+  ``zgw_consumers.client.ServiceConfigAdapter`` and
+  ``zgw_consumers.client.build_client``).
+
 0.29.0 (2024-02-05)
 -------------------
 Backwards compatible 'feature' release.
