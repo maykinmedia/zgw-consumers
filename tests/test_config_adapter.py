@@ -137,3 +137,31 @@ def test_zgw_auth():
 
     headers = m.last_request.headers
     assert "Authorization" in headers
+
+
+def test_default_timeout():
+    service = ServiceFactory.build(api_root="https://example.com/")
+    adapter = ServiceConfigAdapter(service)
+    client = APIClient.configure_from(adapter)
+
+    with requests_mock.Mocker() as m, client:
+        m.get("https://example.com/foo")
+
+        client.get("foo")
+
+    timeout = m.last_request.timeout
+    assert timeout == 10
+
+
+def test_custom_timeout():
+    service = ServiceFactory.build(api_root="https://example.com/", timeout=30)
+    adapter = ServiceConfigAdapter(service)
+    client = APIClient.configure_from(adapter)
+
+    with requests_mock.Mocker() as m, client:
+        m.get("https://example.com/foo")
+
+        client.get("foo")
+
+    timeout = m.last_request.timeout
+    assert timeout == 30

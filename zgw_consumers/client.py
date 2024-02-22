@@ -68,6 +68,9 @@ class ServiceConfigAdapter:
             case AuthTypes.zgw:
                 kwargs["auth"] = ZGWAuth(service=self.service)
 
+        # set timeout for the requests
+        kwargs["timeout"] = self.service.timeout
+
         return kwargs
 
 
