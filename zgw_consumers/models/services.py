@@ -72,6 +72,11 @@ class Service(RestAPIService):
         on_delete=models.PROTECT,
         related_name="service_server",
     )
+    timeout = models.PositiveSmallIntegerField(
+        _("timeout"),
+        help_text=_("Timeout (in seconds) for HTTP calls."),
+        default=10,
+    )
 
     objects = ServiceManager()
 
