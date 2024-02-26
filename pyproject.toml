@@ -23,7 +23,6 @@ classifiers = [
     "Operating System :: Microsoft :: Windows",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 requires-python = ">=3.10"
@@ -79,7 +78,6 @@ docs = [
 ]
 release = [
     "bump-my-version",
-    "twine",
 ]
 
 [tool.setuptools.packages.find]
@@ -92,6 +90,7 @@ combine_as_imports = true
 known_django = "django"
 known_first_party="zgw_consumers"
 sections=["FUTURE", "STDLIB", "DJANGO", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
+skip = ["env", ".tox", ".history"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
