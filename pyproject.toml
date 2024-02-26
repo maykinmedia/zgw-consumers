@@ -1,0 +1,132 @@
+[build-system]
+requires = ["setuptools>=61.0.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "zgw-consumers"
+version = "0.30.0"
+description = "Configuration for service (OpenAPI 3 or other) consumers"
+authors = [
+    {name = "Maykin Media", email = "support@maykinmedia.nl"}
+]
+readme = "README.rst"
+license = {file = "LICENSE"}
+keywords = ["Django", "ZGW", "Common Ground", "VNG", "API", "OpenAPI", "OAS", "mTLS"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Framework :: Django",
+    "Framework :: Django :: 3.2",
+    "Framework :: Django :: 4.2",
+    "Intended Audience :: Developers",
+    "Operating System :: Unix",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+requires-python = ">=3.10"
+dependencies = [
+    "django>=3.2",
+    "django-relativedelta>=2.0.0",
+    "django-solo",
+    "gemma-zds-client>=2.0.0",
+    "django-simple-certmanager>=1.4.1",
+    "requests",
+    "ape-pie",
+]
+
+[project.urls]
+Homepage = "https://github.com/maykinmedia/zgw-consumers"
+Documentation = "https://zgw-consumers.readthedocs.io/en/latest/"
+"Bug Tracker" = "https://github.com/maykinmedia/zgw-consumers/issues"
+"Source Code" = "https://github.com/maykinmedia/zgw-consumers"
+Changelog = "https://github.com/maykinmedia/zgw-consumers/blob/main/CHANGELOG.rst"
+
+[project.optional-dependencies]
+db = [
+    "psycopg2",
+]
+drf = [
+    "djangorestframework",
+]
+# These are not the test requirements! They are extras to be installed when making use of `zgw_consumers.test`
+testutils = [
+    "Faker>=0.7.0",
+    "factory-boy",
+    "requests-mock",
+]
+tests = [
+    "django-redis",
+    "pytest",
+    "pytest-django",
+    "requests-mock",
+    "freezegun",
+    "tox",
+    "isort",
+    "black",
+    "flake8",
+    "tabulate",
+    "pyquery",
+]
+coverage = [
+    "pytest-cov",
+]
+docs = [
+    "sphinx",
+    "sphinx-rtd-theme",
+]
+release = [
+    "bump-my-version",
+]
+
+[tool.setuptools.packages.find]
+include = ["zgw_consumers*"]
+namespaces = false
+
+[tool.isort]
+profile = "black"
+combine_as_imports = true
+known_django = "django"
+known_first_party="zgw_consumers"
+sections=["FUTURE", "STDLIB", "DJANGO", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
+skip = ["env", ".tox", ".history"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+DJANGO_SETTINGS_MODULE = "testapp.settings"
+
+[tool.bumpversion]
+current_version = "0.30.0"
+files = [
+    {filename = "pyproject.toml"},
+    {filename = "README.rst"},
+    {filename = "zgw_consumers/locale/nl/LC_MESSAGES/django.po"},
+    {filename = "docs/conf.py"},
+]
+
+[tool.coverage.run]
+branch = true
+source = [
+    "zgw_consumers"
+]
+omit = [
+    "zgw_consumers/migrations/*",
+]
+
+[tool.coverage.report]
+exclude_also = [
+    "if (typing\\.)?TYPE_CHECKING:",
+    "@(typing\\.)?overload",
+    "class .*\\(.*Protocol.*\\):",
+    "@(abc\\.)?abstractmethod",
+    "raise NotImplementedError",
+    "\\.\\.\\.",
+    "pass",
+]
+omit = [
+    "zgw_consumers/migrations/*",
+]
+
+[tool.coverage.html]
+directory = "cover"

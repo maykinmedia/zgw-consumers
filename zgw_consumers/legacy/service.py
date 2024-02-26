@@ -16,7 +16,7 @@ def get_paginated_results(
     minimum: Optional[int] = None,
     test_func: Optional[callable] = None,
     *args,
-    **kwargs
+    **kwargs,
 ) -> list:
     request_kwargs = kwargs.get("request_kwargs", {})
     request_params = request_kwargs.get("params", {})

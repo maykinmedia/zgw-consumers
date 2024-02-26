@@ -34,7 +34,6 @@ Requirements
 ------------
 
 * Python 3.10 or newer
-* setuptools 30.3.0 or newer
 * Django 3.2 or newer
 
 
