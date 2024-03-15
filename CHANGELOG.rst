@@ -1,6 +1,23 @@
 Changes
 =======
 
+0.31.0 (2024-03-15)
+-------------------
+
+Periodic maintenance release
+
+**Breaking changes**
+
+* Dropped support for Django 4.1
+
+**Bugfixes and other cleanups**
+
+* Updated Github actions
+* Set up PyPI trusted publisher
+* Drop unused PyOpenSSL dependency from installation requirements
+* Switched package management to ``pyproject.toml``
+* Confirmed Python 3.12 support
+
 0.30.0 (2024-02-22)
 -------------------
 
