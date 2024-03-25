@@ -1,6 +1,7 @@
 import os
 
 from requests_mock import Mocker
+from typing_extensions import deprecated
 
 from ..settings import get_setting
 
@@ -33,6 +34,12 @@ def _clear_cache():
         del _cache[key]
 
 
+@deprecated(
+    "zds_client support is deprecated and scheduled for removal in 1.0. OpenAPI "
+    "specification integration will be dropped as we don't require it anymore.",
+    category=DeprecationWarning,
+    stacklevel=2,
+)
 def mock_service_oas_get(m: Mocker, url: str, service: str, oas_url: str = "") -> None:
     if not oas_url:
         oas_url = f"{url}schema/openapi.yaml?v=3"

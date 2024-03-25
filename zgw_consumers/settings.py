@@ -12,10 +12,19 @@ NLX_DIRECTORY_URLS = {
 NLX_OUTWAY_TIMEOUT = 2  # 2 seconds
 
 ZGW_CONSUMERS_OAS_CACHE = DEFAULT_CACHE_ALIAS
+"""
+Deprecated.
+"""
 
 ZGW_CONSUMERS_CLIENT_CLASS = "zgw_consumers.legacy.client.ZGWClient"
+"""
+Deprecated.
+"""
 
 ZGW_CONSUMERS_TEST_SCHEMA_DIRS = []
+"""
+Deprecated.
+"""
 
 
 def get_setting(name: str):
