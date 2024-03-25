@@ -1,11 +1,12 @@
 import logging
-from dataclasses import dataclass, field
+import time
+from dataclasses import dataclass
 from typing import Any, TypeVar
 
+import jwt
 from ape_pie import APIClient
 from requests.auth import AuthBase
 from requests.models import PreparedRequest
-from zds_client import ClientAuth
 
 from zgw_consumers.constants import AuthTypes
 from zgw_consumers.models import Service
@@ -88,19 +89,26 @@ class APIKeyAuth(AuthBase):
 
 @dataclass
 class ZGWAuth(AuthBase):
-    """:class:`requests.auth.AuthBase` implementation for :class:`zds_client.auth.ClientAuth`."""
+    """
+    :class:`requests.auth.AuthBase` implementation for ZGW APIs auth.
+    """
 
     service: Service
-    auth: ClientAuth = field(init=False)
 
     def __post_init__(self):
-        self.auth = ClientAuth(
-            client_id=self.service.client_id,
-            secret=self.service.secret,
-            user_id=self.service.user_id,
-            user_representation=self.service.user_representation,
-        )
+        # Generate the JWT Bearer token. Ported from gemma-zds-client ClientAuth.
+        payload = {
+            # standard claims
+            "iss": self.service.client_id,
+            "iat": int(time.time()),
+            # custom claims
+            "client_id": self.service.client_id,
+            "user_id": self.service.user_id,
+            "user_representation": self.service.user_representation,
+        }
+
+        self._token: str = jwt.encode(payload, self.service.secret, algorithm="HS256")
 
     def __call__(self, request: PreparedRequest):
-        request.headers.update(self.auth.credentials())
+        request.headers["Authorization"] = f"Bearer {self._token}"
         return request

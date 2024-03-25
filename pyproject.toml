@@ -34,6 +34,7 @@ dependencies = [
     "requests",
     "ape-pie",
     "typing_extensions>=4.5.0",
+    "PyJWT>=2.0.0",
 ]
 
 [project.urls]
@@ -58,6 +59,7 @@ testutils = [
     "Faker>=0.7.0",
     "factory-boy",
     "requests-mock",
+    "pyyaml",
 ]
 tests = [
     "django-redis",
