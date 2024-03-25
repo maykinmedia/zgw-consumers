@@ -18,7 +18,6 @@ from zgw_consumers import settings as zgw_settings
 
 from ..constants import APITypes, AuthTypes, NLXDirectories
 from ..legacy.client import ZGWClient, get_client_class
-from ..query import ServiceManager
 from .abstract import RestAPIService
 
 
@@ -77,8 +76,6 @@ class Service(RestAPIService):
         help_text=_("Timeout (in seconds) for HTTP calls."),
         default=10,
     )
-
-    objects = ServiceManager()
 
     class Meta:
         verbose_name = _("service")
