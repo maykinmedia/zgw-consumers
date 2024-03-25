@@ -1,7 +1,8 @@
+from __future__ import annotations
+
 import socket
 import uuid
-import warnings
-from typing import Optional
+from typing import TYPE_CHECKING
 from urllib.parse import urlparse, urlsplit, urlunsplit
 
 from django.core.exceptions import ValidationError
@@ -12,14 +13,15 @@ from django.utils.translation import gettext_lazy as _
 from privates.fields import PrivateMediaFileField
 from simple_certmanager.models import Certificate
 from solo.models import SingletonModel
-from typing_extensions import deprecated
-from zds_client import ClientAuth
+from typing_extensions import Self, deprecated
 
 from zgw_consumers import settings as zgw_settings
 
 from ..constants import APITypes, AuthTypes, NLXDirectories
-from ..legacy.client import ZGWClient, get_client_class
 from .abstract import RestAPIService
+
+if TYPE_CHECKING:
+    from ..legacy.client import ZGWClient
 
 
 class Service(RestAPIService):
@@ -136,6 +138,8 @@ class Service(RestAPIService):
         """
         Build an API client from the service configuration.
         """
+        from ..legacy.client import ClientAuth, get_client_class
+
         api_root = self.api_root
         if self.nlx:
             api_root = api_root.replace(self.api_root, self.nlx, 1)
@@ -172,7 +176,7 @@ class Service(RestAPIService):
         return client
 
     @classmethod
-    def get_service(cls, url: str) -> Optional["Service"]:
+    def get_service(cls, url: str) -> Self | None:
         split_url = urlsplit(url)
         scheme_and_domain = urlunsplit(split_url[:2] + ("", "", ""))
 
@@ -190,7 +194,14 @@ class Service(RestAPIService):
         return None
 
     @classmethod
-    def get_client(cls, url: str, **kwargs) -> Optional[ZGWClient]:
+    @deprecated(
+        "The `get_client` class method is deprecated and will be removed in the next "
+        "major release. Instead, use the `get_service` class method combined with "
+        "zgw_consumers.client.build_client.",
+        category=DeprecationWarning,
+        stacklevel=2,
+    )
+    def get_client(cls, url: str, **kwargs) -> ZGWClient | None:
         service = cls.get_service(url)
         if not service:
             return None
@@ -198,7 +209,12 @@ class Service(RestAPIService):
         return service.build_client(**kwargs)
 
     @classmethod
-    def get_auth_header(cls, url: str, **kwargs) -> Optional[dict]:
+    @deprecated(
+        "The `get_auth_header` class method is deprecated and will be removed in 1.0.",
+        category=DeprecationWarning,
+        stacklevel=2,
+    )
+    def get_auth_header(cls, url: str, **kwargs) -> dict | None:
         client = cls.get_client(url, **kwargs)
         if not client:
             return None

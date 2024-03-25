@@ -7,6 +7,7 @@ logger = logging.getLogger(__name__)
 
 class ZgwConsumersConfig(AppConfig):
     name = "zgw_consumers"
+    default_auto_field = "django.db.models.AutoField"
 
     def ready(self):
         from .cache import install_schema_fetcher_cache

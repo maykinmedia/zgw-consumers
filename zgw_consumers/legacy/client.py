@@ -6,10 +6,18 @@ from urllib.parse import urljoin
 from django.utils.module_loading import import_string
 
 import yaml
-from zds_client import Client
+from zds_client import Client, ClientAuth
 from zds_client.oas import schema_fetcher
 
 from ..settings import get_setting
+
+__all__ = [
+    "get_client_class",
+    "load_schema_file",
+    "ZGWClient",
+    "UnknownService",
+    "ClientAuth",
+]
 
 logger = logging.getLogger(__name__)
 
