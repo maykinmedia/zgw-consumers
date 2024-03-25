@@ -113,21 +113,6 @@ class Service(RestAPIService):
                 {"header_key": _("If header_value is set, header_key must also be set")}
             )
 
-        if self.oas and self.oas_file:
-            raise ValidationError(
-                {
-                    "oas": _("Set either oas or oas_file, not both"),
-                    "oas_file": _("Set either oas or oas_file, not both"),
-                }
-            )
-        elif not self.oas and not self.oas_file:
-            raise ValidationError(
-                {
-                    "oas": _("Set either oas or oas_file"),
-                    "oas_file": _("Set either oas or oas_file"),
-                }
-            )
-
     @deprecated(
         "The `build_client` method is deprecated and will be removed in the next major release. "
         "Instead, use the new `ape_pie.APIClient` or `zgw_consumers.nlx.NLXClient`.",

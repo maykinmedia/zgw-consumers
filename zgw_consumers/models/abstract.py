@@ -1,6 +1,9 @@
+from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+from ..settings import get_setting
 
 
 class Service(models.Model):
@@ -24,3 +27,24 @@ class RestAPIService(Service):
 
     class Meta:
         abstract = True
+
+    def clean(self):
+        super().clean()
+
+        if get_setting("ZGW_CONSUMERS_IGNORE_OAS_FIELDS"):
+            return
+
+        if self.oas and self.oas_file:
+            raise ValidationError(
+                {
+                    "oas": _("Set either oas or oas_file, not both"),
+                    "oas_file": _("Set either oas or oas_file, not both"),
+                }
+            )
+        elif not self.oas and not self.oas_file:
+            raise ValidationError(
+                {
+                    "oas": _("Set either oas or oas_file"),
+                    "oas_file": _("Set either oas or oas_file"),
+                }
+            )
