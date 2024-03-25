@@ -15,11 +15,3 @@ class Case(models.Model):
         blank=True,
         null=True,
     )
-
-
-class ZgwConfig(models.Model):
-    zaaktype = models.URLField(
-        "zaaktype",
-        max_length=1000,
-        blank=True,
-    )
