@@ -11,7 +11,7 @@ Features
 --------
 
 * Store services with their configuration in the database
-* Integrate with OpenAPI 3.0 specifications
+* Built in `ape-pie <https://pypi.org/project/ape-pie/>`_ API client adapter
 * NLX support
 * Declare data/domain objects as modern Python dataclasses
 

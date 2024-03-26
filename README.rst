@@ -23,7 +23,7 @@ Features
 ========
 
 * Store services with their configuration in the database
-* Integrate with OpenAPI 3.0 specifications
+* Built in `ape-pie <https://pypi.org/project/ape-pie/>`_ API client adapter
 * NLX support
 * Declare data/domain objects as modern Python dataclasses
 
@@ -47,14 +47,6 @@ Install
     pip install zgw-consumers
 
 2. Add ``zgw_consumers`` and ``simple_certmanager`` to the ``INSTALLED_APPS`` setting.
-
-3. Optionally override ``ZGW_CONSUMERS_CLIENT_CLASS`` to a custom client class.
-
-4. Optionally specify ``ZGW_CONSUMERS_OAS_CACHE`` to point to a separate django cache.
-   Defaults to ``django.core.cache.DEFAULT_CACHE_ALIAS``, which is ``default`` in
-   practice. For performance reasons we highly recommend to use a real cache backend
-   like Redis or Memcache.
-
 
 Usage
 =====
