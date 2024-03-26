@@ -1,7 +1,7 @@
 Changes
 =======
 
-0.32.0 (2024-03-??)
+0.32.0 (2024-03-26)
 -------------------
 
 The hard dependency on gemma-zds-client client is now optional.
