@@ -1,6 +1,72 @@
 Changes
 =======
 
+0.32.0 (2024-03-??)
+-------------------
+
+The hard dependency on gemma-zds-client client is now optional.
+
+This is another important step towards a 1.0 version. gemma-zds-client usage is still
+supported through the legacy subpackage. Additionally, it was decided that the
+``zgw_consumers.api_models`` package will still be part of 1.0, but it will be deprecated
+and removed in 2.0.
+
+**💥 Breaking changes**
+
+* The helpers in ``zgw_consumers.service`` (except for ``pagination_helper``) are
+  removed. If you need these, you can safely copy the
+  `0.31.0 service <https://github.com/maykinmedia/zgw-consumers/blob/0.31.0/zgw_consumers/service.py>`_
+  implementation.
+
+* The zaaktype field mixin (``ListZaaktypenMixin``) for the admin is removed. If you
+  need this, we recommend writing your own version based on ``ape-pie``. You can of
+  course use the `0.31.0 admin <https://github.com/maykinmedia/zgw-consumers/blob/0.31.0/zgw_consumers/admin_fields.py>`_
+  implementation for inspiration.
+
+* Removed the manager method ``Service.objects.get_client_for``. For the time being you
+  can use ``Service.get_client`` instead, which is a drop-in replacement. Note however
+  that this class method is deprecated and will be removed in 1.0. We recommend
+  migrating to ``ape-pie``:
+
+  .. code-block:: python
+
+      from requests import Session
+      from zgw_consumers.client import build_client
+
+      service = Service.get_service(some_resource_url)
+      client: Session = build_client(service)
+
+* The gemma-zds-client is now an optional dependency. If you still make use of the
+  ``zgw_consumers.legacy`` package, update your dependencies to include the new
+  dependency group, e.g. ``zgw-consumers[zds-client]``.
+
+**🗑️ Deprecations**
+
+* All code that is processing an OpenAPI specification in some form is deprecated. This
+  includes:
+
+    - ``zgw_consumers.cache``
+    - ``zgw_consumers.legacy``
+    - ``zgw_consumers.test.component_generation``
+    - ``zgw_consumers.test.schema_mock``
+
+* Code built on top of gemma-zds-client is deprecated and will be removed in 1.0:
+
+    - ``zgw_consumers.models.Service.build_client``
+    - ``zgw_consumers.models.Service.get_client``
+    - ``zgw_consumers.models.Service.get_auth_header``
+
+**Cleanups**
+
+* gemma-zds-client is no longer a hard dependency. Users that don't use the
+  ``zgw_consumers.legacy`` package can safely remove the ``gemma-zds-client`` package.
+
+* The ``Service`` (and ``RestAPIService`` abstract base) model requirement of either
+  providing ``oas`` (URL) or ``oas_file`` is relaxed - opt-in via the new transitional
+  setting ``ZGW_CONSUMERS_IGNORE_OAS_FIELDS = True``. Note that this excludes these
+  fields from the admin UI and bypasses the validation that a mutually exclusive value
+  must be provided.
+
 0.31.0 (2024-03-15)
 -------------------
 

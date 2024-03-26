@@ -62,7 +62,14 @@ Constructing an OpenAPI 3 client with the legacy client
 *******************************************************
 
 .. deprecated:: 0.28.x
+
     The legacy client is deprecated and will be removed in the next major release.
+
+    You also need to install the extra ``zds-client``:
+
+    .. code-block:: bash
+
+        pip install zgw-consumers[zds-client]
 
 From a service, you can construct a :class:`zds_client.client.Client`
 instance which is driven by the API schema. There are two common scenario's:

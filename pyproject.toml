@@ -30,10 +30,11 @@ dependencies = [
     "django>=3.2",
     "django-relativedelta>=2.0.0",
     "django-solo",
-    "gemma-zds-client>=2.0.0",
     "django-simple-certmanager>=1.4.1",
     "requests",
     "ape-pie",
+    "typing_extensions>=4.5.0",
+    "PyJWT>=2.0.0",
 ]
 
 [project.urls]
@@ -50,11 +51,15 @@ db = [
 drf = [
     "djangorestframework",
 ]
+zds-client = [
+    "gemma-zds-client>=2.0.0",
+]
 # These are not the test requirements! They are extras to be installed when making use of `zgw_consumers.test`
 testutils = [
     "Faker>=0.7.0",
     "factory-boy",
     "requests-mock",
+    "pyyaml",
 ]
 tests = [
     "django-redis",

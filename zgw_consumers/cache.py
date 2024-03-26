@@ -4,7 +4,7 @@ Replace the OAS schema cache with django's cache mechanism.
 
 from django.core.cache import caches
 
-from zds_client.oas import schema_fetcher
+from typing_extensions import deprecated
 
 from .settings import get_setting
 
@@ -13,6 +13,12 @@ class OASCache:
     KEY_PREFIX = "oas"
     DURATION = 60 * 60 * 24  # 24 hours
 
+    @deprecated(
+        "zds_client support is deprecated and scheduled for removal in 1.0. OpenAPI "
+        "specification integration will be dropped as we don't require it anymore.",
+        category=DeprecationWarning,
+        stacklevel=2,
+    )
     def __init__(self):
         self.alias = get_setting("ZGW_CONSUMERS_OAS_CACHE")
         self._local_cache = {}  # in memory
@@ -45,4 +51,9 @@ class OASCache:
 
 
 def install_schema_fetcher_cache():
+    try:
+        from zds_client.oas import schema_fetcher
+    except ImportError:
+        return
+
     schema_fetcher.cache = OASCache()

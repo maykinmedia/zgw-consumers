@@ -1,108 +1,15 @@
 import logging
-from typing import Any, Dict, List, Tuple
-from urllib.parse import parse_qs, urlparse
 
 from django import forms
-from django.contrib import messages
-from django.contrib.admin import widgets
 from django.db.models import Field
 from django.http import HttpRequest
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext as _
 
-from requests.exceptions import HTTPError
-from zds_client.client import ClientError
-
-from .constants import APITypes
-from .models.services import NLXConfig, Service
+from .models.services import NLXConfig
 from .nlx import ServiceType, get_nlx_services
 from .utils import cache_on_request
 
 logger = logging.getLogger(__name__)
-
-
-# TODO: parallelize
-def get_zaaktypen() -> Dict[Service, List[Dict[str, Any]]]:
-    services = Service.objects.filter(api_type=APITypes.ztc)
-
-    zaaktypen_per_service = {}
-
-    for service in services:
-        client = service.build_client()
-        logger.debug("Fetching zaaktype list for service %r", service)
-        zaaktypen_per_service[service] = []
-        response = client.operation(
-            url="zaaktypen",
-            operation_id="zaaktype_list",
-            method="GET",
-            data={},
-        )
-        zaaktypen_per_service[service] += response["results"]
-        while response["next"]:
-            next_url = urlparse(response["next"])
-            query = parse_qs(next_url.query)
-            new_page = int(query["page"][0])
-            query["page"] = [new_page]
-            response = client.list(
-                "zaaktype",
-                params=query,
-            )
-            zaaktypen_per_service[service] += response["results"]
-
-    return zaaktypen_per_service
-
-
-def get_zaaktype_field(db_field: Field, request: HttpRequest, **kwargs):
-    try:
-        zaaktypen = get_zaaktypen()
-    except ClientError as exc:
-        error_message = exc.args[0]
-        if not error_message:
-            message = _(
-                "One of the configured service did not provide a compliant response. "
-                "The cause of this exception was: {cause}"
-            ).format(cause=exc.__cause__)
-        else:
-            message = _(
-                "Failed to retrieve available zaaktypen "
-                "(got {http_status} - {detail}). "
-                "The cause of this exception was: {cause}"
-            ).format(
-                http_status=error_message["status"],
-                detail=error_message["detail"],
-                cause=exc.__cause__,
-            )
-        messages.error(
-            request,
-            message,
-        )
-        choices = []
-    except HTTPError as exc:
-        error_message = exc.args[0]
-        choices = []
-        messages.error(request, error_message)
-    else:
-
-        def _get_choice(zaaktype: dict) -> Tuple[str, str]:
-            return (
-                zaaktype["url"],
-                f"{zaaktype['identificatie']} - {zaaktype['omschrijving']}",
-            )
-
-        choices = [
-            (
-                f"Service: {service.label}",
-                [_get_choice(zaaktype) for zaaktype in _zaaktypen],
-            )
-            for service, _zaaktypen in zaaktypen.items()
-        ]
-
-    return forms.ChoiceField(
-        label=db_field.verbose_name.capitalize(),
-        widget=widgets.AdminRadioSelect(),
-        choices=choices,
-        required=False,
-        help_text=db_field.help_text,
-    )
 
 
 def get_nlx_field(db_field: Field, request: HttpRequest, **kwargs):
@@ -115,7 +22,7 @@ def get_nlx_field(db_field: Field, request: HttpRequest, **kwargs):
 
     nlx_outway = NLXConfig.get_solo().outway
 
-    def _get_choice(service: ServiceType) -> Tuple[str, str]:
+    def _get_choice(service: ServiceType) -> tuple[str, str]:
         org_id = service["organization"]["serial_number"]
         name = service["name"]
         url = f"{nlx_outway}{org_id}/{name}/"

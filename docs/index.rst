@@ -36,6 +36,7 @@ can still leverage the utilities offered by ZGW Consumers.
    drf
    testing
    reference
+   changelog
 
 Indices and tables
 ==================
