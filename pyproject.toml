@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "zgw-consumers"
-version = "0.32.0"
+version = "0.33.0"
 description = "Configuration for service (OpenAPI 3 or other) consumers"
 authors = [
     {name = "Maykin Media", email = "support@maykinmedia.nl"}
@@ -102,7 +102,7 @@ testpaths = ["tests"]
 DJANGO_SETTINGS_MODULE = "testapp.settings"
 
 [tool.bumpversion]
-current_version = "0.32.0"
+current_version = "0.33.0"
 files = [
     {filename = "pyproject.toml"},
     {filename = "README.rst"},
