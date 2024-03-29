@@ -14,10 +14,17 @@ from decimal import Decimal
 from uuid import UUID
 
 from rest_framework import fields, serializers
+from typing_extensions import deprecated
 
 from .utils import extract_model_field_type, get_field_kwargs
 
 
+@deprecated(
+    "The APIModelSerializer is deprecated and will be removed in 1.0. "
+    "The package `djangorestframework-dataclasses` seems to be a drop-in replacement.",
+    category=DeprecationWarning,
+    stacklevel=2,
+)
 class APIModelSerializer(serializers.Serializer):
     serializer_field_mapping = {
         str: fields.CharField,

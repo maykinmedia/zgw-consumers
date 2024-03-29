@@ -1,6 +1,31 @@
 Changes
 =======
 
+0.33.0 (2024-03-29)
+-------------------
+
+Deprecation release. We've deprecated more public API, but made sure to provide/offer
+alternatives. This allows you to upgrade to newer versions of zgw-consumers already
+while buying yourself enough time to update your project code.
+
+We published some of the deprecated utilities in a separate package: ``zgw-consumers-oas``.
+
+* Deprecated the OAS test utilities in ``zgw_consumers.test``:
+
+    - ``read_schema``: Use ``zgw_consumers_oas.read_schema`` if you need to.
+    - ``generate_oas_component``: Use ``zgw_consumers_oas.generate_oas_component`` if
+      you need to. However, we recommend using `VCR`_ instead of manually
+      building API mocks, or leverage factory_boy_ to generate mock data.
+    - ``mock_service_oas_get``: there is no alternative because zgw-consumers no longer
+      fetches configured API schemas.
+
+* Deprecated ``zgw_consumers.drf.serializers.APIModelSerializer``. Instead, use
+  `djangorestframework-dataclasses`_.
+
+.. _VCR: https://vcrpy.readthedocs.io/en/latest/
+.. _factory_boy: https://factoryboy.readthedocs.io/en/stable/
+.. _djangorestframework-dataclasses: https://pypi.org/project/djangorestframework-dataclasses/
+
 0.32.0 (2024-03-26)
 -------------------
 

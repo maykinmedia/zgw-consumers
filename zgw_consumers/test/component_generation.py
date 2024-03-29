@@ -7,6 +7,7 @@ from django.utils import timezone
 
 import yaml
 from faker import Faker
+from typing_extensions import deprecated
 
 from .schema_mock import read_schema
 
@@ -20,6 +21,13 @@ def load_schema(service: str):
     return yaml.safe_load(read_schema(service))
 
 
+@deprecated(
+    "OAS (test) tooling is deprecated and scheduled for removal in 1.0. We recommend "
+    "writing your own factories, or alternatively `pip install zgw-consumers-oas` "
+    "for a drop-in replacement.",
+    category=DeprecationWarning,
+    stacklevel=2,
+)
 def generate_oas_component(
     service: str,
     component: str,

@@ -8,6 +8,13 @@ from ..settings import get_setting
 _cache = {}
 
 
+@deprecated(
+    "OAS (test) tooling is deprecated and scheduled for removal in 1.0. We recommend "
+    "writing your own factories, or alternatively `pip install zgw-consumers-oas` "
+    "for a drop-in replacement.",
+    category=DeprecationWarning,
+    stacklevel=2,
+)
 def read_schema(service: str, extension=".yaml"):
     schema_dirs = get_setting("ZGW_CONSUMERS_TEST_SCHEMA_DIRS")
 
