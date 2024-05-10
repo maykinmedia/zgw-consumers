@@ -13,9 +13,22 @@ from .widgets import NoDownloadPrivateFileWidget
 
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
-    list_display = ("label", "api_type", "api_root", "nlx", "auth_type")
+    list_display = (
+        "label",
+        "api_type",
+        "api_root",
+        "nlx",
+        "auth_type",
+    )
     list_filter = ("api_type", "auth_type")
     search_fields = ("label", "api_root", "nlx", "uuid")
+    readonly_fields = [
+        "get_health_check_indication",
+    ]
+
+    @admin.display(description="Health Check", boolean=True)
+    def get_health_check_indication(self, obj):
+        return obj.get_health_check_indication
 
     def get_fields(self, request: HttpRequest, obj: models.Model | None = None):
         fields = super().get_fields(request, obj=obj)

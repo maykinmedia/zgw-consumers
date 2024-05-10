@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import socket
 import uuid
 from typing import TYPE_CHECKING
@@ -11,6 +12,7 @@ from django.db.models.functions import Length
 from django.utils.translation import gettext_lazy as _
 
 from privates.fields import PrivateMediaFileField
+from requests.exceptions import ConnectionError, RequestException
 from simple_certmanager.models import Certificate
 from solo.models import SingletonModel
 from typing_extensions import Self, deprecated
@@ -20,6 +22,8 @@ from zgw_consumers import settings as zgw_settings
 from ..constants import APITypes, AuthTypes, NLXDirectories
 from .abstract import RestAPIService
 
+logger = logging.getLogger(__name__)
+
 if TYPE_CHECKING:
     from ..legacy.client import ZGWClient
 
@@ -28,6 +32,15 @@ class Service(RestAPIService):
     uuid = models.UUIDField(_("UUID"), default=uuid.uuid4)
     api_type = models.CharField(_("type"), max_length=20, choices=APITypes.choices)
     api_root = models.CharField(_("api root url"), max_length=255, unique=True)
+    api_health_check_endpoint = models.CharField(
+        _("health check endpoint"),
+        help_text=_(
+            "An optional API endpoint which will be used to check if the API is configured correctly and "
+            "is currently up or down. This field is only used for in the admin's 'health check' field."
+        ),
+        max_length=255,
+        blank=True,
+    )
 
     # credentials for the API
     client_id = models.CharField(max_length=255, blank=True)
@@ -112,6 +125,22 @@ class Service(RestAPIService):
             raise ValidationError(
                 {"header_key": _("If header_value is set, header_key must also be set")}
             )
+
+    @property
+    def get_health_check_indication(self) -> bool:
+        from zgw_consumers.client import build_client
+
+        try:
+            client = build_client(self)
+            if (
+                client.get(self.api_health_check_endpoint or self.api_root).status_code
+                == 200
+            ):
+                return True
+        except (ConnectionError, RequestException) as e:
+            logger.exception(self, exc_info=e)
+
+        return False
 
     @deprecated(
         "The `build_client` method is deprecated and will be removed in the next major release. "
