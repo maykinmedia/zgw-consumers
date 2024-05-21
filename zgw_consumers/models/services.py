@@ -12,7 +12,7 @@ from django.db.models.functions import Length
 from django.utils.translation import gettext_lazy as _
 
 from privates.fields import PrivateMediaFileField
-from requests.exceptions import ConnectionError, RequestException
+from requests.exceptions import RequestException
 from simple_certmanager.models import Certificate
 from solo.models import SingletonModel
 from typing_extensions import Self, deprecated
@@ -21,6 +21,7 @@ from zgw_consumers import settings as zgw_settings
 
 from ..constants import APITypes, AuthTypes, NLXDirectories
 from .abstract import RestAPIService
+from .validators import IsNotUrlValidator, StartWithValidator
 
 logger = logging.getLogger(__name__)
 
@@ -32,13 +33,17 @@ class Service(RestAPIService):
     uuid = models.UUIDField(_("UUID"), default=uuid.uuid4)
     api_type = models.CharField(_("type"), max_length=20, choices=APITypes.choices)
     api_root = models.CharField(_("api root url"), max_length=255, unique=True)
-    api_health_check_endpoint = models.CharField(
-        _("health check endpoint"),
+    api_connection_check_path = models.CharField(
+        _("connection check endpoint"),
         help_text=_(
             "An optional API endpoint which will be used to check if the API is configured correctly and "
-            "is currently up or down. This field is only used for in the admin's 'health check' field."
+            "is currently up or down. This field is only used for in the admin's 'Connection check' field."
         ),
         max_length=255,
+        validators=[
+            StartWithValidator(prefix="/", return_value=False),
+            IsNotUrlValidator(),
+        ],
         blank=True,
     )
 
@@ -127,20 +132,22 @@ class Service(RestAPIService):
             )
 
     @property
-    def get_health_check_indication(self) -> bool:
+    def connection_check(self) -> bool:
         from zgw_consumers.client import build_client
 
         try:
             client = build_client(self)
-            if (
-                client.get(self.api_health_check_endpoint or self.api_root).status_code
-                == 200
-            ):
-                return True
-        except (ConnectionError, RequestException) as e:
-            logger.exception(self, exc_info=e)
+            return client.get(
+                self.api_connection_check_path or self.api_root
+            ).status_code
+        except RequestException as e:
+            logger.info(
+                "Encountered an error while performing the connection check to service %s",
+                self,
+                exc_info=e,
+            )
 
-        return False
+        return None
 
     @deprecated(
         "The `build_client` method is deprecated and will be removed in the next major release. "
