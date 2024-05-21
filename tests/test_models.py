@@ -2,9 +2,7 @@ from django.core.exceptions import ValidationError
 
 import pytest
 import requests_mock
-from ape_pie import APIClient
 
-from zgw_consumers.client import ServiceConfigAdapter
 from zgw_consumers.constants import APITypes, AuthTypes
 from zgw_consumers.models import Service
 from zgw_consumers.test.factories import ServiceFactory
@@ -83,42 +81,40 @@ def test_model_validation_with_oas_fields_disabled_both_provided(settings):
 
 
 @pytest.mark.django_db
-def test_health_check_indication_service_model_badly_configured(settings):
+def test_connection_check_service_model_badly_configured(settings):
+    settings.ZGW_CONSUMERS_IGNORE_OAS_FIELDS = True
     service = ServiceFactory.create(
         api_root="https://example.com/",
-        api_health_check_endpoint="foo",
+        api_connection_check_path="foo",
         auth_type=AuthTypes.zgw,
         client_id="my-client-id",
         secret="my-secret",
     )
-    adapter = ServiceConfigAdapter(service)
-    client = APIClient.configure_from(adapter)
 
-    with requests_mock.Mocker() as m, client:
+    with requests_mock.Mocker() as m:
         m.get(
             "https://example.com/foo",
             status_code=404,
         )
         service.refresh_from_db()
-        assert service.get_health_check_indication == False
+        assert service.connection_check == 404
 
 
 @pytest.mark.django_db
-def test_health_check_indication_service_model_correctly_configured(settings):
+def test_connection_check_service_model_correctly_configured(settings):
+    settings.ZGW_CONSUMERS_IGNORE_OAS_FIELDS = True
     service = ServiceFactory.create(
         api_root="https://example.com/",
-        api_health_check_endpoint="foo",
+        api_connection_check_path="foo",
         auth_type=AuthTypes.zgw,
         client_id="my-client-id",
         secret="my-secret",
     )
-    adapter = ServiceConfigAdapter(service)
-    client = APIClient.configure_from(adapter)
 
-    with requests_mock.Mocker() as m, client:
+    with requests_mock.Mocker() as m:
         m.get(
             "https://example.com/foo",
             status_code=200,
         )
         service.refresh_from_db()
-        assert service.get_health_check_indication == True
+        assert service.connection_check == 200
