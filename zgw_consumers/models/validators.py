@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 
 @deconstructible
-class StartWithValidator:
+class PrefixValidator:
     code = "invalid"
 
     def __init__(
@@ -13,10 +13,10 @@ class StartWithValidator:
         prefix: str,
         message: str = None,
         code: str = None,
-        return_value: bool = True,
+        starts_with: bool = True,
     ):
         self.prefix = prefix
-        self.return_value = return_value
+        self.starts_with = starts_with
 
         if code is not None:
             self.code = code
@@ -27,12 +27,12 @@ class StartWithValidator:
             self.message = _(
                 "The given value {must_or_cannot} start with '{prefix}'"
             ).format(
-                must_or_cannot="must" if self.return_value else "cannot",
+                must_or_cannot="must" if self.starts_with else "cannot",
                 prefix=self.prefix,
             )
 
     def __call__(self, value: str) -> bool:
-        if not value.startswith(self.prefix) == self.return_value:
+        if value.startswith(self.prefix) != self.starts_with:
             raise ValidationError(self.message, code=self.code, params={"value": value})
 
     def __eq__(self, other):
@@ -41,13 +41,13 @@ class StartWithValidator:
             and self.prefix == other.prefix
             and (self.message == other.message)
             and (self.code == other.code)
-            and (self.return_value == other.return_value)
+            and (self.starts_with == other.starts_with)
         )
 
 
 @deconstructible
-class IsNotUrlValidator(URLValidator):
-    message = _("String cannot be a URL")
+class NonUrlValidator(URLValidator):
+    message = _("Value cannot be a URL")
 
     def __call__(self, value):
         try:

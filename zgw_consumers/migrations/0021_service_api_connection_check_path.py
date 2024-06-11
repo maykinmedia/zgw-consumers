@@ -17,13 +17,13 @@ class Migration(migrations.Migration):
             name="api_connection_check_path",
             field=models.CharField(
                 blank=True,
-                help_text="An optional API endpoint which will be used to check if the API is configured correctly and is currently up or down. This field is only used for in the admin's 'Connection check' field.",
+                help_text="An optional API endpoint which will be used to check if the API is configured correctly and is currently up or down. This field is only used for the admin's 'Connection check status code' field.",
                 max_length=255,
                 validators=[
-                    zgw_consumers.models.validators.StartWithValidator(
-                        prefix="/", return_value=False
+                    zgw_consumers.models.validators.PrefixValidator(
+                        prefix="/", starts_with=False
                     ),
-                    zgw_consumers.models.validators.IsNotUrlValidator(),
+                    zgw_consumers.models.validators.NonUrlValidator(),
                 ],
                 verbose_name="connection check endpoint",
             ),
