@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.db import models
 from django.http import HttpRequest
+from django.utils.translation import gettext_lazy as _
 
 from privates.admin import PrivateMediaMixin
 from solo.admin import SingletonModelAdmin
@@ -18,7 +19,7 @@ class ServiceAdmin(admin.ModelAdmin):
     search_fields = ("label", "api_root", "nlx", "uuid")
     readonly_fields = ("get_connection_check",)
 
-    @admin.display(description="Connection Check")
+    @admin.display(description=_("Connection check status code"))
     def get_connection_check(self, obj):
         return obj.connection_check
 

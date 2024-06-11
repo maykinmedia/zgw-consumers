@@ -21,7 +21,7 @@ from zgw_consumers import settings as zgw_settings
 
 from ..constants import APITypes, AuthTypes, NLXDirectories
 from .abstract import RestAPIService
-from .validators import IsNotUrlValidator, StartWithValidator
+from .validators import NonUrlValidator, PrefixValidator
 
 logger = logging.getLogger(__name__)
 
@@ -37,12 +37,12 @@ class Service(RestAPIService):
         _("connection check endpoint"),
         help_text=_(
             "An optional API endpoint which will be used to check if the API is configured correctly and "
-            "is currently up or down. This field is only used for in the admin's 'Connection check' field."
+            "is currently up or down. This field is only used for the admin's 'Connection check status code' field."
         ),
         max_length=255,
         validators=[
-            StartWithValidator(prefix="/", return_value=False),
-            IsNotUrlValidator(),
+            PrefixValidator(prefix="/", starts_with=False),
+            NonUrlValidator(),
         ],
         blank=True,
     )
