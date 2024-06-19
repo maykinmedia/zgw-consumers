@@ -21,6 +21,9 @@ class ServiceAdmin(admin.ModelAdmin):
 
     @admin.display(description=_("Connection check status code"))
     def get_connection_check(self, obj):
+        if obj.pk is None:
+            return _("n/a")
+
         return obj.connection_check
 
     def get_fields(self, request: HttpRequest, obj: models.Model | None = None):

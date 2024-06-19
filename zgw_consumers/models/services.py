@@ -21,7 +21,7 @@ from zgw_consumers import settings as zgw_settings
 
 from ..constants import APITypes, AuthTypes, NLXDirectories
 from .abstract import RestAPIService
-from .validators import NonUrlValidator, PrefixValidator
+from .validators import NonUrlValidator, validate_leading_slashes
 
 logger = logging.getLogger(__name__)
 
@@ -36,12 +36,13 @@ class Service(RestAPIService):
     api_connection_check_path = models.CharField(
         _("connection check endpoint"),
         help_text=_(
-            "An optional API endpoint which will be used to check if the API is configured correctly and "
-            "is currently up or down. This field is only used for the admin's 'Connection check status code' field."
+            "A relative URL to perform a connection test. If left blank, the API root itself is used. "
+            "This connection check is only performed in the admin when viewing the service "
+            "configuration."
         ),
         max_length=255,
         validators=[
-            PrefixValidator(prefix="/", starts_with=False),
+            validate_leading_slashes,
             NonUrlValidator(),
         ],
         blank=True,
@@ -132,7 +133,7 @@ class Service(RestAPIService):
             )
 
     @property
-    def connection_check(self) -> bool:
+    def connection_check(self) -> int | None:
         from zgw_consumers.client import build_client
 
         try:
