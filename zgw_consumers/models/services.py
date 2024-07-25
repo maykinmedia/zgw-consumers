@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import socket
 import uuid
 from typing import TYPE_CHECKING
@@ -11,6 +12,7 @@ from django.db.models.functions import Length
 from django.utils.translation import gettext_lazy as _
 
 from privates.fields import PrivateMediaFileField
+from requests.exceptions import RequestException
 from simple_certmanager.models import Certificate
 from solo.models import SingletonModel
 from typing_extensions import Self, deprecated
@@ -19,6 +21,9 @@ from zgw_consumers import settings as zgw_settings
 
 from ..constants import APITypes, AuthTypes, NLXDirectories
 from .abstract import RestAPIService
+from .validators import NonUrlValidator, validate_leading_slashes
+
+logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
     from ..legacy.client import ZGWClient
@@ -28,6 +33,20 @@ class Service(RestAPIService):
     uuid = models.UUIDField(_("UUID"), default=uuid.uuid4)
     api_type = models.CharField(_("type"), max_length=20, choices=APITypes.choices)
     api_root = models.CharField(_("api root url"), max_length=255, unique=True)
+    api_connection_check_path = models.CharField(
+        _("connection check endpoint"),
+        help_text=_(
+            "A relative URL to perform a connection test. If left blank, the API root itself is used. "
+            "This connection check is only performed in the admin when viewing the service "
+            "configuration."
+        ),
+        max_length=255,
+        validators=[
+            validate_leading_slashes,
+            NonUrlValidator(),
+        ],
+        blank=True,
+    )
 
     # credentials for the API
     client_id = models.CharField(max_length=255, blank=True)
@@ -112,6 +131,24 @@ class Service(RestAPIService):
             raise ValidationError(
                 {"header_key": _("If header_value is set, header_key must also be set")}
             )
+
+    @property
+    def connection_check(self) -> int | None:
+        from zgw_consumers.client import build_client
+
+        try:
+            client = build_client(self)
+            return client.get(
+                self.api_connection_check_path or self.api_root
+            ).status_code
+        except RequestException as e:
+            logger.info(
+                "Encountered an error while performing the connection check to service %s",
+                self,
+                exc_info=e,
+            )
+
+        return None
 
     @deprecated(
         "The `build_client` method is deprecated and will be removed in the next major release. "

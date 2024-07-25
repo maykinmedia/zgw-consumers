@@ -1,9 +1,11 @@
 from django.core.exceptions import ValidationError
 
 import pytest
+import requests_mock
 
 from zgw_consumers.constants import APITypes, AuthTypes
 from zgw_consumers.models import Service
+from zgw_consumers.test.factories import ServiceFactory
 
 
 def test_model_validation_with_oas_fields_enabled_none_provided(settings):
@@ -76,3 +78,43 @@ def test_model_validation_with_oas_fields_disabled_both_provided(settings):
         service.clean()
     except ValidationError:
         pytest.fail("OAS fields should be ignored")
+
+
+@pytest.mark.django_db
+def test_connection_check_service_model_badly_configured(settings):
+    settings.ZGW_CONSUMERS_IGNORE_OAS_FIELDS = True
+    service = ServiceFactory.create(
+        api_root="https://example.com/",
+        api_connection_check_path="foo",
+        auth_type=AuthTypes.zgw,
+        client_id="my-client-id",
+        secret="my-secret",
+    )
+
+    with requests_mock.Mocker() as m:
+        m.get(
+            "https://example.com/foo",
+            status_code=404,
+        )
+        service.refresh_from_db()
+        assert service.connection_check == 404
+
+
+@pytest.mark.django_db
+def test_connection_check_service_model_correctly_configured(settings):
+    settings.ZGW_CONSUMERS_IGNORE_OAS_FIELDS = True
+    service = ServiceFactory.create(
+        api_root="https://example.com/",
+        api_connection_check_path="foo",
+        auth_type=AuthTypes.zgw,
+        client_id="my-client-id",
+        secret="my-secret",
+    )
+
+    with requests_mock.Mocker() as m:
+        m.get(
+            "https://example.com/foo",
+            status_code=200,
+        )
+        service.refresh_from_db()
+        assert service.connection_check == 200
