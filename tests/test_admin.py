@@ -10,10 +10,6 @@ def test_oas_fields_enabled(admin_client: Client, settings):
 
     form = response.context["adminform"]
 
-    # django 3.2
-    if hasattr(form, "form"):
-        form = form.form
-
     assert "oas" in form.fields
     assert "oas_file" in form.fields
 
@@ -25,10 +21,6 @@ def test_oas_fields_disabled(admin_client: Client, settings):
     response = admin_client.get(url)
 
     form = response.context["adminform"]
-
-    # django 3.2
-    if hasattr(form, "form"):
-        form = form.form
 
     assert "oas" not in form.fields
     assert "oas_file" not in form.fields

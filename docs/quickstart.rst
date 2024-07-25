@@ -7,7 +7,7 @@ Installation
 **Requirements**
 
 * Python 3.10 or newer
-* Django 3.2+
+* Django 4.2+
 
 1. Install from PyPI using ``pip``:
 

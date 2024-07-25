@@ -15,7 +15,6 @@ keywords = ["Django", "ZGW", "Common Ground", "VNG", "API", "OpenAPI", "OAS", "m
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Framework :: Django",
-    "Framework :: Django :: 3.2",
     "Framework :: Django :: 4.2",
     "Intended Audience :: Developers",
     "Operating System :: Unix",
@@ -27,7 +26,7 @@ classifiers = [
 ]
 requires-python = ">=3.10"
 dependencies = [
-    "django>=3.2",
+    "django>=4.2",
     "django-relativedelta>=2.0.0",
     "django-solo",
     "django-simple-certmanager>=1.4.1",
