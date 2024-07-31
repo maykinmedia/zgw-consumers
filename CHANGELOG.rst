@@ -1,6 +1,15 @@
 Changes
 =======
 
+0.34.0 (2024-07-31)
+-------------------
+
+Feature and maintenance release
+
+* 💥 Dropped support for Django 3.2 (end of life), only 4.2 and up are supported.
+* You can now configure a health check endpoint for a service. The HTTP response
+  status code of this URL is displayed in the admin change page.
+
 0.33.0 (2024-03-29)
 -------------------
 
