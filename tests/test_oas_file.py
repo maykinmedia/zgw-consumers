@@ -7,6 +7,7 @@ from pathlib import Path
 
 from django.core.exceptions import ValidationError
 from django.core.files.base import File
+from django.utils.text import slugify
 
 import pytest
 
@@ -26,6 +27,7 @@ def test_use_local_oas_file(settings, tmp_path):
             api_type=APITypes.drc,
             api_root="http://foo.bar",
             oas_file=File(oas_file, name="schema.yaml"),
+            slug=slugify("http://foo.bar"),
         )
         service.full_clean()
 

@@ -14,10 +14,11 @@ from .widgets import NoDownloadPrivateFileWidget
 
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
-    list_display = ("label", "api_type", "api_root", "nlx", "auth_type")
+    list_display = ("label", "api_type", "api_root", "slug", "nlx", "auth_type")
     list_filter = ("api_type", "auth_type")
-    search_fields = ("label", "api_root", "nlx", "uuid")
+    search_fields = ("label", "api_root", "nlx", "uuid", "slug")
     readonly_fields = ("get_connection_check",)
+    prepopulated_fields = {"slug": ["api_root"]}
 
     @admin.display(description=_("Connection check status code"))
     def get_connection_check(self, obj):
