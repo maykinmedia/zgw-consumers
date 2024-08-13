@@ -2,6 +2,7 @@ from datetime import date
 from pathlib import Path
 
 from django.core.files.base import File
+from django.utils.text import slugify
 
 import pytest
 
@@ -73,11 +74,13 @@ def test_get_catalogi(settings, requests_mock):
             api_type=APITypes.ztc,
             api_root=CATALOGI_API_ROOT,
             oas_file=File(oas_file, name="schema.yaml"),
+            slug=slugify(CATALOGI_API_ROOT),
         )
         service2 = Service.objects.create(
             api_type=APITypes.ztc,
             api_root=CATALOGI_API_ROOT2,
             oas_file=File(oas_file, name="schema.yaml"),
+            slug=slugify(CATALOGI_API_ROOT2),
         )
     client1 = service1.build_client()
     client2 = service2.build_client()
@@ -232,11 +235,13 @@ def test_get_informatieobjecttypen(settings, requests_mock):
             api_type=APITypes.ztc,
             api_root=CATALOGI_API_ROOT,
             oas_file=File(oas_file, name="schema.yaml"),
+            slug=slugify(CATALOGI_API_ROOT),
         )
         service2 = Service.objects.create(
             api_type=APITypes.ztc,
             api_root=CATALOGI_API_ROOT2,
             oas_file=File(oas_file, name="schema.yaml"),
+            slug=slugify(CATALOGI_API_ROOT2),
         )
     client1 = service1.build_client()
     client2 = service2.build_client()

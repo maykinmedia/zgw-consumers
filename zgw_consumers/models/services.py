@@ -29,8 +29,22 @@ if TYPE_CHECKING:
     from ..legacy.client import ZGWClient
 
 
+class ServiceManager(models.Manager):
+    def get_by_natural_key(self, slug):
+        return self.get(slug=slug)
+
+
 class Service(RestAPIService):
     uuid = models.UUIDField(_("UUID"), default=uuid.uuid4)
+    slug = models.SlugField(
+        _("service slug"),
+        blank=False,
+        null=False,
+        unique=True,
+        help_text=_(
+            "A unique, human-friendly slug to identify this service. Primarily useful for cross-instance import/export."
+        ),
+    )
     api_type = models.CharField(_("type"), max_length=20, choices=APITypes.choices)
     api_root = models.CharField(_("api root url"), max_length=255, unique=True)
     api_connection_check_path = models.CharField(
@@ -99,12 +113,17 @@ class Service(RestAPIService):
         default=10,
     )
 
+    objects = ServiceManager()
+
     class Meta:
         verbose_name = _("service")
         verbose_name_plural = _("services")
 
     def __str__(self):
         return f"[{self.get_api_type_display()}] {self.label}"
+
+    def natural_key(self):
+        return (self.slug,)
 
     def save(self, *args, **kwargs):
         if not self.api_root.endswith("/"):
