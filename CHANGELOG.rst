@@ -1,6 +1,17 @@
 Changes
 =======
 
+0.35.0 (2024-07-31)
+-------------------
+
+Small feature release.
+
+* ✨ Added a slug field to the ``Service`` model for improved indexing across
+  instances. As this field is required, the included migration will initiaize
+  this field with a slugified version of the ``api_root`` field.
+* ✨ Added natural key getters to the ``Service`` model to support Django's 
+   natural key-based (de)serialization methods.
+
 0.34.0 (2024-07-31)
 -------------------
 
