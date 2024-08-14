@@ -16,6 +16,9 @@ def set_service_slug_default_from_api_root(apps, schema_editor):
 
     for row in Service.objects.all():
         candidate_slug = slugify(row.label if row.label else row.api_root)
+        if len(candidate_slug) > 254:
+            candidate_slug = candidate_slug[:250]
+
         row.slug = generate_unique_slug(candidate_slug)
         row.save(update_fields=["slug"])
 
@@ -34,6 +37,7 @@ class Migration(migrations.Migration):
                 unique=False,
                 blank=True,
                 db_index=False,
+                max_length=255,
             ),
             preserve_default=False,
         ),
@@ -48,6 +52,7 @@ class Migration(migrations.Migration):
                 help_text="A unique, human-friendly slug to identify this service. Primarily useful for cross-instance import/export.",
                 unique=True,
                 verbose_name="service slug",
+                max_length=255,
             ),
         ),
     ]
