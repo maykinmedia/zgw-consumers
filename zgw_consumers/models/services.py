@@ -44,6 +44,7 @@ class Service(RestAPIService):
         help_text=_(
             "A unique, human-friendly slug to identify this service. Primarily useful for cross-instance import/export."
         ),
+        max_length=255,
     )
     api_type = models.CharField(_("type"), max_length=20, choices=APITypes.choices)
     api_root = models.CharField(_("api root url"), max_length=255, unique=True)
