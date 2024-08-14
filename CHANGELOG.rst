@@ -1,8 +1,21 @@
 Changes
 =======
 
-0.35.0 (2024-07-31)
+0.35.1 (2024-08-14)
 -------------------
+
+Bugfix release.
+
+* 🐛 The data migration introduced in 0.35.0 would initialize the ``slug`` 
+  field in such a way that the generated slug would typically exceed the 
+  field's ``max_length``. This release fixes the field and the underlying
+  migration.
+
+0.35.0💥 (2024-08-13)
+-------------------
+
+**💥 0.35.0 has been yanked and should not be used to avoid ending up in
+an inconsistent migration state. Use 0.35.1 instead.**
 
 Small feature release.
 
@@ -10,7 +23,7 @@ Small feature release.
   instances. As this field is required, the included migration will initiaize
   this field with a slugified version of the ``api_root`` field.
 * ✨ Added natural key getters to the ``Service`` model to support Django's 
-   natural key-based (de)serialization methods.
+  natural key-based (de)serialization methods.
 
 0.34.0 (2024-07-31)
 -------------------
