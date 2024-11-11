@@ -17,6 +17,7 @@ python:
         - docs
         - db
         - drf
+        - setup-configuration
 
 sphinx:
   configuration: docs/conf.py
