@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "simple_certmanager",
     "solo",
     "testapp",
+    "django_setup_configuration",
 ]
 
 MIDDLEWARE = [
