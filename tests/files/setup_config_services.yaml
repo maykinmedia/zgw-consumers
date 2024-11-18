@@ -1,7 +1,7 @@
-ZGW_CONSUMERS_CONFIG_ENABLE: True
-ZGW_CONSUMERS:
+zgw_consumers_config_enable: True
+zgw_consumers:
   services:
-  - slug: objecten-test
+  - identifier: objecten-test
     label: Objecten API test
     api_root: http://objecten.local/api/v1/
     api_connection_check_path: objects
@@ -9,10 +9,9 @@ ZGW_CONSUMERS:
     auth_type: api_key
     header_key: Authorization
     header_value: Token foo
-  - slug: zaken-test
+  - identifier: zaken-test
     label: Zaken API test
     api_root: http://zaken.local/api/v1/
-    connection_check_expected_status: 400
     api_type: zrc
     auth_type: zgw
     client_id: client
