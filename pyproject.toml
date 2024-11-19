@@ -102,6 +102,9 @@ skip = ["env", ".tox", ".history"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 DJANGO_SETTINGS_MODULE = "testapp.settings"
+markers = [
+    "config_path: the path to the YAML file that is loaded for setup_configuration",
+]
 
 [tool.bumpversion]
 current_version = "0.35.1"

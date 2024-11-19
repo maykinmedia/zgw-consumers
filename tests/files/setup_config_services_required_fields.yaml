@@ -1,0 +1,8 @@
+zgw_consumers_config_enable: True
+zgw_consumers:
+  services:
+  - identifier: objecten-test
+    label: Objecten API test
+    api_root: http://objecten.local/api/v1/
+    api_type: orc
+    auth_type: zgw
