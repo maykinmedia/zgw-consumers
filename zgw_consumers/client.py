@@ -96,7 +96,9 @@ class ZGWAuth(AuthBase):
     service: Service
 
     def __post_init__(self):
-        # Generate the JWT Bearer token. Ported from gemma-zds-client ClientAuth.
+        self._token = self._generate_token()
+
+    def _generate_token(self) -> str:
         payload = {
             # standard claims
             "iss": self.service.client_id,
@@ -107,8 +109,11 @@ class ZGWAuth(AuthBase):
             "user_representation": self.service.user_representation,
         }
 
-        self._token: str = jwt.encode(payload, self.service.secret, algorithm="HS256")
+        return jwt.encode(payload, self.service.secret, algorithm="HS256")
 
     def __call__(self, request: PreparedRequest):
         request.headers["Authorization"] = f"Bearer {self._token}"
         return request
+
+    def refresh_token(self):
+        self._token = self._generate_token()
