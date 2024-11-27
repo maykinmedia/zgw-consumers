@@ -12,7 +12,7 @@ Bugfix release.
   migration.
 
 0.35.0💥 (2024-08-13)
--------------------
+---------------------
 
 **💥 0.35.0 has been yanked and should not be used to avoid ending up in
 an inconsistent migration state. Use 0.35.1 instead.**
