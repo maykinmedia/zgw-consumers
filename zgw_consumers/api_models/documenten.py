@@ -33,4 +33,4 @@ class Document(ZGWModel):
     locked: bool = False
 
     def get_vertrouwelijkheidaanduiding_display(self):
-        return VertrouwelijkheidsAanduidingen.values[self.vertrouwelijkheidaanduiding]
+        return VertrouwelijkheidsAanduidingen(self.vertrouwelijkheidaanduiding).label
