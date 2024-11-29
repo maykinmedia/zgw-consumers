@@ -47,12 +47,13 @@ class parallel:
     def __init__(self, **kwargs):
         self.executor = futures.ThreadPoolExecutor(**kwargs)
 
-    def submit(*args, **kwargs):
-        if len(args) >= 2:
-            self, _fn, *args = args
+    def submit(self, *args, **kwargs):
+        if len(args) >= 1:
+            _fn, *args = args
         elif "fn" in kwargs:
             _fn = kwargs.pop("fn")
-            self, *args = args
+        else:
+            raise TypeError("Invalid signature")
 
         fn = wrap_fn(_fn)
 

@@ -1,0 +1,16 @@
+[tool.pyright]
+include = [
+    "zgw_consumers/"
+]
+exclude = [
+    # should really be replaced with pydantic or typed dicts...
+    "zgw_consumers/api_models/base.py",
+    # this module is quite funky... doesn't hold up to the base types
+    "zgw_consumers/models/lookups.py",
+    # this should be removed instead of fixed
+    "zgw_consumers/legacy/",
+]
+ignore = []
+
+pythonVersion = "3.11"
+pythonPlatform = "Linux"
