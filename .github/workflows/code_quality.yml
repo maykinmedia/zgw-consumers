@@ -25,6 +25,7 @@ jobs:
           - isort
           - black
           - docs
+          - type-checking
           # - flake8
     steps:
       - uses: actions/checkout@v4
