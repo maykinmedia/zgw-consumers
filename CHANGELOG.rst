@@ -1,6 +1,13 @@
 Changes
 =======
 
+0.36.0 (2024-11-02)
+-------------------
+
+Small feature release that provides an optional dependency via ``zgw-consumers[setup-configuration]``
+
+* Add a ``django-setup-configuration`` ``ConfigurationStep`` that configures any number of ``Service``s from a YAML file
+
 0.35.1 (2024-08-15)
 -------------------
 
