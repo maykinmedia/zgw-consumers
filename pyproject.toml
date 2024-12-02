@@ -53,6 +53,9 @@ drf = [
 zds-client = [
     "gemma-zds-client>=2.0.0",
 ]
+setup-configuration = [
+    "django-setup-configuration>=0.4.0",
+]
 # These are not the test requirements! They are extras to be installed when making use of `zgw_consumers.test`
 testutils = [
     "Faker>=0.7.0",
@@ -99,6 +102,9 @@ skip = ["env", ".tox", ".history"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 DJANGO_SETTINGS_MODULE = "testapp.settings"
+markers = [
+    "config_path: the path to the YAML file that is loaded for setup_configuration",
+]
 
 [tool.bumpversion]
 current_version = "0.35.1"
