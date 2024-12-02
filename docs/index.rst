@@ -34,6 +34,7 @@ can still leverage the utilities offered by ZGW Consumers.
    models
    model_fields
    drf
+   setup_config
    testing
    reference
    changelog
