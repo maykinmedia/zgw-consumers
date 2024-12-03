@@ -1,12 +1,19 @@
 Changes
 =======
 
+0.36.1 (2024-12-03)
+-------------------
+
+Bugfix release.
+
+* 🐛 Make it possible to refresh credentials if a client is used over a long period of time.
+
 0.36.0 (2024-11-02)
 -------------------
 
 Small feature release that provides an optional dependency via ``zgw-consumers[setup-configuration]``
 
-* Add a ``django-setup-configuration`` ``ConfigurationStep`` that configures any number of ``Service``s from a YAML file
+* Add a ``django-setup-configuration`` ``ConfigurationStep`` that configures any number of ``Service``\s from a YAML file.
 
 0.35.1 (2024-08-15)
 -------------------
