@@ -9,6 +9,7 @@ from requests import JSONDecodeError
 from requests.models import PreparedRequest, Request, Response
 from requests.utils import guess_json_utf
 
+from .mixins import RefreshTokenMixin
 from .models import NLXConfig, Service
 
 logger = logging.getLogger(__name__)
@@ -150,7 +151,7 @@ class NLXMixin:
         return prepared_request
 
 
-class NLXClient(NLXMixin, APIClient):
+class NLXClient(NLXMixin, RefreshTokenMixin, APIClient):
     """A :class:`ape_pie.APIClient` implementation that will take care of rewriting
     URLs with :external:ref:`an event hook <event-hooks>`.
     """
