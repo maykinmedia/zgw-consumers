@@ -21,12 +21,17 @@ def extract_model_field_type(model_class, field_name):
 
     # support for Optional / List
     if hasattr(typehint, "__origin__"):
-        if typehint.__origin__ is list and typehint.__args__:
-            subtypehint = typehint.__args__[0]
+        if (
+            typehint.__origin__ is list  # pyright: ignore[reportAttributeAccessIssue]
+            and typehint.__args__  # pyright: ignore[reportAttributeAccessIssue]
+        ):
+            # fmt: off
+            subtypehint = typehint.__args__[0]  # pyright: ignore[reportAttributeAccessIssue]
+            # fmt: on
             raise NotImplementedError("TODO: support collections")
 
-        if typehint.__origin__ is Union:
-            typehint = typehint.__args__
+        if typehint.__origin__ is Union:  # pyright: ignore[reportAttributeAccessIssue]
+            typehint = typehint.__args__  # pyright: ignore[reportAttributeAccessIssue]
             # Optional is ONE type combined with None
             typehint = next(t for t in typehint if t is not None)
     return typehint

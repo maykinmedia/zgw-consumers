@@ -56,4 +56,4 @@ def install_schema_fetcher_cache():
     except ImportError:
         return
 
-    schema_fetcher.cache = OASCache()
+    schema_fetcher.cache = OASCache()  # type: ignore - untyped library...

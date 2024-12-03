@@ -25,7 +25,7 @@ class RestAPIService(Service):
         validators=[FileExtensionValidator(["yml", "yaml"])],
     )
 
-    class Meta:
+    class Meta:  # pyright: ignore[reportIncompatibleVariableOverride]
         abstract = True
 
     def clean(self):

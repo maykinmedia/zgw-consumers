@@ -1,9 +1,8 @@
 import logging
 import random
+from datetime import timezone
 from functools import lru_cache
 from typing import Any, Dict
-
-from django.utils import timezone
 
 import yaml
 from faker import Faker
