@@ -37,6 +37,7 @@ extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.intersphinx",
     "sphinx.ext.viewcode",
+    "django_setup_configuration.documentation.setup_config_example",
 ]
 
 # Add any paths that contain templates here, relative to this directory.

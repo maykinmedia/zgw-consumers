@@ -9,7 +9,7 @@ class SingleServiceConfigurationModel(ConfigurationModel):
     # client_certificate: FilePath = DjangoModelRef(Service, "client_certificate")
     # server_certificate: FilePath = DjangoModelRef(Service, "server_certificate")
     # Identifier is mapped to slug, because slug isn't a very descriptive name for devops
-    identifier: str = DjangoModelRef(Service, "slug")
+    identifier: str = DjangoModelRef(Service, "slug", examples=["service-identifier"])
 
     class Meta:
         django_model_refs = {
@@ -29,7 +29,21 @@ class SingleServiceConfigurationModel(ConfigurationModel):
                 "timeout",
             ]
         }
+        extra_kwargs = {
+            "label": {
+                "examples": ["Short and human-friendly description of this service"]
+            },
+            "api_root": {"examples": ["https://example.com/api/v1/"]},
+            "api_connection_check_path": {"examples": ["/some/relative/path"]},
+            "client_id": {"examples": ["modify-this"]},
+            "secret": {"examples": ["modify-this"]},
+            "header_key": {"examples": ["Authorization"]},
+            "header_value": {"examples": ["Token <modify-this>"]},
+            "nlx": {"examples": ["http://some-outway-adress.local:8080/"]},
+            "user_id": {"examples": ["client-id"]},
+            "user_representation": {"examples": ["Name of the user"]},
+        }
 
 
 class ServicesConfigurationModel(ConfigurationModel):
-    services: list[SingleServiceConfigurationModel] = Field(default_factory=list)
+    services: list[SingleServiceConfigurationModel]
