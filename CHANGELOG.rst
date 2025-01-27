@@ -1,6 +1,13 @@
 Changes
 =======
 
+0.37.0 (2025-01-27)
+-------------------
+
+Small feature release that updates ``setup-configuration`` documentation
+
+* Use generated yaml directive for setup-config docs
+
 0.36.1 (2024-12-03)
 -------------------
 
