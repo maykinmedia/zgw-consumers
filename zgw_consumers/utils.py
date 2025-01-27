@@ -1,16 +1,25 @@
 import logging
-from typing import Optional, TypedDict
+from typing import Callable, Generic, Optional, TypedDict, TypeVar
 
 from django.http import HttpRequest
 
 from ape_pie.client import APIClient
 
 logger = logging.getLogger(__name__)
-NOTSET = object()
 
 
-class cache_on_request:
-    def __init__(self, request: HttpRequest, key: str, callback: callable):
+class NotSet:
+    pass
+
+
+NOTSET = NotSet()
+
+
+T = TypeVar("T")
+
+
+class cache_on_request(Generic[T]):
+    def __init__(self, request: HttpRequest, key: str, callback: Callable[[], T]):
         self.request = request
         self.key = key
         self.callback = callback
@@ -22,10 +31,10 @@ class cache_on_request:
         pass
 
     @property
-    def value(self):
+    def value(self) -> T:
         # check if it's cached on the request
         cached_value = getattr(self.request, self.key, NOTSET)
-        if cached_value is NOTSET:
+        if isinstance(cached_value, NotSet):
             value = self.callback()
             setattr(self.request, self.key, value)
             cached_value = value

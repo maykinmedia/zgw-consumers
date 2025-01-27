@@ -45,14 +45,18 @@ class APIModelSerializer(serializers.Serializer):
             serializer_class=self.__class__.__name__
         )
         assert hasattr(
-            self.Meta, "model"
+            self.Meta, "model"  # pyright: ignore[reportAttributeAccessIssue]
         ), 'Class {serializer_class} missing "Meta.model" attribute'.format(
             serializer_class=self.__class__.__name__
         )
 
         declared_fields = copy.deepcopy(self._declared_fields)
-        model = self.Meta.model
-        depth = getattr(self.Meta, "depth", 0)
+        model = self.Meta.model  # pyright: ignore[reportAttributeAccessIssue]
+        depth = getattr(
+            self.Meta,  # pyright: ignore[reportAttributeAccessIssue]
+            "depth",
+            0,
+        )
 
         if depth is not None:
             assert depth >= 0, "'depth' may not be negative."
@@ -88,7 +92,7 @@ class APIModelSerializer(serializers.Serializer):
         return fields
 
     def get_field_names(self, declared_fields):
-        fields = self.Meta.fields
+        fields = self.Meta.fields  # pyright: ignore[reportAttributeAccessIssue]
         # Ensure that all declared fields have also been included in the
         # `Meta.fields` option.
 
@@ -114,9 +118,19 @@ class APIModelSerializer(serializers.Serializer):
         Return a dictionary mapping field names to a dictionary of
         additional keyword arguments.
         """
-        extra_kwargs = copy.deepcopy(getattr(self.Meta, "extra_kwargs", {}))
+        extra_kwargs = copy.deepcopy(
+            getattr(
+                self.Meta,  # pyright: ignore[reportAttributeAccessIssue]
+                "extra_kwargs",
+                {},
+            )
+        )
 
-        read_only_fields = getattr(self.Meta, "read_only_fields", None)
+        read_only_fields = getattr(
+            self.Meta,  # pyright: ignore[reportAttributeAccessIssue]
+            "read_only_fields",
+            None,
+        )
         if read_only_fields is not None:
             if not isinstance(read_only_fields, (list, tuple)):
                 raise TypeError(
@@ -131,7 +145,10 @@ class APIModelSerializer(serializers.Serializer):
         else:
             # Guard against the possible misspelling `readonly_fields` (used
             # by the Django admin and others).
-            assert not hasattr(self.Meta, "readonly_fields"), (
+            assert not hasattr(
+                self.Meta,  # pyright: ignore[reportAttributeAccessIssue]
+                "readonly_fields",
+            ), (
                 "Serializer `%s.%s` has field `readonly_fields`; "
                 "the correct spelling for the option is `read_only_fields`."
                 % (self.__class__.__module__, self.__class__.__name__)
@@ -186,7 +203,9 @@ class APIModelSerializer(serializers.Serializer):
         if "choices" in field_kwargs:
             # Fields with choices get coerced into `ChoiceField`
             # instead of using their regular typed field.
-            field_class = self.serializer_choice_field
+            # fmt: off
+            field_class = self.serializer_choice_field  # pyright: ignore[reportAttributeAccessIssue]
+            # fmt: on
             # Some model fields may introduce kwargs that would not be valid
             # for the choice field. We need to strip these out.
             # Eg. models.DecimalField(max_digits=3, decimal_places=1, choices=DECIMAL_CHOICES)

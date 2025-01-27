@@ -123,17 +123,21 @@ class Eigenschap(ZGWModel):
     zaaktype: str
     naam: str
     definitie: str
-    specificatie: dict
+    specificatie: EigenschapSpecificatie | dict
     toelichting: str = ""
 
     def __post_init__(self):
         super().__post_init__()
-        self.specificatie = factory(EigenschapSpecificatie, self.specificatie)
+        assert isinstance(self.specificatie, dict)
+        _specificatie = factory(EigenschapSpecificatie, self.specificatie)
+        assert isinstance(_specificatie, EigenschapSpecificatie)
+        self.specificatie = _specificatie
 
     def to_python(self, value: str) -> Union[str, Decimal, date, datetime]:
         """
         Cast the string value into the appropriate python type based on the spec.
         """
+        assert isinstance(self.specificatie, EigenschapSpecificatie)
         formaat = self.specificatie.formaat
         assert formaat in EIGENSCHAP_FORMATEN, f"Unknown format {formaat}"
 
