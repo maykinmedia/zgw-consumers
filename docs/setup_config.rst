@@ -10,6 +10,12 @@ This library provides a ``ConfigurationStep``
 for more information on how to run ``setup_configuration``)
 to configure any number of ``Services`` from a YAML file.
 
+To make use of this, you must install the ``setup-configuration`` dependency group:
+
+.. code-block:: bash
+
+    pip install zgw-consumers[setup-configuration]
+
 To add this step to your configuration steps, add ``django_setup_configuration`` to ``INSTALLED_APPS`` and add the following setting:
 
     .. code:: python
@@ -22,33 +28,8 @@ To add this step to your configuration steps, add ``django_setup_configuration``
 
 The YAML file that is passed to ``setup_configuration`` must set the
 ``zgw_consumers_config_enable`` flag to ``true`` to enable the step and also provide ``services`` under
-the ``zgw_consumers`` namespace to configure ``Services``
+the ``zgw_consumers`` namespace to configure ``Services``.
 
-Example file:
+You can use the following example YAML and adapt it to your needs:
 
-    .. code:: yaml
-
-        zgw_consumers_config_enable: True
-        zgw_consumers:
-          services:
-          # all possible configurable fields
-          - identifier: objecten-test
-            label: Objecten API test
-            api_root: http://objecten.local/api/v1/
-            api_connection_check_path: objects
-            api_type: orc
-            auth_type: api_key
-            header_key: Authorization
-            header_value: Token foo
-            client_id: client
-            secret: super-secret
-            nlx: http://some-outway-adress.local:8080/
-            user_id: open-formulieren
-            user_representation: Open Formulieren
-            timeout: 5
-          # minimum required fields
-          - identifier: objecttypen-test
-            label: Objecttypen API test
-            api_root: http://objecttypen.local/api/v1/
-            api_type: orc
-            auth_type: api_key
+.. setup-config-example:: zgw_consumers.contrib.setup_configuration.steps.ServiceConfigurationStep

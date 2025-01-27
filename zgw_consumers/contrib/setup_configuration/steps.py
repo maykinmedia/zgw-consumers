@@ -7,7 +7,9 @@ from .models import ServicesConfigurationModel
 
 class ServiceConfigurationStep(BaseConfigurationStep[ServicesConfigurationModel]):
     """
-    Configure Services to connect with external APIs
+    Configure one or more ``Service`` instances with their connection parameters and
+    authentication credentials, which will allow this application to integrate
+    with third-party systems in a consistent manner.
     """
 
     verbose_name = "Configuration to connect with external services"

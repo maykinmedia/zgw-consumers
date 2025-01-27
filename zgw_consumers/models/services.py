@@ -47,7 +47,14 @@ class Service(RestAPIService):
         max_length=255,
     )
     api_type = models.CharField(_("type"), max_length=20, choices=APITypes.choices)
-    api_root = models.CharField(_("api root url"), max_length=255, unique=True)
+    api_root = models.CharField(
+        _("api root url"),
+        help_text=_(
+            "The root URL of the service that will be used to construct the URLs when making requests."
+        ),
+        max_length=255,
+        unique=True,
+    )
     api_connection_check_path = models.CharField(
         _("connection check endpoint"),
         help_text=_(
@@ -64,18 +71,47 @@ class Service(RestAPIService):
     )
 
     # credentials for the API
-    client_id = models.CharField(max_length=255, blank=True)
-    secret = models.CharField(max_length=255, blank=True)
+    client_id = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text=_(
+            "The client ID used to construct the JSON Web Token to connect "
+            "with the service (only needed if auth type is `zgw`)."
+        ),
+    )
+    secret = models.CharField(
+        max_length=255,
+        blank=True,
+        help_text=_(
+            "The secret used to construct the JSON Web Token to connect with "
+            "the service (only needed if auth type is `zgw`)."
+        ),
+    )
     auth_type = models.CharField(
         _("authorization type"),
         max_length=20,
         choices=AuthTypes.choices,
         default=AuthTypes.zgw,
+        help_text=_("The type of authorization to use for this service."),
     )
-    header_key = models.CharField(_("header key"), max_length=100, blank=True)
-    header_value = models.CharField(_("header value"), max_length=255, blank=True)
+    header_key = models.CharField(
+        _("header key"),
+        max_length=100,
+        blank=True,
+        help_text=_(
+            "The header key used to store the API key (only needed if auth type is `api_key`)."
+        ),
+    )
+    header_value = models.CharField(
+        _("header value"),
+        max_length=255,
+        blank=True,
+        help_text=_(
+            "The API key to connect with the service (only needed if auth type is `api_key`)."
+        ),
+    )
     nlx = models.URLField(
-        _("NLX url"), max_length=1000, blank=True, help_text=_("NLX (outway) address")
+        _("NLX url"), max_length=1000, blank=True, help_text=_("NLX (outway) address.")
     )
     user_id = models.CharField(
         _("user ID"),
