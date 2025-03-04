@@ -28,14 +28,6 @@ CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
     },
-    "oas": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": f"redis://{os.environ.get('CACHE_OAS', 'localhost:6379/1')}",
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-            "IGNORE_EXCEPTIONS": True,
-        },
-    },
 }
 
 INSTALLED_APPS = [
@@ -81,5 +73,3 @@ ROOT_URLCONF = "testapp.urls"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
-
-ZGW_CONSUMERS_OAS_CACHE = "oas"
