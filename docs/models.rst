@@ -21,8 +21,6 @@ specification. It supports:
    :exclude-members: DoesNotExist, MultipleObjectsReturned, clean, save
 
    .. automethod:: get_service
-   .. automethod:: get_client
-   .. automethod:: get_auth_header
 
 
 Abstract
@@ -33,10 +31,5 @@ to implement your own service types like ``SOAPService``.
 
 
 .. autoclass:: zgw_consumers.models.abstract.Service
-   :members:
-   :exclude-members: DoesNotExist, MultipleObjectsReturned, clean, save
-
-
-.. autoclass:: zgw_consumers.models.abstract.RestAPIService
    :members:
    :exclude-members: DoesNotExist, MultipleObjectsReturned, clean, save

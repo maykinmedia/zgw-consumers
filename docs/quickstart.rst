@@ -58,59 +58,6 @@ The resulting client will have certificate and authentication automatically conf
     make use of the :class:`zgw_consumers.client.ServiceConfigAdapter` directly.
 
 
-Constructing an OpenAPI 3 client with the legacy client
-*******************************************************
-
-.. deprecated:: 0.28.x
-
-    The legacy client is deprecated and will be removed in the next major release.
-
-    You also need to install the extra ``zds-client``:
-
-    .. code-block:: bash
-
-        pip install zgw-consumers[zds-client]
-
-From a service, you can construct a :class:`zds_client.client.Client`
-instance which is driven by the API schema. There are two common scenario's:
-
-**If you know upfront which service you need to consume**
-
-Example snippet:
-
-.. code-block:: python
-
-    from zgw_consumers.models import Service
-
-    my_service = Service.objects.get(api_root="https://api.example.com/")
-    client = my_service.build_client()
-    resource = client.retrieve("resource", uuid="6d166c39-74bf-4cf4-903d-f99fbb1670ac")
-
-**If you are given a resource URL and need the appropriate client**
-
-In this situation, you don't necessarily know upfront which service you will need,
-since the resource URL may be from various services. You can obtain the service and/or
-client directly based on the URL and the best ``api_root`` match:
-
-.. code-block:: python
-
-    from zgw_consumers.models import Service
-
-    client = Service.get_client(resource_url)
-    resource = client.retrieve("resource", url=resource_url)
-
-
-Obtaining the authentication details
-************************************
-
-Similar to :meth:`Service.get_client <zgw_consumers.models.Service.get_client>`, you can also invoke :meth:`Service.get_auth_header <zgw_consumers.models.Service.get_auth_header>`:
-
-.. code-block:: python
-
-    from zgw_consumers.models import Service
-
-    auth = Service.get_auth_header(resource_url)
-
 Data model
 **********
 
@@ -122,7 +69,7 @@ of domain models:
     from zgw_consumers.api_models.base import factory
     from zgw_consumers.api_models.zaken import Zaak
 
-    results = client.list("zaak")["results"]
+    results = client.get("zaken")["results"]
 
     return factory(Zaak, results)
 
