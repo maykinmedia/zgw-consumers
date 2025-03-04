@@ -10,10 +10,8 @@ class ZgwConsumersConfig(AppConfig):
     default_auto_field = "django.db.models.AutoField"
 
     def ready(self):
-        from .cache import install_schema_fetcher_cache
         from .models import lookups  # noqa
 
-        install_schema_fetcher_cache()
         register_serializer_field()
 
 

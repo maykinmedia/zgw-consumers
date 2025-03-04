@@ -9,30 +9,6 @@ from zgw_consumers.constants import AuthTypes
 from zgw_consumers.test.factories import ServiceFactory
 
 
-def test_oas_fields_enabled(admin_client: Client, settings):
-    settings.ZGW_CONSUMERS_IGNORE_OAS_FIELDS = False
-    url = reverse("admin:zgw_consumers_service_add")
-
-    response = admin_client.get(url)
-
-    form = response.context["adminform"]
-
-    assert "oas" in form.fields
-    assert "oas_file" in form.fields
-
-
-def test_oas_fields_disabled(admin_client: Client, settings):
-    settings.ZGW_CONSUMERS_IGNORE_OAS_FIELDS = True
-    url = reverse("admin:zgw_consumers_service_add")
-
-    response = admin_client.get(url)
-
-    form = response.context["adminform"]
-
-    assert "oas" not in form.fields
-    assert "oas_file" not in form.fields
-
-
 def test_get_connection_check_correct_status_code(admin_client: Client, settings):
     service = ServiceFactory.create(
         api_root="https://example.com/",
