@@ -4,9 +4,9 @@ from django.core.cache import DEFAULT_CACHE_ALIAS
 from .constants import NLXDirectories
 
 NLX_DIRECTORY_URLS = {
-    NLXDirectories.demo: "https://directory.demo.nlx.io/",
+    NLXDirectories.demo: "https://demo-directory-api.commonground.acc.utrecht.nl/",
     NLXDirectories.preprod: "https://directory.preprod.nlx.io/",
-    NLXDirectories.prod: "https://directory.prod.nlx.io/",
+    NLXDirectories.prod: "https://directory-api.commonground.utrecht.nl/",
 }
 
 NLX_OUTWAY_TIMEOUT = 2  # 2 seconds
