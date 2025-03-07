@@ -26,5 +26,4 @@ class AuthTypes(models.TextChoices):
 
 class NLXDirectories(models.TextChoices):
     demo = "demo", _("Demo")
-    preprod = "preprod", _("Pre-prod")
     prod = "prod", _("Prod")
