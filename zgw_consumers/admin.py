@@ -27,14 +27,6 @@ class ServiceAdmin(admin.ModelAdmin):
 
         return obj.connection_check
 
-    def get_fields(self, request: HttpRequest, obj: models.Model | None = None):
-        fields = super().get_fields(request, obj=obj)
-        if get_setting("ZGW_CONSUMERS_IGNORE_OAS_FIELDS"):
-            assert isinstance(fields, list)
-            fields.remove("oas")
-            fields.remove("oas_file")
-        return fields
-
     def formfield_for_dbfield(self, db_field, request, **kwargs):
         if db_field.name == "nlx":
             return get_nlx_field(db_field, request, **kwargs)
