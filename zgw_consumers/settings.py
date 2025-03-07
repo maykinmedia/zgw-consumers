@@ -5,7 +5,6 @@ from .constants import NLXDirectories
 
 NLX_DIRECTORY_URLS = {
     NLXDirectories.demo: "https://demo-directory-api.commonground.acc.utrecht.nl/",
-    NLXDirectories.preprod: "https://directory.preprod.nlx.io/",
     NLXDirectories.prod: "https://directory-api.commonground.utrecht.nl/",
 }
 
