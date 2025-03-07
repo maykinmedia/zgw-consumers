@@ -66,5 +66,4 @@ html_static_path = []
 intersphinx_mapping = {
     "requests": ("https://requests.readthedocs.io/en/latest/", None),
     "ape-pie": ("https://ape-pie.readthedocs.io/en/latest/", None),
-    "zds-client": ("https://gemma-zds-client.readthedocs.io/en/latest/", None),
 }
