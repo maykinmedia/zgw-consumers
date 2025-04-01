@@ -1,7 +1,6 @@
 import time
 
 import jwt
-import pytest
 import requests_mock
 from freezegun import freeze_time
 
@@ -10,9 +9,8 @@ from zgw_consumers.constants import AuthTypes
 from zgw_consumers.test.factories import ServiceFactory
 
 
-@pytest.mark.django_db
 def test_retry_request_on_403_auth_zgw():
-    service = ServiceFactory.create(
+    service = ServiceFactory.build(
         api_root="https://example.com/",
         auth_type=AuthTypes.zgw,
         client_id="my-client-id",
@@ -40,20 +38,29 @@ def test_retry_request_on_403_auth_zgw():
 
         first_request = history[0]
         first_token = first_request.headers["Authorization"].removeprefix("Bearer ")
-        time1 = jwt.decode(first_token, service.secret, algorithms=["HS256"])["iat"]
+        time1 = jwt.decode(
+            first_token,
+            service.secret,
+            algorithms=["HS256"],
+            options={"verify_exp": False},
+        )["iat"]
 
         assert time1 == initial_time
 
         second_request = history[1]
         second_token = second_request.headers["Authorization"].removeprefix("Bearer ")
-        time2 = jwt.decode(second_token, service.secret, algorithms=["HS256"])["iat"]
+        time2 = jwt.decode(
+            second_token,
+            service.secret,
+            algorithms=["HS256"],
+            options={"verify_exp": False},
+        )["iat"]
 
         assert time2 == later_time
 
 
-@pytest.mark.django_db
 def test_retry_request_on_403_auth_api_key():
-    service = ServiceFactory.create(
+    service = ServiceFactory.build(
         api_root="https://example.com/",
         auth_type=AuthTypes.api_key,
         header_key="Some-Auth-Header",
@@ -78,9 +85,8 @@ def test_retry_request_on_403_auth_api_key():
         assert len(history) == 1
 
 
-@pytest.mark.django_db
 def test_retry_request_on_403_no_auth():
-    service = ServiceFactory.create(
+    service = ServiceFactory.build(
         api_root="https://example.com/",
         auth_type=AuthTypes.no_auth,
     )
