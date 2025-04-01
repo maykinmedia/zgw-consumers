@@ -1,0 +1,8 @@
+# Dependencies for type checking (in CI, and locally)
+pyright
+django~=4.2.0
+django-stubs
+django-stubs-ext
+djangorestframework-stubs
+types-pyyaml
+types-requests
