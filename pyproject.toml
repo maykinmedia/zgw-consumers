@@ -50,9 +50,6 @@ db = [
 drf = [
     "djangorestframework",
 ]
-zds-client = [
-    "gemma-zds-client>=2.0.0",
-]
 setup-configuration = [
     "django-setup-configuration>=0.6.0",
 ]
