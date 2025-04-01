@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.37.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-13 18:00+0200\n"
+"POT-Creation-Date: 2025-04-01 08:04-0500\n"
 "PO-Revision-Date: 2022-05-17 09:40+02:00\n"
 "Last-Translator: Sergei Maertens <sergei@maykinmedia.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -99,10 +99,6 @@ msgid "Demo"
 msgstr ""
 
 #: constants.py:29
-msgid "Pre-prod"
-msgstr ""
-
-#: constants.py:30
 msgid "Prod"
 msgstr ""
 
@@ -151,22 +147,30 @@ msgid ""
 "A unique, human-friendly slug to identify this service. Primarily useful for "
 "cross-instance import/export."
 msgstr ""
-"Een unieke, voor mensen leesbare slug om deze service te identificeren. Hoofdzakelijk "
-"nuttig voor importeren en exporteren."
+"Een unieke, voor mensen leesbare identificatie om deze service te herkennen. "
+"Hoofdzakelijk nuttig voor importeren en exporteren."
 
-#: models/services.py:48
+#: models/services.py:49
 msgid "type"
 msgstr "type"
 
-#: models/services.py:49
+#: models/services.py:51
 msgid "api root url"
 msgstr "basisurl van de API"
 
-#: models/services.py:51
+#: models/services.py:53
+msgid ""
+"The root URL of the service that will be used to construct the URLs when "
+"making requests."
+msgstr ""
+"De basis-URL van de service om volledige URLs op te bouwen bij het maken van "
+"verzoeken."
+
+#: models/services.py:59
 msgid "connection check endpoint"
 msgstr "endpoint verbindingstest"
 
-#: models/services.py:53
+#: models/services.py:61
 msgid ""
 "A relative URL to perform a connection test. If left blank, the API root "
 "itself is used. This connection check is only performed in the admin when "
@@ -177,94 +181,142 @@ msgstr ""
 "verbindingstest wordt enkel uitgevoerd in de beheerpagina wanneer de "
 "instellingen weergegeven worden."
 
-#: models/services.py:69
+#: models/services.py:74
 msgid "authorization type"
 msgstr "authorisatietype"
 
-#: models/services.py:74
+#: models/services.py:78
+msgid "The type of authorization to use for this service."
+msgstr "De soort autorisatie die op deze service van toepassing is."
+
+#: models/services.py:85
+msgid ""
+"The client ID used to construct the JSON Web Token to connect with the "
+"service (only needed if auth type is `zgw`)."
+msgstr ""
+"De client-iD die in het JSON Web Token opgenomen wordt om zich te authenticeren "
+"bij de service (enkel nodig bij autorisatietype `zgw`)."
+
+#: models/services.py:93
+msgid ""
+"The secret used to construct the JSON Web Token to connect with the service "
+"(only needed if auth type is `zgw`)."
+msgstr ""
+"De geheime sleutel waarmee het JSON Web Token ondertekend wordt om zich bij de "
+"service te authenticeren (enkel nodig bij autorisatietype `zgw`)."
+
+#: models/services.py:98
+msgid "JWT expires after"
+msgstr "JWT vervalt na"
+
+#: models/services.py:101
+msgid ""
+"How long a JWT is valid for, in seconds. This controls the 'exp' claim (only "
+"used if auth type is `zgw`)."
+msgstr ""
+"Bepaalt de geldigheidsduur van een JWT, in seconden. Deze parameter heeft invloed "
+"op de 'exp' claim (enkel relevant bij autorisatietype `zgw`)."
+
+#: models/services.py:107
 msgid "header key"
 msgstr "header sleutel"
 
-#: models/services.py:75
+#: models/services.py:111
+msgid ""
+"The header key used to store the API key (only needed if auth type is "
+"`api_key`)."
+msgstr ""
+"De naam van de header die de API-key bevat (enkel nodig bij autorisatietype "
+"`api_key`)."
+
+#: models/services.py:115
 msgid "header value"
 msgstr "header waarde"
 
-#: models/services.py:77
+#: models/services.py:119
+msgid ""
+"The API key to connect with the service (only needed if auth type is "
+"`api_key`)."
+msgstr ""
+"De waarde voor de API-key header (enkel nodig bij autorisatietype "
+"`api_key`)."
+
+#: models/services.py:123
 msgid "NLX url"
 msgstr "NLX-url"
 
-#: models/services.py:77
-msgid "NLX (outway) address"
-msgstr "NLX-outway adres"
+#: models/services.py:123
+msgid "NLX (outway) address."
+msgstr "NLX (outway)-adres"
 
-#: models/services.py:80
+#: models/services.py:126
 msgid "user ID"
 msgstr "gebruikers-ID"
 
-#: models/services.py:84
+#: models/services.py:130
 msgid ""
 "User ID to use for the audit trail. Although these external API credentials "
 "are typically used bythis API itself instead of a user, the user ID is "
 "required."
 msgstr ""
 
-#: models/services.py:89
+#: models/services.py:135
 msgid "user representation"
 msgstr "gebruikersweergave"
 
-#: models/services.py:92
+#: models/services.py:138
 msgid "Human readable representation of the user."
 msgstr "Weergave van de gebruikersidentiteit voor mensen."
 
-#: models/services.py:98
+#: models/services.py:144
 msgid "The SSL/TLS certificate of the client"
 msgstr "Het SSL/TLS-certificaat van de client"
 
-#: models/services.py:106
+#: models/services.py:152
 msgid "The SSL/TLS certificate of the server"
 msgstr "Het SSL/TLS-certificaat van de server"
 
-#: models/services.py:111
+#: models/services.py:157
 msgid "timeout"
 msgstr "time-out"
 
-#: models/services.py:112
+#: models/services.py:158
 msgid "Timeout (in seconds) for HTTP calls."
 msgstr ""
 "Time-out (in seconden) voor HTTP-calls. Na het verstrijken wordt het verzoek "
 "afgebroken."
 
-#: models/services.py:119
+#: models/services.py:165
 msgid "service"
 msgstr "service"
 
-#: models/services.py:120
+#: models/services.py:166
 msgid "services"
 msgstr "services"
 
-#: models/services.py:145
+#: models/services.py:191
 msgid "If header_key is set, header_value must also be set"
 msgstr ""
 "Als de header_key opgegeven is, dan moet je ook een header-waarde opgeven"
 
-#: models/services.py:151
+#: models/services.py:197
 msgid "If header_value is set, header_key must also be set"
 msgstr ""
 "Als de header_value opgegeven is, dan moet je ook een header-sleutel opgeven"
 
-#: models/services.py:268
+#: models/services.py:314
 msgid "NLX directory"
 msgstr "NLX directory"
 
-#: models/services.py:271
+#: models/services.py:317
 msgid "NLX outway address"
 msgstr "NLX-outway adres"
 
-#: models/services.py:273
+#: models/services.py:319
 msgid "Example: http://my-outway.nlx:8080"
 msgstr "Voorbeeld: http://mijn-outway.nl:8080"
 
-#: models/services.py:279
+#: models/services.py:325
 msgid ""
 "Your organization TLS certificate for the NLX network. This is used to fetch "
 "the list of available services from the NLX directory API."
@@ -273,7 +325,7 @@ msgstr ""
 "gebruikt om de lijst van beschikbare services uit de NLX directory API op te "
 "halen."
 
-#: models/services.py:286
+#: models/services.py:332
 msgid ""
 "Your organization TLS private key for the NLX network. This is used to fetch "
 "the list of available services from the NLX directory API."
@@ -281,11 +333,11 @@ msgstr ""
 "De TLS-privésleutel voor het NLX-netwerk. Dit wordt gebruikt om de lijst van "
 "beschikbare services uit de NLX directory API op te halen."
 
-#: models/services.py:293
+#: models/services.py:339
 msgid "NLX configuration"
 msgstr "NLX-configuratie"
 
-#: models/services.py:324
+#: models/services.py:370
 msgid "Connection refused. Please provide a correct address."
 msgstr "Verbinding geweigerd. Geef een valide adres op."
 
