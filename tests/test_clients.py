@@ -40,13 +40,23 @@ def test_retry_request_on_403_auth_zgw():
 
         first_request = history[0]
         first_token = first_request.headers["Authorization"].removeprefix("Bearer ")
-        time1 = jwt.decode(first_token, service.secret, algorithms=["HS256"])["iat"]
+        time1 = jwt.decode(
+            first_token,
+            service.secret,
+            algorithms=["HS256"],
+            options={"verify_exp": False},
+        )["iat"]
 
         assert time1 == initial_time
 
         second_request = history[1]
         second_token = second_request.headers["Authorization"].removeprefix("Bearer ")
-        time2 = jwt.decode(second_token, service.secret, algorithms=["HS256"])["iat"]
+        time2 = jwt.decode(
+            second_token,
+            service.secret,
+            algorithms=["HS256"],
+            options={"verify_exp": False},
+        )["iat"]
 
         assert time2 == later_time
 

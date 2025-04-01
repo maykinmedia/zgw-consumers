@@ -99,10 +99,12 @@ class ZGWAuth(AuthBase):
         self._token = self._generate_token()
 
     def _generate_token(self) -> str:
+        iat = int(time.time())
         payload = {
             # standard claims
             "iss": self.service.client_id,
-            "iat": int(time.time()),
+            "iat": iat,
+            "exp": iat + self.service.jwt_valid_for,
             # custom claims
             "client_id": self.service.client_id,
             "user_id": self.service.user_id,
