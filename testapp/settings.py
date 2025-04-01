@@ -1,5 +1,7 @@
 import os
 
+DEBUG = True
+
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 
 SECRET_KEY = "so-secret-i-cant-believe-you-are-looking-at-this"
@@ -43,6 +45,7 @@ INSTALLED_APPS = [
     "django.contrib.auth",
     "django.contrib.sessions",
     "django.contrib.messages",
+    "django.contrib.staticfiles",
     "django.contrib.admin",
     "zgw_consumers",
     "simple_certmanager",
@@ -78,6 +81,8 @@ TEMPLATES = [
 ]
 
 ROOT_URLCONF = "testapp.urls"
+
+STATIC_URL = "/static/"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
