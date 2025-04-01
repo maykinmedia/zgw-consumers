@@ -2,7 +2,6 @@ import time
 from datetime import datetime, timezone
 
 import jwt
-import pytest
 import requests_mock
 from freezegun import freeze_time
 
@@ -11,9 +10,8 @@ from zgw_consumers.constants import AuthTypes
 from zgw_consumers.test.factories import ServiceFactory
 
 
-@pytest.mark.django_db
 def test_zgw_auth_refresh_token():
-    service = ServiceFactory.create(
+    service = ServiceFactory.build(
         api_root="https://example.com/",
         auth_type=AuthTypes.zgw,
         client_id="my-client-id",
