@@ -1,6 +1,27 @@
 Changes
 =======
 
+0.38.0 (2025-04-01)
+-------------------
+
+Feature release
+
+* [#109] 💥 The NLX directory URLs have been updated to their new location - Utrecht
+  takes care of hosting these. Note that the pre-production URL is removed, as there
+  were no services registered in there. If, for some reason, you still need the old URLs,
+  you can specify the ``NLX_DIRECTORY_URLS`` setting in your project to the old values.
+* [open-formulieren/open-forms#5193] The generated JWTs for ZGW APIs authentication now
+  have an ``exp`` claim indicating when the JWT is no longer valid. By default, it is
+  valid for 12 hours, but you can configure this per-service.
+* The service slug is now automatically populated from the label. This only affects
+  newly added services.
+
+**Cleanups**
+
+* The testapp settings have been updated so you can now properly use ``runserver`` to
+  view the admin.
+* Added some more missing Dutch translations.
+
 0.37.0 (2025-01-27)
 -------------------
 
