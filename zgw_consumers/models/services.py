@@ -70,7 +70,14 @@ class Service(RestAPIService):
         blank=True,
     )
 
-    # credentials for the API
+    auth_type = models.CharField(
+        _("authorization type"),
+        max_length=20,
+        choices=AuthTypes.choices,
+        default=AuthTypes.zgw,
+        help_text=_("The type of authorization to use for this service."),
+    )
+    # credentials for the API, ZGW auth
     client_id = models.CharField(
         max_length=255,
         blank=True,
@@ -87,13 +94,15 @@ class Service(RestAPIService):
             "the service (only needed if auth type is `zgw`)."
         ),
     )
-    auth_type = models.CharField(
-        _("authorization type"),
-        max_length=20,
-        choices=AuthTypes.choices,
-        default=AuthTypes.zgw,
-        help_text=_("The type of authorization to use for this service."),
+    jwt_valid_for = models.PositiveIntegerField(
+        _("JWT expires after"),
+        default=12 * 60 * 60,  # 12 hours as default
+        help_text=_(
+            "How long a JWT is valid for, in seconds. This controls the 'exp' claim "
+            "(only used if auth type is `zgw`)."
+        ),
     )
+    # credentials for the API, API key
     header_key = models.CharField(
         _("header key"),
         max_length=100,
