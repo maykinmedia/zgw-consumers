@@ -18,7 +18,7 @@ class ServiceAdmin(admin.ModelAdmin):
     list_filter = ("api_type", "auth_type")
     search_fields = ("label", "api_root", "nlx", "uuid", "slug")
     readonly_fields = ("get_connection_check",)
-    prepopulated_fields = {"slug": ["api_root"]}
+    prepopulated_fields = {"slug": ["label"]}
 
     @admin.display(description=_("Connection check status code"))
     def get_connection_check(self, obj):
