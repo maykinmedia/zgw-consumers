@@ -15,6 +15,7 @@ zgw_consumers:
     user_id: open-formulieren
     user_representation: Open Formulieren
     timeout: 5
+    jwt_valid_for: 42
     # NOT SUPPORTED YET
     # client_certificatie: ...
     # server_certificatie: ...

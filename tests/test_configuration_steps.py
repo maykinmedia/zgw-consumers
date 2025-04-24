@@ -29,6 +29,7 @@ def test_execute_configuration_step_success():
     assert objects_service.header_key == "Authorization"
     assert objects_service.header_value == "Token foo"
     assert objects_service.timeout == 10
+    assert objects_service.jwt_valid_for == 43200
 
     assert zaken_service.slug == "zaken-test"
     assert zaken_service.label == "Zaken API test"
@@ -38,6 +39,7 @@ def test_execute_configuration_step_success():
     assert zaken_service.client_id == "client"
     assert zaken_service.secret == "super-secret"
     assert zaken_service.timeout == 10
+    assert zaken_service.jwt_valid_for == 43200
 
 
 @pytest.mark.django_db
@@ -115,6 +117,7 @@ def test_execute_configuration_step_with_all_fields():
     assert objects_service.user_id == "open-formulieren"
     assert objects_service.user_representation == "Open Formulieren"
     assert objects_service.timeout == 5
+    assert objects_service.jwt_valid_for == 42
 
 
 @pytest.mark.django_db
@@ -138,6 +141,7 @@ def test_execute_configuration_step_idempotent():
         assert objects_service.user_id == "open-formulieren"
         assert objects_service.user_representation == "Open Formulieren"
         assert objects_service.timeout == 5
+        assert objects_service.jwt_valid_for == 42
 
     execute_single_step(
         ServiceConfigurationStep, yaml_source=CONFIG_FILE_PATH_ALL_FIELDS

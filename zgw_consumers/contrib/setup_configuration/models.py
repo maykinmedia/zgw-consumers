@@ -27,6 +27,7 @@ class SingleServiceConfigurationModel(ConfigurationModel):
                 "user_id",
                 "user_representation",
                 "timeout",
+                "jwt_valid_for",
             ]
         }
         extra_kwargs = {
