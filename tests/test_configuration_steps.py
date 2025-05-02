@@ -17,7 +17,7 @@ CONFIG_FILE_PATH_ALL_FIELDS = "tests/files/setup_config_services_all_fields.yaml
 def test_execute_configuration_step_success():
     execute_single_step(ServiceConfigurationStep, yaml_source=CONFIG_FILE_PATH)
 
-    assert Service.objects.count() == 2
+    assert Service.objects.count() == 3
 
     objects_service, zaken_service, producten_service = Service.objects.all()
 
@@ -60,9 +60,9 @@ def test_execute_configuration_step_update_existing():
 
     execute_single_step(ServiceConfigurationStep, yaml_source=CONFIG_FILE_PATH)
 
-    assert Service.objects.count() == 2
+    assert Service.objects.count() == 3
 
-    objects_service, zaken_service = Service.objects.all()
+    objects_service, zaken_service, producten_service = Service.objects.all()
 
     assert objects_service.slug == "objecten-test"
     assert objects_service.label == "Objecten API test"
@@ -71,6 +71,10 @@ def test_execute_configuration_step_update_existing():
     assert zaken_service.slug == "zaken-test"
     assert zaken_service.label == "Zaken API test"
     assert zaken_service.api_root == "http://zaken.local/api/v1/"
+
+    assert producten_service.slug == "producten-test"
+    assert producten_service.label == "Producten API test"
+    assert producten_service.api_root == "http://producten.local/api/v1/"
 
 
 @pytest.mark.django_db

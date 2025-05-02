@@ -161,6 +161,3 @@ class OIDCAuth(AuthBase):
     def __call__(self, request: PreparedRequest):
         request.headers["Authorization"] = f"Bearer {self._get_token()}"
         return request
-
-    def refresh_token(self):
-        self._get_token()
