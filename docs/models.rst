@@ -11,7 +11,7 @@ Concrete
 The ``Service`` model is aimed at RESTful services, ideally with an OpenAPI
 specification. It supports:
 
-* credentials: ZGW auth (JWT based), API key, basic auth, no auth
+* credentials: ZGW auth (JWT based), OIDC auth, API key, basic auth, no auth
 * custom/self-signed server certificates
 * mutual TLS (client certificate)
 * accessing over NLX

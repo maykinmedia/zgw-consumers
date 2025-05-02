@@ -29,6 +29,7 @@ class ServiceConfigurationStep(BaseConfigurationStep[ServicesConfigurationModel]
                     "auth_type": config.auth_type,
                     "client_id": config.client_id,
                     "secret": config.secret,
+                    "oidc_token_endpoint": config.oidc_token_endpoint,
                     "header_key": config.header_key,
                     "header_value": config.header_value,
                     "nlx": config.nlx,

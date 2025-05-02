@@ -55,6 +55,14 @@ class Service(RestAPIService):
         max_length=255,
         unique=True,
     )
+    oidc_token_endpoint = models.CharField(
+        _("OIDC token endpoint"),
+        help_text=_(
+            "The endpoint of the OIDC provider to get token (only needed if auth type is `oidc`)."
+        ),
+        max_length=255,
+        blank=True,
+    )
     api_connection_check_path = models.CharField(
         _("connection check endpoint"),
         help_text=_(

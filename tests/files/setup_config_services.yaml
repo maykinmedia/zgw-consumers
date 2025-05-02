@@ -16,3 +16,11 @@ zgw_consumers:
     auth_type: zgw
     client_id: client
     secret: super-secret
+  - identifier: producten-test
+    label: Producten API test
+    api_root: http://product.local/api/v1/
+    api_type: orc
+    auth_type: oidc
+    client_id: client
+    secret: super-secret
+    oidc_token_endpoint: https://oidc.example.com/token

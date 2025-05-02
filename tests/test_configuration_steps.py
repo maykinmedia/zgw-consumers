@@ -19,7 +19,7 @@ def test_execute_configuration_step_success():
 
     assert Service.objects.count() == 2
 
-    objects_service, zaken_service = Service.objects.all()
+    objects_service, zaken_service, producten_service = Service.objects.all()
 
     assert objects_service.slug == "objecten-test"
     assert objects_service.label == "Objecten API test"
@@ -38,6 +38,16 @@ def test_execute_configuration_step_success():
     assert zaken_service.client_id == "client"
     assert zaken_service.secret == "super-secret"
     assert zaken_service.timeout == 10
+
+    assert producten_service.slug == "producten-test"
+    assert producten_service.label == "Producten API test"
+    assert producten_service.api_root == "http://producten.local/api/v1/"
+    assert producten_service.api_type == APITypes.orc
+    assert producten_service.auth_type == AuthTypes.oidc
+    assert producten_service.client_id == "client"
+    assert producten_service.secret == "super-secret"
+    assert producten_service.oidc_token_endpoint == "https://oidc.example.com/token"
+    assert producten_service.timeout == 10
 
 
 @pytest.mark.django_db

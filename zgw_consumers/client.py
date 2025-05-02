@@ -1,9 +1,11 @@
 import logging
 import time
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
 from typing import Any, TypeVar
 
 import jwt
+import requests
 from ape_pie import APIClient
 from requests.auth import AuthBase
 from requests.models import PreparedRequest
@@ -69,6 +71,9 @@ class ServiceConfigAdapter:
             case AuthTypes.zgw:
                 kwargs["auth"] = ZGWAuth(service=self.service)
 
+            case AuthTypes.oidc:
+                kwargs["auth"] = OIDCAuth(service=self.service)
+
         # set timeout for the requests
         kwargs["timeout"] = self.service.timeout
 
@@ -119,3 +124,43 @@ class ZGWAuth(AuthBase):
 
     def refresh_token(self):
         self._token = self._generate_token()
+
+
+@dataclass
+class OIDCAuth(AuthBase):
+    """
+    :class:`requests.auth.AuthBase` implementation for OIDC APIs auth.
+    """
+
+    service: Service
+    expires_in: datetime = field(init=False, default=None)
+    access_token: str = field(init=False, default=None)
+
+    def __post_init__(self):
+        self._get_token()
+
+    def _get_token(self) -> str:
+        if self.expires_in and self.expires_in > datetime.now():
+            return self.access_token
+
+        data = {
+            "client_id": self.service.client_id,
+            "client_secret": self.service.secret,
+            "grant_type": "client_credentials",
+        }
+        response = requests.post(self.service.oidc_token_endpoint, data=data, timeout=5)
+
+        response.raise_for_status()
+
+        data = response.json()
+        self.access_token = data["access_token"]
+        self.expires_in = datetime.now() + timedelta(seconds=data.get("expires_in", 0))
+
+        return self.access_token
+
+    def __call__(self, request: PreparedRequest):
+        request.headers["Authorization"] = f"Bearer {self._get_token()}"
+        return request
+
+    def refresh_token(self):
+        self._get_token()

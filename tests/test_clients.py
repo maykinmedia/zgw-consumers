@@ -1,8 +1,10 @@
 import time
 
 import jwt
+import pytest
 import requests_mock
 from freezegun import freeze_time
+from requests import HTTPError
 
 from zgw_consumers.client import build_client
 from zgw_consumers.constants import AuthTypes
@@ -57,6 +59,29 @@ def test_retry_request_on_403_auth_zgw():
         )["iat"]
 
         assert time2 == later_time
+
+
+def test_403_on_odic_endpoint():
+    service = ServiceFactory.build(
+        api_root="https://example.com/",
+        auth_type=AuthTypes.oidc,
+        client_id="my-client-id",
+        secret="my-secret",
+        oidc_token_endpoint="https://keycloak.abc.com/token",
+    )
+
+    with requests_mock.Mocker() as m:
+        m.get(
+            "https://example.com/",
+            status_code=403,
+        )
+        m.post("https://keycloak.abc.com/token", status_code=403)
+
+        with pytest.raises(HTTPError):
+            client = build_client(service)
+
+            with pytest.raises(HTTPError):
+                client.get("https://example.com/")
 
 
 def test_retry_request_on_403_auth_api_key():

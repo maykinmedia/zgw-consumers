@@ -21,6 +21,7 @@ class SingleServiceConfigurationModel(ConfigurationModel):
                 "auth_type",
                 "client_id",
                 "secret",
+                "oidc_token_endpoint",
                 "header_key",
                 "header_value",
                 "nlx",
@@ -37,6 +38,11 @@ class SingleServiceConfigurationModel(ConfigurationModel):
             "api_connection_check_path": {"examples": ["/some/relative/path"]},
             "client_id": {"examples": ["modify-this"]},
             "secret": {"examples": ["modify-this"]},
+            "oidc_token_endpoint": {
+                "examples": [
+                    "https://keycloak.com/realms/example/protocol/openid-connect/token"
+                ]
+            },
             "header_key": {"examples": ["Authorization"]},
             "header_value": {"examples": ["Token <modify-this>"]},
             "nlx": {"examples": ["http://some-outway-adress.local:8080/"]},
