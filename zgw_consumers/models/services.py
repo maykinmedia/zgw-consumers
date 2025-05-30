@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 import socket
 import uuid
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Callable
 from urllib.parse import urlparse, urlsplit, urlunsplit
 
 from django.core.exceptions import ValidationError
@@ -161,7 +161,9 @@ class Service(RestAPIService):
 
     objects = ServiceManager()
 
-    class Meta:
+    get_api_type_display: Callable[[], str]
+
+    class Meta:  # pyright: ignore[reportIncompatibleVariableOverride]
         verbose_name = _("service")
         verbose_name_plural = _("services")
 
@@ -335,7 +337,7 @@ class NLXConfig(SingletonModel):
         blank=True,
     )
 
-    class Meta:
+    class Meta:  # pyright: ignore[reportIncompatibleVariableOverride]
         verbose_name = _("NLX configuration")
 
     @property
