@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging
 import socket
 import uuid
-from typing import TYPE_CHECKING
 from urllib.parse import urlparse, urlsplit, urlunsplit
 
 from django.core.exceptions import ValidationError
@@ -15,18 +14,15 @@ from privates.fields import PrivateMediaFileField
 from requests.exceptions import RequestException
 from simple_certmanager.models import Certificate
 from solo.models import SingletonModel
-from typing_extensions import Self, deprecated
+from typing_extensions import Self
 
 from zgw_consumers import settings as zgw_settings
 
 from ..constants import APITypes, AuthTypes, NLXDirectories
-from .abstract import RestAPIService
+from .abstract import Service as _Service
 from .validators import NonUrlValidator, validate_leading_slashes
 
 logger = logging.getLogger(__name__)
-
-if TYPE_CHECKING:
-    from ..legacy.client import ZGWClient
 
 
 class ServiceManager(models.Manager):
@@ -34,7 +30,7 @@ class ServiceManager(models.Manager):
         return self.get(slug=slug)
 
 
-class Service(RestAPIService):
+class Service(_Service):
     uuid = models.UUIDField(_("UUID"), default=uuid.uuid4)
     slug = models.SlugField(
         _("service slug"),
@@ -215,53 +211,6 @@ class Service(RestAPIService):
 
         return None
 
-    @deprecated(
-        "The `build_client` method is deprecated and will be removed in the next major release. "
-        "Instead, use the new `ape_pie.APIClient` or `zgw_consumers.nlx.NLXClient`.",
-        category=DeprecationWarning,
-        stacklevel=2,
-    )
-    def build_client(self, **claims):
-        """
-        Build an API client from the service configuration.
-        """
-        from ..legacy.client import ClientAuth, get_client_class
-
-        api_root = self.api_root
-        if self.nlx:
-            api_root = api_root.replace(self.api_root, self.nlx, 1)
-
-        Client = get_client_class()
-        client = Client(api_root, schema_url=self.oas, schema_file=self.oas_file)
-
-        if self.server_certificate:
-            client.server_certificate_path = (
-                self.server_certificate.public_certificate.path
-            )
-
-        if self.client_certificate:
-            client.client_certificate_path = (
-                self.client_certificate.public_certificate.path
-            )
-
-            if self.client_certificate.private_key:
-                client.client_private_key_path = (
-                    self.client_certificate.private_key.path
-                )
-
-        if self.auth_type == AuthTypes.zgw:
-            client.auth = ClientAuth(
-                client_id=self.client_id,
-                secret=self.secret,
-                user_id=self.user_id,
-                user_representation=self.user_representation,
-                **claims,
-            )
-        elif self.auth_type == AuthTypes.api_key:
-            client.auth_value = {self.header_key: self.header_value}
-
-        return client
-
     @classmethod
     def get_service(cls, url: str) -> Self | None:
         split_url = urlsplit(url)
@@ -279,34 +228,6 @@ class Service(RestAPIService):
                 return candidate
 
         return None
-
-    @classmethod
-    @deprecated(
-        "The `get_client` class method is deprecated and will be removed in the next "
-        "major release. Instead, use the `get_service` class method combined with "
-        "zgw_consumers.client.build_client.",
-        category=DeprecationWarning,
-        stacklevel=2,
-    )
-    def get_client(cls, url: str, **kwargs) -> ZGWClient | None:
-        service = cls.get_service(url)
-        if not service:
-            return None
-
-        return service.build_client(**kwargs)
-
-    @classmethod
-    @deprecated(
-        "The `get_auth_header` class method is deprecated and will be removed in 1.0.",
-        category=DeprecationWarning,
-        stacklevel=2,
-    )
-    def get_auth_header(cls, url: str, **kwargs) -> dict | None:
-        client = cls.get_client(url, **kwargs)
-        if not client:
-            return None
-
-        return client.auth_header
 
 
 class NLXConfig(SingletonModel):
