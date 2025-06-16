@@ -1,6 +1,11 @@
 Changes
 =======
 
+0.38.1 (2025-06-16)
+-------------------
+
+* [#112] Add ``jwt_valid_for`` to the django-setup-configuration model
+
 0.38.0 (2025-04-01)
 -------------------
 
