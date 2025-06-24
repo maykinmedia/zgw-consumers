@@ -61,3 +61,41 @@ def test_jwt_exp_configuration():
     exp = datetime.fromtimestamp(decoded["exp"], tz=timezone.utc)
     # 5 minutes later than "now"
     assert exp == datetime(2025, 4, 1, 11, 57, 13, tzinfo=timezone.utc)
+
+
+@freeze_time("2025-04-01T11:52:13Z")
+def test_oidc_auth():
+    service = ServiceFactory.build(
+        auth_type=AuthTypes.oidc,
+        client_id="my-client-id",
+        secret="my-secret",
+        oidc_token_endpoint="https://keycloak.abc.com/token",
+    )
+
+    with requests_mock.Mocker() as m:
+        token_request = m.post(
+            "https://keycloak.abc.com/token",
+            json={"access_token": "access-token", "expires_in": 600},
+        )
+        with build_client(service) as client:
+            m.get(requests_mock.ANY, status_code=200)
+
+            resp = client.get("irrelevant")
+            assert resp.status_code == 200
+
+            assert token_request.call_count == 1
+            auth_header = resp.request.headers["Authorization"]
+            assert auth_header == "Bearer access-token"
+
+            # use existing access token
+            resp = client.get("irrelevant")
+            assert resp.status_code == 200
+
+            assert token_request.call_count == 1  # token was reused.
+            auth_header = resp.request.headers["Authorization"]
+            assert auth_header == "Bearer access-token"
+
+            with freeze_time("2025-04-01T12:02:13Z"):
+                resp = client.get("irrelevant")
+                assert resp.status_code == 200
+                assert token_request.call_count == 2

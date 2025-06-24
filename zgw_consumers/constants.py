@@ -22,6 +22,7 @@ class AuthTypes(models.TextChoices):
     no_auth = "no_auth", _("No authorization")
     api_key = "api_key", _("API key")
     zgw = "zgw", _("ZGW client_id + secret")
+    oidc = "oidc", _("OIDC endpoints + client_id + secret")
 
 
 class NLXDirectories(models.TextChoices):
