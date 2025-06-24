@@ -1,6 +1,36 @@
 Changes
 =======
 
+1.0.0 (2025-06-24)
+------------------
+
+💥 Major release with breaking changes
+
+Maintenance:
+
+* Remove deprecated ``zgw_consumers.drf.serializers.APIModelSerializer``
+* Remove deprecated ``zgw_consumers.legacy`` module
+* Remove ``gemma-zds-client`` dependency
+* Remove deprecated fields and methods for ``Service`` model
+
+  * ``get_client`` and ``build_client`` (can be replaced with ``zgw_consumers.client.build_client`` together with ``ape_pie.APIClient`` or ``zgw_consumers.nlx.NLXClient``)
+  * ``get_auth_header``
+  * ``oas``
+  * ``oas_file``
+
+* Remove OAS test utils (moved to ``zgw-consumers-oas`` package)
+
+  * ``zgw_consumers.test.read_schema`` (can be replaced by ``zgw_consumers_oas.read_schema``)
+  * ``zgw_consumers.test.mock_service_oas_get`` (can be replaced by ``zgw_consumers_oas.mocks.mock_service_oas_get``)
+  * ``zgw_consumers.test.generate_oas_component`` (can be replaced by ``zgw_consumers_oas.generate_oas_component``)
+
+Removed deprecated settings:
+
+* ``ZGW_CONSUMERS_IGNORE_OAS_FIELDS``
+* ``ZGW_CONSUMERS_OAS_CACHE``
+* ``ZGW_CONSUMERS_CLIENT_CLASS``
+* ``ZGW_CONSUMERS_TEST_SCHEMA_DIRS`` (moved to ``zgw-consumers-oas``)
+
 0.38.1 (2025-06-16)
 -------------------
 
