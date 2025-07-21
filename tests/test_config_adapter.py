@@ -139,6 +139,33 @@ def test_zgw_auth():
     assert "Authorization" in headers
 
 
+def test_oidc_auth():
+    service = ServiceFactory.build(
+        api_root="https://example.com/",
+        oidc_token_endpoint="https://keycloak.abc.com/token",
+        auth_type=AuthTypes.oidc,
+        client_id="my-client-id",
+        secret="my-secret",
+    )
+    adapter = ServiceConfigAdapter(service)
+
+    with requests_mock.Mocker() as m:
+        m.post(
+            "https://keycloak.abc.com/token",
+            json={"access_token": "access-token", "expires_in": 600},
+        )
+        m.get("https://example.com/foo")
+
+        client = APIClient.configure_from(adapter)
+
+        assert client.auth is not None
+
+        client.get("foo")
+
+    headers = m.last_request.headers
+    assert "Authorization" in headers
+
+
 def test_default_timeout():
     service = ServiceFactory.build(api_root="https://example.com/")
     adapter = ServiceConfigAdapter(service)
