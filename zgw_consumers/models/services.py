@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import importlib.util
 import logging
 import socket
 import uuid
@@ -68,7 +69,7 @@ class Service(_Service):
 
     auth_type = models.CharField(
         _("authorization type"),
-        max_length=20,
+        max_length=30,
         choices=AuthTypes.choices,
         default=AuthTypes.zgw,
         help_text=_("The type of authorization to use for this service."),
@@ -79,7 +80,7 @@ class Service(_Service):
         blank=True,
         help_text=_(
             "The client ID used to construct the JSON Web Token to connect "
-            "with the service (only needed if auth type is `zgw`)."
+            "with the service (only needed if auth type is `zgw` or `oauth2_client_credentials`)."
         ),
     )
     secret = models.CharField(
@@ -87,7 +88,28 @@ class Service(_Service):
         blank=True,
         help_text=_(
             "The secret used to construct the JSON Web Token to connect with "
-            "the service (only needed if auth type is `zgw`)."
+            "the service (only needed if auth type is `zgw` or `oauth2_client_credentials`)."
+        ),
+    )
+    # necessary only for OAuth2 client credentials flow
+    oauth2_token_url = models.URLField(
+        _("OAuth2 token url"),
+        max_length=1000,
+        blank=True,
+        help_text=_(
+            "OAuth2 token endpoint for client credentials flow. "
+            "(Only needed if auth type is OAuth2)"
+        ),
+    )
+    # necessary only for OAuth2 client credentials flow
+    oauth2_scope = models.CharField(
+        _("OAuth2 scope"),
+        max_length=255,
+        blank=True,
+        help_text=_(
+            "Optional OAuth2 scope (space-separated). "
+            "Included in the token request body if defined. "
+            "(Only needed if auth type is OAuth2)"
         ),
     )
     jwt_valid_for = models.PositiveIntegerField(
@@ -184,14 +206,54 @@ class Service(_Service):
             raise ValidationError(
                 {
                     "header_value": _(
-                        "If header_key is set, header_value must also be set"
+                        "If field '{header_key}' is set, field '{header_value}' must also be set"
+                    ).format(
+                        header_key=self._meta.get_field("header_key").verbose_name,
+                        header_value=self._meta.get_field("header_value").verbose_name,
                     )
                 }
             )
         if not self.header_key and self.header_value:
             raise ValidationError(
-                {"header_key": _("If header_value is set, header_key must also be set")}
+                {
+                    "header_key": _(
+                        "If field '{header_value}' is set, field '{header_key}' must also be set"
+                    ).format(
+                        header_value=self._meta.get_field("header_value").verbose_name,
+                        header_key=self._meta.get_field("header_key").verbose_name,
+                    )
+                }
             )
+
+        # validate required fields for oauth2_client_credentials type
+        if self.auth_type == AuthTypes.oauth2_client_credentials:
+            if importlib.util.find_spec("requests_oauthlib") is None:
+                raise ValidationError(
+                    {
+                        "auth_type": _(
+                            "Additional libraries are required to use OAuth, which aren't installed. Select another method."
+                        )
+                    }
+                )
+
+            missing = [
+                field
+                for field in (
+                    "client_id",
+                    "secret",
+                    "oauth2_token_url",
+                )
+                if not getattr(self, field)
+            ]
+            if missing:
+                raise ValidationError(
+                    {
+                        field: _(
+                            "The field '{field_name}' is required for OAuth2 client credentials flow"
+                        ).format(field_name=self._meta.get_field(field).verbose_name)
+                        for field in missing
+                    }
+                )
 
     @property
     def connection_check(self) -> int | None:
