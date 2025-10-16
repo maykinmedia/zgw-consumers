@@ -71,12 +71,7 @@ class ServiceConfigAdapter:
             case AuthTypes.zgw:
                 kwargs["auth"] = ZGWAuth(service=self.service)
             case AuthTypes.oauth2_client_credentials:
-                if (
-                    getattr(self.service, "oauth2_token_url", None)
-                    and getattr(self.service, "client_id", None)
-                    and getattr(self.service, "secret", None)
-                ):
-                    kwargs["auth"] = OAuth2Auth(service=self.service)
+                kwargs["auth"] = OAuth2Auth(service=self.service)
 
         # set timeout for the requests
         kwargs["timeout"] = self.service.timeout
@@ -143,22 +138,14 @@ class OAuth2Auth(AuthBase):
 
     def _fetch_token(self) -> None:
         """Request a new access token using client credentials and add it to the cache."""
+        from oauthlib.oauth2 import BackendApplicationClient
+        from requests_oauthlib import OAuth2Session
+
         cache_key = f"oauth2_token:{self.service.uuid}"
         cached = cache.get(cache_key)
         if cached:
             self._token = cached
             return
-
-        # requests_oauthlib and oauthlib (as a dependency) are optional dependencies in
-        # in the library so we want to make sure they have been installed
-        try:
-            from oauthlib.oauth2 import BackendApplicationClient
-            from requests_oauthlib import OAuth2Session
-        except ImportError as exc:
-            raise ImportError(
-                "requests-oauthlib and oauthlib are required for OAuth2 authentication. "
-                "Install with `(uv) pip install requests-oauthlib`"
-            ) from exc
 
         client = BackendApplicationClient(
             client_id=self.service.client_id, scope=self.service.oauth2_scope

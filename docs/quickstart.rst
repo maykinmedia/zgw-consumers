@@ -20,6 +20,14 @@ Installation
 4. Configure `django-simple-certmanager <https://django-simple-certmanager.readthedocs.io/en/latest/quickstart.html>`_
    correctly
 
+.. note::
+    
+    If you want to support OAuth 2.0 authentication (client credentials flow), then install the library with the necessary extras:
+
+    .. code-block::
+
+        (uv) pip install zgw-consumers[oauth2]
+
 
 Usage
 -----
