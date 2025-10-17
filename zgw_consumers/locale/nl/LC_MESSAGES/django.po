@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-01 08:04-0500\n"
+"POT-Creation-Date: 2025-10-17 15:06+0200\n"
 "PO-Revision-Date: 2022-05-17 09:40+02:00\n"
 "Last-Translator: Sergei Maertens <sergei@maykinmedia.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -94,11 +94,15 @@ msgstr "API sleutel"
 msgid "ZGW client_id + secret"
 msgstr "ZGW client_id en secret"
 
-#: constants.py:28
+#: constants.py:27
+msgid "OAuth2 client credentials flow"
+msgstr "OAuth2 (client credentials flow)"
+
+#: constants.py:32
 msgid "Demo"
 msgstr ""
 
-#: constants.py:29
+#: constants.py:33
 msgid "Prod"
 msgstr ""
 
@@ -106,43 +110,19 @@ msgstr ""
 msgid "The url service is unknown."
 msgstr "De service voor de URL is onbekend."
 
-#: models/abstract.py:10
+#: models/abstract.py:6
 msgid "label"
 msgstr "label"
 
-#: models/abstract.py:18
-msgid "OAS url"
-msgstr ""
-
-#: models/abstract.py:18
-msgid "URL to OAS yaml file"
-msgstr "URL naar het OAS-bestand (YAML-formaat)"
-
-#: models/abstract.py:21
-msgid "OAS file"
-msgstr "OAS-bestand"
-
-#: models/abstract.py:23
-msgid "OAS yaml file"
-msgstr "OAS YAML-bestand"
-
-#: models/abstract.py:40 models/abstract.py:41
-msgid "Set either oas or oas_file, not both"
-msgstr "Geef de OAS URL of het OAS-bestand op, niet beide"
-
-#: models/abstract.py:47 models/abstract.py:48
-msgid "Set either oas or oas_file"
-msgstr "Geef de OAS URL of het OAS-bestand op"
-
-#: models/services.py:38
+#: models/services.py:35
 msgid "UUID"
 msgstr "UUID"
 
-#: models/services.py:40
+#: models/services.py:37
 msgid "service slug"
 msgstr "service slug"
 
-#: models/services.py:45
+#: models/services.py:42
 msgid ""
 "A unique, human-friendly slug to identify this service. Primarily useful for "
 "cross-instance import/export."
@@ -150,15 +130,15 @@ msgstr ""
 "Een unieke, voor mensen leesbare identificatie om deze service te herkennen. "
 "Hoofdzakelijk nuttig voor importeren en exporteren."
 
-#: models/services.py:49
+#: models/services.py:46
 msgid "type"
 msgstr "type"
 
-#: models/services.py:51
+#: models/services.py:48
 msgid "api root url"
 msgstr "basisurl van de API"
 
-#: models/services.py:53
+#: models/services.py:50
 msgid ""
 "The root URL of the service that will be used to construct the URLs when "
 "making requests."
@@ -166,11 +146,11 @@ msgstr ""
 "De basis-URL van de service om volledige URLs op te bouwen bij het maken van "
 "verzoeken."
 
-#: models/services.py:59
+#: models/services.py:56
 msgid "connection check endpoint"
 msgstr "endpoint verbindingstest"
 
-#: models/services.py:61
+#: models/services.py:58
 msgid ""
 "A relative URL to perform a connection test. If left blank, the API root "
 "itself is used. This connection check is only performed in the admin when "
@@ -181,47 +161,74 @@ msgstr ""
 "verbindingstest wordt enkel uitgevoerd in de beheerpagina wanneer de "
 "instellingen weergegeven worden."
 
-#: models/services.py:74
+#: models/services.py:71
 msgid "authorization type"
 msgstr "authorisatietype"
 
-#: models/services.py:78
+#: models/services.py:75
 msgid "The type of authorization to use for this service."
 msgstr "De soort autorisatie die op deze service van toepassing is."
 
-#: models/services.py:85
+#: models/services.py:82
 msgid ""
 "The client ID used to construct the JSON Web Token to connect with the "
-"service (only needed if auth type is `zgw`)."
+"service (only needed if auth type is `zgw` or `oauth2_client_credentials`)."
 msgstr ""
-"De client-iD die in het JSON Web Token opgenomen wordt om zich te authenticeren "
-"bij de service (enkel nodig bij autorisatietype `zgw`)."
+"De client-iD die in het JSON Web Token opgenomen wordt om zich te "
+"authenticeren bij de service (enkel nodig bij autorisatietype `zgw` of "
+"`oauth2_client_credentials`)."
 
-#: models/services.py:93
+#: models/services.py:90
 msgid ""
 "The secret used to construct the JSON Web Token to connect with the service "
-"(only needed if auth type is `zgw`)."
+"(only needed if auth type is `zgw` or `oauth2_client_credentials`)."
 msgstr ""
-"De geheime sleutel waarmee het JSON Web Token ondertekend wordt om zich bij de "
-"service te authenticeren (enkel nodig bij autorisatietype `zgw`)."
+"De geheime sleutel waarmee het JSON Web Token ondertekend wordt om zich bij "
+"de service te authenticeren (enkel nodig bij autorisatietype `zgw`of "
+"`oauth2_client_credentials`)."
 
-#: models/services.py:98
+#: models/services.py:96
+msgid "OAuth2 token url"
+msgstr "OAuth2 token-endpoint"
+
+#: models/services.py:100
+msgid ""
+"OAuth2 token endpoint for client credentials flow. (Only needed if auth type "
+"is OAuth2)"
+msgstr ""
+"De token-endpoint waar client-ID en secret uitgewisseld worden voor een token "
+"(enkel relevant voor de OAuth2-authenticatietype(n))."
+
+#: models/services.py:106
+msgid "OAuth2 scope"
+msgstr "OAuth2 scope"
+
+#: models/services.py:110
+msgid ""
+"Optional OAuth2 scope (space-separated). Included in the token request body "
+"if defined. (Only needed if auth type is OAuth2)"
+msgstr ""
+"Eventuele Oauth2 scope-namen om voor te autoriseren, gescheiden met spaties. "
+"Deze wordt meegestuurd bij het ophalen van een autorisatietoken (enkel relevant "
+"voor de OAuth2-authenticatietype(n))."
+
+#: models/services.py:116
 msgid "JWT expires after"
 msgstr "JWT vervalt na"
 
-#: models/services.py:101
+#: models/services.py:119
 msgid ""
 "How long a JWT is valid for, in seconds. This controls the 'exp' claim (only "
 "used if auth type is `zgw`)."
 msgstr ""
-"Bepaalt de geldigheidsduur van een JWT, in seconden. Deze parameter heeft invloed "
-"op de 'exp' claim (enkel relevant bij autorisatietype `zgw`)."
+"Bepaalt de geldigheidsduur van een JWT, in seconden. Deze parameter heeft "
+"invloed op de 'exp' claim (enkel relevant bij autorisatietype `zgw`)."
 
-#: models/services.py:107
+#: models/services.py:125
 msgid "header key"
 msgstr "header sleutel"
 
-#: models/services.py:111
+#: models/services.py:129
 msgid ""
 "The header key used to store the API key (only needed if auth type is "
 "`api_key`)."
@@ -229,94 +236,109 @@ msgstr ""
 "De naam van de header die de API-key bevat (enkel nodig bij autorisatietype "
 "`api_key`)."
 
-#: models/services.py:115
+#: models/services.py:133
 msgid "header value"
 msgstr "header waarde"
 
-#: models/services.py:119
+#: models/services.py:137
 msgid ""
 "The API key to connect with the service (only needed if auth type is "
 "`api_key`)."
 msgstr ""
-"De waarde voor de API-key header (enkel nodig bij autorisatietype "
-"`api_key`)."
+"De waarde voor de API-key header (enkel nodig bij autorisatietype `api_key`)."
 
-#: models/services.py:123
+#: models/services.py:141
 msgid "NLX url"
 msgstr "NLX-url"
 
-#: models/services.py:123
+#: models/services.py:141
 msgid "NLX (outway) address."
 msgstr "NLX (outway)-adres"
 
-#: models/services.py:126
+#: models/services.py:144
 msgid "user ID"
 msgstr "gebruikers-ID"
 
-#: models/services.py:130
+#: models/services.py:148
 msgid ""
 "User ID to use for the audit trail. Although these external API credentials "
 "are typically used bythis API itself instead of a user, the user ID is "
 "required."
 msgstr ""
 
-#: models/services.py:135
+#: models/services.py:153
 msgid "user representation"
 msgstr "gebruikersweergave"
 
-#: models/services.py:138
+#: models/services.py:156
 msgid "Human readable representation of the user."
 msgstr "Weergave van de gebruikersidentiteit voor mensen."
 
-#: models/services.py:144
+#: models/services.py:162
 msgid "The SSL/TLS certificate of the client"
 msgstr "Het SSL/TLS-certificaat van de client"
 
-#: models/services.py:152
+#: models/services.py:170
 msgid "The SSL/TLS certificate of the server"
 msgstr "Het SSL/TLS-certificaat van de server"
 
-#: models/services.py:157
+#: models/services.py:175
 msgid "timeout"
 msgstr "time-out"
 
-#: models/services.py:158
+#: models/services.py:176
 msgid "Timeout (in seconds) for HTTP calls."
 msgstr ""
 "Time-out (in seconden) voor HTTP-calls. Na het verstrijken wordt het verzoek "
 "afgebroken."
 
-#: models/services.py:165
+#: models/services.py:183
 msgid "service"
 msgstr "service"
 
-#: models/services.py:166
+#: models/services.py:184
 msgid "services"
 msgstr "services"
 
-#: models/services.py:191
-msgid "If header_key is set, header_value must also be set"
+#: models/services.py:209
+msgid "If field '{header_key}' is set, field '{header_value}' must also be set"
 msgstr ""
-"Als de header_key opgegeven is, dan moet je ook een header-waarde opgeven"
+"Als het veld '{header_key}' opgegeven is, dan moet je ook een waarde opgeven "
+"voor het '{header_value}'-veld."
 
-#: models/services.py:197
-msgid "If header_value is set, header_key must also be set"
+#: models/services.py:220
+msgid "If field '{header_value}' is set, field '{header_key}' must also be set"
 msgstr ""
-"Als de header_value opgegeven is, dan moet je ook een header-sleutel opgeven"
+"Als het veld '{header_value}' opgegeven is, dan moet je ook een waarde opgeven "
+"voor het '{header_key}'-veld."
 
-#: models/services.py:314
+#: models/services.py:234
+msgid ""
+"Additional libraries are required to use OAuth, which aren't installed. "
+"Select another method."
+msgstr ""
+"Er zijn extra systeembibliotheken nodig om OAuth2 te kunnen gebruiken, die niet "
+"beschikbaar zijn. Kies een ander type."
+
+#: models/services.py:252
+#, python-brace-format
+msgid "The field '{field_name}' is required for OAuth2 client credentials flow"
+msgstr ""
+"Het veld '{field_name}' is verplicht voor de OAuth2 OAuth2-authenticatietype(n)."
+
+#: models/services.py:297
 msgid "NLX directory"
 msgstr "NLX directory"
 
-#: models/services.py:317
+#: models/services.py:300
 msgid "NLX outway address"
 msgstr "NLX-outway adres"
 
-#: models/services.py:319
+#: models/services.py:302
 msgid "Example: http://my-outway.nlx:8080"
 msgstr "Voorbeeld: http://mijn-outway.nl:8080"
 
-#: models/services.py:325
+#: models/services.py:308
 msgid ""
 "Your organization TLS certificate for the NLX network. This is used to fetch "
 "the list of available services from the NLX directory API."
@@ -325,7 +347,7 @@ msgstr ""
 "gebruikt om de lijst van beschikbare services uit de NLX directory API op te "
 "halen."
 
-#: models/services.py:332
+#: models/services.py:315
 msgid ""
 "Your organization TLS private key for the NLX network. This is used to fetch "
 "the list of available services from the NLX directory API."
@@ -333,11 +355,11 @@ msgstr ""
 "De TLS-privésleutel voor het NLX-netwerk. Dit wordt gebruikt om de lijst van "
 "beschikbare services uit de NLX directory API op te halen."
 
-#: models/services.py:339
+#: models/services.py:322
 msgid "NLX configuration"
 msgstr "NLX-configuratie"
 
-#: models/services.py:370
+#: models/services.py:353
 msgid "Connection refused. Please provide a correct address."
 msgstr "Verbinding geweigerd. Geef een valide adres op."
 
