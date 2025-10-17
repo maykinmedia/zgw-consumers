@@ -1,5 +1,3 @@
-import uuid
-
 from django.utils.text import slugify
 
 import factory
@@ -27,7 +25,7 @@ class ServiceFactory(factory.django.DjangoModelFactory):
     api_root = factory.Faker("api_root")
     slug = factory.LazyAttribute(lambda o: slugify(o.api_root))
 
-    class Meta:
+    class Meta:  # pyright: ignore[reportIncompatibleVariableOverride]
         model = Service
         django_get_or_create = ("api_root",)
 

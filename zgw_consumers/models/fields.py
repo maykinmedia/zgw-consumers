@@ -1,4 +1,3 @@
-from typing import Optional
 from urllib.parse import urljoin
 
 from django.core import checks
@@ -12,14 +11,14 @@ class ServiceUrlDescriptor:
         self.field = field
 
     def get_base_url(self, base_val) -> str:
-        return getattr(base_val, "api_root", None)
+        return getattr(base_val, "api_root", "")
 
     def get_base_val(self, detail_url: str):
         from zgw_consumers.models import Service
 
         return Service.get_service(detail_url)
 
-    def __get__(self, instance: Model, cls=None) -> Optional[str]:
+    def __get__(self, instance: Model | None, cls=None) -> str | None:
         if instance is None:
             return None
 
@@ -30,7 +29,7 @@ class ServiceUrlDescriptor:
         # todo cache value
         return urljoin(base_url, relative_val)
 
-    def __set__(self, instance: Model, value: Optional[str]):
+    def __set__(self, instance: Model, value: str | None):
         if value is None and not self.field.null:
             raise ValueError(
                 "A 'None'-value is not allowed. Make the field "
@@ -64,9 +63,9 @@ class ServiceUrlField(Field):
     """
 
     # field flags
-    name = None
+    name: str
     concrete = False
-    column = None
+    column: str | None = None  # pyright: ignore[reportIncompatibleVariableOverride]
     db_column = None
 
     descriptor_class = ServiceUrlDescriptor
@@ -132,10 +131,10 @@ class ServiceUrlField(Field):
         return
 
     @property
-    def attname(self) -> str:
+    def attname(self) -> str:  # pyright: ignore[reportIncompatibleVariableOverride]
         return self.name
 
-    def get_attname_column(self):
+    def get_attname_column(self):  # pyright: ignore[reportIncompatibleMethodOverride]
         return self.attname, None
 
     def deconstruct(self):
@@ -150,13 +149,17 @@ class ServiceUrlField(Field):
 
     @property
     def _base_field(self) -> ForeignKey:
-        return self.model._meta.get_field(self.base_field)
+        field = self.model._meta.get_field(self.base_field)
+        assert isinstance(field, ForeignKey)
+        return field
 
     @property
     def _relative_field(self) -> CharField:
-        return self.model._meta.get_field(self.relative_field)
+        field = self.model._meta.get_field(self.relative_field)
+        assert isinstance(field, CharField)
+        return field
 
-    def check(self, **kwargs):
+    def check(self, **kwargs) -> list[checks.CheckMessage]:
         return [
             *self._check_field_name(),
             *self._check_base_field(),
