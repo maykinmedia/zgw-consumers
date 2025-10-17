@@ -8,6 +8,10 @@ Feature release that provides OAuth 2.0 client credentials flow.
 
 * [open-formulieren/open-forms#5688] Added ``OAuth 2.0 client credentials flow`` support.
 
+Maintenance:
+
+* Added support for Python 3.12 and Django 5.2 
+
 1.0.0 (2025-06-24)
 ------------------
 
