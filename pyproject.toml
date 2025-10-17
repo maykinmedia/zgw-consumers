@@ -50,6 +50,7 @@ db = [
 drf = [
     "djangorestframework",
 ]
+oauth2 = ["requests-oauthlib"]
 setup-configuration = [
     "django-setup-configuration>=0.6.0",
 ]

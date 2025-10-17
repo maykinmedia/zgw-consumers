@@ -3,6 +3,8 @@ import time
 from dataclasses import dataclass
 from typing import Any, TypeVar
 
+from django.core.cache import cache
+
 import jwt
 from ape_pie import APIClient
 from requests.auth import AuthBase
@@ -68,6 +70,8 @@ class ServiceConfigAdapter:
                 )
             case AuthTypes.zgw:
                 kwargs["auth"] = ZGWAuth(service=self.service)
+            case AuthTypes.oauth2_client_credentials:
+                kwargs["auth"] = OAuth2Auth(service=self.service)
 
         # set timeout for the requests
         kwargs["timeout"] = self.service.timeout
@@ -119,3 +123,56 @@ class ZGWAuth(AuthBase):
 
     def refresh_token(self):
         self._token = self._generate_token()
+
+
+@dataclass
+class OAuth2Auth(AuthBase):
+    """OAuth2 bearer token auth using requests-oauthlib (client credentials)."""
+
+    service: Service
+
+    _token: dict[str, Any] | None = None
+
+    def __post_init__(self) -> None:
+        self._fetch_token()
+
+    def _fetch_token(self) -> None:
+        """Request a new access token using client credentials and add it to the cache."""
+        from oauthlib.oauth2 import BackendApplicationClient
+        from requests_oauthlib import OAuth2Session
+
+        cache_key = f"oauth2_token:{self.service.uuid}"
+        cached = cache.get(cache_key)
+        if cached:
+            self._token = cached
+            return
+
+        client = BackendApplicationClient(
+            client_id=self.service.client_id, scope=self.service.oauth2_scope
+        )
+
+        with OAuth2Session(client=client) as session:
+            self._token = session.fetch_token(
+                token_url=self.service.oauth2_token_url,
+                client_id=self.service.client_id,
+                client_secret=self.service.secret,
+            )
+
+        # Determine TTL based on token's `expires_in`
+        ttl = self._token.get("expires_in", 1)
+        timeout = ttl - 10 if ttl > 10 else None
+        cache.set(cache_key, self._token, timeout=timeout)
+
+    def _ensure_valid_token(self) -> None:
+        """Refresh token if expired."""
+        if not self._token or self._token.get("expires_at", 0) <= time.time():
+            self._fetch_token()
+
+    def __call__(self, request: PreparedRequest) -> PreparedRequest:
+        """Attach Authorization header to outgoing requests."""
+        self._ensure_valid_token()
+
+        assert self._token is not None
+
+        request.headers["Authorization"] = f"Bearer {self._token['access_token']}"
+        return request
