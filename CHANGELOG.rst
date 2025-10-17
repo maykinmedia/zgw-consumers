@@ -1,6 +1,13 @@
 Changes
 =======
 
+1.1.0 (2025-10-17)
+-------------------
+
+Feature release that provides OAuth 2.0 client credentials flow.
+
+* [open-formulieren/open-forms#5688] Added ``OAuth 2.0 client credentials flow`` support.
+
 1.0.0 (2025-06-24)
 ------------------
 
