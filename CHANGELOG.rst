@@ -1,6 +1,16 @@
 Changes
 =======
 
+1.1.1 (2025-11-20)
+-------------------
+
+Patch release.
+
+* Switch to the updated Utrecht NLX directory URLs. The ``NLX_DIRECTORY_URLS`` defaults have been updated and can still be overridden in project settings. They can also be overridden with environment variables:
+
+  * ``NLX_DIRECTORY_URL_DEMO`` (default: ``https://nlx-directory-ui.commonground.acc.utrecht.nl/``)
+  * ``NLX_DIRECTORY_URL_PROD`` (default: ``https://nlx-directory-ui.commonground.utrecht.nl/``)
+
 1.1.0 (2025-10-17)
 -------------------
 
