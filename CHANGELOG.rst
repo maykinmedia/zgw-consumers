@@ -1,6 +1,13 @@
 Changes
 =======
 
+1.2.0 (2026-01-29)
+-------------------
+
+Minor feature release.
+
+* [#128] Add Service oauth2 attributes to setup configuration model
+
 1.1.2 (2026-01-26)
 -------------------
 
@@ -30,7 +37,7 @@ Feature release that provides OAuth 2.0 client credentials flow.
 
 Maintenance:
 
-* Added support for Python 3.12 and Django 5.2 
+* Added support for Python 3.12 and Django 5.2
 
 1.0.0 (2025-06-24)
 ------------------
