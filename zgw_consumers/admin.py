@@ -1,6 +1,4 @@
 from django.contrib import admin
-from django.db import models
-from django.http import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
 from privates.admin import PrivateMediaMixin
@@ -8,7 +6,6 @@ from solo.admin import SingletonModelAdmin
 
 from .admin_fields import get_nlx_field
 from .models.services import NLXConfig, Service
-from .settings import get_setting
 from .widgets import NoDownloadPrivateFileWidget
 
 

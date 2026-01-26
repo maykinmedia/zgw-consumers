@@ -73,3 +73,24 @@ def test_get_connection_opening_add_page(admin_client: Client, settings):
         '<label>Connection check status code:</label><div class="readonly">n/a</div>'
     )
     assertContains(response, connection_check_inner_html, html=True)
+
+
+def test_custom_exception_in_connection_check_is_handled(admin_client: Client):
+    service = ServiceFactory.create(
+        api_root="https://example.com/",
+        api_connection_check_path="foo",
+        auth_type=AuthTypes.zgw,
+        client_id="my-client-id",
+        secret="my-secret",
+    )
+
+    with requests_mock.Mocker() as m:
+        m.get("https://example.com/foo", exc=Exception)
+
+        url = reverse(
+            "admin:zgw_consumers_service_change", kwargs={"object_id": service.id}
+        )
+        response = admin_client.get(url)
+
+        connection_check_inner_html = '<label>Connection check status code:</label><div class="readonly">None</div>'
+        assertContains(response, connection_check_inner_html, html=True)

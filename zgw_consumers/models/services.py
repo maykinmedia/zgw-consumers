@@ -12,7 +12,6 @@ from django.db.models.functions import Length
 from django.utils.translation import gettext_lazy as _
 
 from privates.fields import PrivateMediaFileField
-from requests.exceptions import RequestException
 from simple_certmanager.models import Certificate
 from solo.models import SingletonModel
 from typing_extensions import Self
@@ -264,7 +263,10 @@ class Service(_Service):
             return client.get(
                 self.api_connection_check_path or self.api_root
             ).status_code
-        except RequestException as e:
+        # Catching generic exceptions is not ideal but we cannot handle this kind of
+        # situations in another way. This helps and informs the user about the problem
+        # of the service configuration instead of crashing the application (change page).
+        except Exception as e:
             logger.info(
                 "Encountered an error while performing the connection check to service %s",
                 self,
