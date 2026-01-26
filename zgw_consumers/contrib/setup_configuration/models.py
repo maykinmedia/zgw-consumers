@@ -28,6 +28,8 @@ class SingleServiceConfigurationModel(ConfigurationModel):
                 "user_representation",
                 "timeout",
                 "jwt_valid_for",
+                "oauth2_token_url",
+                "oauth2_scope",
             ]
         }
         extra_kwargs = {
