@@ -36,5 +36,7 @@ class ServiceConfigurationStep(BaseConfigurationStep[ServicesConfigurationModel]
                     "user_representation": config.user_representation,
                     "timeout": config.timeout,
                     "jwt_valid_for": config.jwt_valid_for,
+                    "oauth2_token_url": config.oauth2_token_url,
+                    "oauth2_scope": config.oauth2_scope,
                 },
             )
