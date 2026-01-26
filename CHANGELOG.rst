@@ -1,12 +1,22 @@
 Changes
 =======
 
+1.1.2 (2026-01-26)
+-------------------
+
+Patch release.
+
+* [#124] Fixed crash in connection check when the OAUTH2 configuration is broken.
+* Fixed CI configuration issue that would install Django 6 instead of 5.2.
+
 1.1.1 (2025-11-20)
 -------------------
 
 Patch release.
 
-* Switch to the updated Utrecht NLX directory URLs. The ``NLX_DIRECTORY_URLS`` defaults have been updated and can still be overridden in project settings. They can also be overridden with environment variables:
+* Switch to the updated Utrecht NLX directory URLs. The ``NLX_DIRECTORY_URLS`` defaults
+  have been updated and can still be overridden in project settings. They can also be
+  overridden with environment variables:
 
   * ``NLX_DIRECTORY_URL_DEMO`` (default: ``https://nlx-directory-ui.commonground.acc.utrecht.nl/``)
   * ``NLX_DIRECTORY_URL_PROD`` (default: ``https://nlx-directory-ui.commonground.utrecht.nl/``)

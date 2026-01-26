@@ -5,7 +5,7 @@
 Welcome to ZGW Consumers' documentation!
 ========================================
 
-:Version: 1.1.1
+:Version: 1.1.2
 :Source: https://github.com/maykinmedia/zgw-consumers
 :Keywords: OpenAPI, Zaakgericht Werken, Common Ground, NLX
 
