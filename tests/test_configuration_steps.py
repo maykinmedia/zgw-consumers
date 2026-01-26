@@ -107,12 +107,17 @@ def test_execute_configuration_step_with_all_fields():
     assert objects_service.label == "Objecten API test"
     assert objects_service.api_root == "http://objecten.local/api/v1/"
     assert objects_service.api_type == APITypes.orc
-    assert objects_service.auth_type == AuthTypes.api_key
+    assert objects_service.auth_type == AuthTypes.oauth2_client_credentials
     assert objects_service.api_connection_check_path == "objects"
     assert objects_service.header_key == "Authorization"
     assert objects_service.header_value == "Token foo"
     assert objects_service.client_id == "client"
     assert objects_service.secret == "super-secret"
+    assert (
+        objects_service.oauth2_token_url
+        == "http://some-auth-server.local:8080/realms/master/protocol/openid-connect/token"
+    )
+    assert objects_service.oauth2_scope == "email profile"
     assert objects_service.nlx == "http://some-outway-adress.local:8080/"
     assert objects_service.user_id == "open-formulieren"
     assert objects_service.user_representation == "Open Formulieren"
@@ -131,7 +136,7 @@ def test_execute_configuration_step_idempotent():
         assert objects_service.label == "Objecten API test"
         assert objects_service.api_root == "http://objecten.local/api/v1/"
         assert objects_service.api_type == APITypes.orc
-        assert objects_service.auth_type == AuthTypes.api_key
+        assert objects_service.auth_type == AuthTypes.oauth2_client_credentials
         assert objects_service.api_connection_check_path == "objects"
         assert objects_service.header_key == "Authorization"
         assert objects_service.header_value == "Token foo"
