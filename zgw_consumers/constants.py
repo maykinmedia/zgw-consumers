@@ -5,15 +5,24 @@ from django.utils.translation import gettext_lazy as _
 class APITypes(models.TextChoices):
     ac = "ac", _("AC (Authorizations)")
     nrc = "nrc", _("NRC (Notifications)")
-
     zrc = "zrc", _("ZRC (Zaken)")
     ztc = "ztc", _("ZTC (Zaaktypen)")
     drc = "drc", _("DRC (Informatieobjecten)")
     brc = "brc", _("BRC (Besluiten)")
-
-    cmc = "cmc", _("Contactmomenten API")
-    kc = "kc", _("Klanten API")
+    rc = "rc", _("Referentielijsten API")
+    kic = "kic", _("Klantinteracties API")
+    oc = "oc", _("Organisatie API")
+    ic = "ic", _("Identiteit API")
+    pc = "pc", _("Producten API")
+    ptc = "ptc", _("Producttypen API")
     vrc = "vrc", _("Verzoeken API")
+    tc = "tc", _("Taken API")
+    bc = "bc", _("Berichten API")
+
+    # XXX: Deprecated choices, will be removed in the next major release
+    # Note: Update data migration to handle this change
+    cmc = "cmc", _("Contactmomenten API - (Deprecated)")
+    kc = "kc", _("Klanten API - (Deprecated)")
 
     orc = "orc", _("ORC (Overige)")
 
