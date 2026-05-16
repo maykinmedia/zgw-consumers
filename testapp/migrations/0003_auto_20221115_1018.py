@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
         migrations.AddConstraint(
             model_name="case",
             constraint=models.CheckConstraint(
-                check=models.Q(
+                condition=models.Q(
                     models.Q(
                         ("_casetype_api__isnull", True),
                         models.Q(

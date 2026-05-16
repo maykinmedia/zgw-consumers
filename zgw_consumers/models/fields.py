@@ -120,10 +120,10 @@ class ServiceUrlField(Field):
 
         if self.null:
             constraint = CheckConstraint(
-                name=constraint_name, check=both_empty | both_filled
+                name=constraint_name, condition=both_empty | both_filled
             )
         else:
-            constraint = CheckConstraint(name=constraint_name, check=both_filled)
+            constraint = CheckConstraint(name=constraint_name, condition=both_filled)
 
         options.constraints.append(constraint)
         # ensure this can be picked up by migrations by making it "explicitly defined"
