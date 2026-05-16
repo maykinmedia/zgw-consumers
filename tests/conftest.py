@@ -10,7 +10,7 @@ def api_client(request) -> APIClient:
     return client
 
 
-@pytest.fixture
+@pytest.fixture(autouse=True)
 def temp_private_root(tmp_path, settings):
     """
     Set up a custom private root location that gets cleared up after tests.
