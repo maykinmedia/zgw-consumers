@@ -14,4 +14,4 @@ default.
 
 ``NLX_DIRECTORY_URLS``
     Mapping of NLX directory environments to their (public) URLs. Defaults to the
-    directories documented on `nlx.io <https://nlx.io>`_.
+    directories documented on nlx.io.
