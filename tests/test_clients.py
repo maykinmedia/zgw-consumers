@@ -14,7 +14,7 @@ def test_retry_request_on_403_auth_zgw():
         api_root="https://example.com/",
         auth_type=AuthTypes.zgw,
         client_id="my-client-id",
-        secret="my-secret",
+        secret="my-secret-that-is-sufficiently-long-enough",
     )
 
     with requests_mock.Mocker() as m:

@@ -123,7 +123,7 @@ def test_zgw_auth():
         api_root="https://example.com/",
         auth_type=AuthTypes.zgw,
         client_id="my-client-id",
-        secret="my-secret",
+        secret="my-secret-that-is-sufficiently-long-enough",
     )
     adapter = ServiceConfigAdapter(service)
     client = APIClient.configure_from(adapter)
