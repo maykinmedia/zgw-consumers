@@ -4,6 +4,7 @@ include zgw_consumers/py.typed
 recursive-include zgw_consumers *.html
 recursive-include zgw_consumers *.txt
 recursive-include zgw_consumers *.po
+recursive-include zgw_consumers *.mo
 global-exclude __pycache__
 global-exclude *.py[co]
 
