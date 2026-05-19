@@ -60,8 +60,6 @@ setup-configuration = [
 testutils = [
     "Faker>=0.7.0",
     "factory-boy",
-    "requests-mock",
-    "pyyaml",
 ]
 tests = [
     "django-redis",
