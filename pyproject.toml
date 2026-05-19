@@ -62,18 +62,14 @@ testutils = [
     "factory-boy",
 ]
 tests = [
-    "django-redis",
     "pytest",
     "pytest-django",
     "requests-mock",
+    "pytest-cov",
     "freezegun",
     "tox",
     "ruff",
     "tabulate",
-    "pyquery",
-]
-coverage = [
-    "pytest-cov",
 ]
 docs = [
     "sphinx",
