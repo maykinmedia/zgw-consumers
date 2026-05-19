@@ -4,6 +4,7 @@ import importlib.util
 import logging
 import socket
 import uuid
+from typing import Self
 from urllib.parse import urlparse, urlsplit, urlunsplit
 
 from django.core.exceptions import ValidationError
@@ -14,7 +15,6 @@ from django.utils.translation import gettext_lazy as _
 from privates.fields import PrivateMediaFileField
 from simple_certmanager.models import Certificate
 from solo.models import SingletonModel
-from typing_extensions import Self
 
 from zgw_consumers import settings as zgw_settings
 
@@ -38,7 +38,8 @@ class Service(_Service):
         null=False,
         unique=True,
         help_text=_(
-            "A unique, human-friendly slug to identify this service. Primarily useful for cross-instance import/export."
+            "A unique, human-friendly slug to identify this service. Primarily useful "
+            "for cross-instance import/export."
         ),
         max_length=255,
     )
@@ -46,7 +47,8 @@ class Service(_Service):
     api_root = models.CharField(
         _("api root url"),
         help_text=_(
-            "The root URL of the service that will be used to construct the URLs when making requests."
+            "The root URL of the service that will be used to construct the URLs when "
+            "making requests."
         ),
         max_length=255,
         unique=True,
@@ -54,9 +56,9 @@ class Service(_Service):
     api_connection_check_path = models.CharField(
         _("connection check endpoint"),
         help_text=_(
-            "A relative URL to perform a connection test. If left blank, the API root itself is used. "
-            "This connection check is only performed in the admin when viewing the service "
-            "configuration."
+            "A relative URL to perform a connection test. If left blank, the API root "
+            "itself is used. This connection check is only performed in the admin when "
+            "viewing the service configuration."
         ),
         max_length=255,
         validators=[
@@ -79,7 +81,8 @@ class Service(_Service):
         blank=True,
         help_text=_(
             "The client ID used to construct the JSON Web Token to connect "
-            "with the service (only needed if auth type is `zgw` or `oauth2_client_credentials`)."
+            "with the service (only needed if auth type is `zgw` or "
+            "`oauth2_client_credentials`)."
         ),
     )
     secret = models.CharField(
@@ -87,7 +90,8 @@ class Service(_Service):
         blank=True,
         help_text=_(
             "The secret used to construct the JSON Web Token to connect with "
-            "the service (only needed if auth type is `zgw` or `oauth2_client_credentials`)."
+            "the service (only needed if auth type is `zgw` or "
+            "`oauth2_client_credentials`)."
         ),
     )
     # necessary only for OAuth2 client credentials flow
@@ -125,7 +129,8 @@ class Service(_Service):
         max_length=100,
         blank=True,
         help_text=_(
-            "The header key used to store the API key (only needed if auth type is `api_key`)."
+            "The header key used to store the API key (only needed if auth type is "
+            "`api_key`)."
         ),
     )
     header_value = models.CharField(
@@ -133,7 +138,8 @@ class Service(_Service):
         max_length=255,
         blank=True,
         help_text=_(
-            "The API key to connect with the service (only needed if auth type is `api_key`)."
+            "The API key to connect with the service (only needed if auth type is "
+            "`api_key`)."
         ),
     )
     nlx = models.URLField(
@@ -144,8 +150,9 @@ class Service(_Service):
         max_length=255,
         blank=True,
         help_text=_(
-            "User ID to use for the audit trail. Although these external API credentials are typically used by"
-            "this API itself instead of a user, the user ID is required."
+            "User ID to use for the audit trail. Although these external API "
+            "credentials are typically used by this API itself instead of a user, the "
+            "user ID is required."
         ),
     )
     user_representation = models.CharField(
@@ -205,7 +212,8 @@ class Service(_Service):
             raise ValidationError(
                 {
                     "header_value": _(
-                        "If field '{header_key}' is set, field '{header_value}' must also be set"
+                        "If field '{header_key}' is set, field '{header_value}' must "
+                        "also be set"
                     ).format(
                         header_key=self._meta.get_field("header_key").verbose_name,
                         header_value=self._meta.get_field("header_value").verbose_name,
@@ -216,7 +224,8 @@ class Service(_Service):
             raise ValidationError(
                 {
                     "header_key": _(
-                        "If field '{header_value}' is set, field '{header_key}' must also be set"
+                        "If field '{header_value}' is set, field '{header_key}' must "
+                        "also be set"
                     ).format(
                         header_value=self._meta.get_field("header_value").verbose_name,
                         header_key=self._meta.get_field("header_key").verbose_name,
@@ -230,7 +239,8 @@ class Service(_Service):
                 raise ValidationError(
                     {
                         "auth_type": _(
-                            "Additional libraries are required to use OAuth, which aren't installed. Select another method."
+                            "Additional libraries are required to use OAuth, which "
+                            "aren't installed. Select another method."
                         )
                     }
                 )
@@ -248,7 +258,8 @@ class Service(_Service):
                 raise ValidationError(
                     {
                         field: _(
-                            "The field '{field_name}' is required for OAuth2 client credentials flow"
+                            "The field '{field_name}' is required for OAuth2 client "
+                            "credentials flow"
                         ).format(field_name=self._meta.get_field(field).verbose_name)
                         for field in missing
                     }
@@ -265,10 +276,12 @@ class Service(_Service):
             ).status_code
         # Catching generic exceptions is not ideal but we cannot handle this kind of
         # situations in another way. This helps and informs the user about the problem
-        # of the service configuration instead of crashing the application (change page).
+        # of the service configuration instead of crashing the application (change
+        # page).
         except Exception as e:
             logger.info(
-                "Encountered an error while performing the connection check to service %s",
+                "Encountered an error while performing the connection check to "
+                "service %s",
                 self,
                 exc_info=e,
             )
@@ -350,7 +363,7 @@ class NLXConfig(SingletonModel):
             s.settimeout(nlx_outway_timeout)
             try:
                 s.connect((parsed.hostname, port))
-            except (OSError, ConnectionRefusedError):
+            except (OSError, ConnectionRefusedError) as exc:
                 raise ValidationError(
                     _("Connection refused. Please provide a correct address.")
-                )
+                ) from exc

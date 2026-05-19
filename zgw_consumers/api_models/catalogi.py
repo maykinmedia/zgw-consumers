@@ -1,7 +1,6 @@
 from dataclasses import dataclass, field
 from datetime import date, datetime
 from decimal import Decimal
-from typing import List, Optional, Union
 
 from dateutil.parser import parse
 from dateutil.relativedelta import relativedelta
@@ -46,8 +45,8 @@ class ZaakType(ZGWModel):
 
     omschrijving_generiek: str = ""
     toelichting: str = ""
-    servicenorm: Optional[relativedelta] = None
-    verlengingstermijn: Optional[relativedelta] = None
+    servicenorm: relativedelta | None = None
+    verlengingstermijn: relativedelta | None = None
     trefwoorden: list = field(default_factory=list)
     publicatietekst: str = ""
     verantwoordingsrelatie: list = field(default_factory=list)
@@ -59,7 +58,7 @@ class ZaakType(ZGWModel):
     roltypen: list = field(default_factory=list)
     deelzaaktypen: list = field(default_factory=list)
 
-    einde_geldigheid: Optional[date] = None
+    einde_geldigheid: date | None = None
     concept: bool = False
 
 
@@ -81,7 +80,7 @@ class InformatieObjectType(ZGWModel):
     omschrijving: str
     vertrouwelijkheidaanduiding: str
     begin_geldigheid: date
-    einde_geldigheid: Optional[date] = None
+    einde_geldigheid: date | None = None
     concept: bool = False
 
 
@@ -96,8 +95,8 @@ class ResultaatType(ZGWModel):
     omschrijving_generiek: str = ""
     toelichting: str = ""
     archiefnominatie: str = ""
-    archiefactietermijn: Optional[relativedelta] = None
-    brondatum_archiefprocedure: Optional[dict] = None
+    archiefactietermijn: relativedelta | None = None
+    brondatum_archiefprocedure: dict | None = None
 
 
 @dataclass
@@ -130,7 +129,7 @@ class Eigenschap(ZGWModel):
         super().__post_init__()
         self.specificatie = factory(EigenschapSpecificatie, self.specificatie)
 
-    def to_python(self, value: str) -> Union[str, Decimal, date, datetime]:
+    def to_python(self, value: str) -> str | Decimal | date | datetime:
         """
         Cast the string value into the appropriate python type based on the spec.
         """
@@ -153,17 +152,17 @@ class RolType(ZGWModel):
 class BesluitType(ZGWModel):
     url: str  # bug: not required according to OAS
     catalogus: str
-    zaaktypen: List[str]
+    zaaktypen: list[str]
     publicatie_indicatie: bool
-    informatieobjecttypen: List[str]
+    informatieobjecttypen: list[str]
     begin_geldigheid: date
 
     omschrijving: str = ""
     omschrijving_generiek: str = ""
     besluitcategorie: str = ""
-    reactietermijn: Optional[relativedelta] = None
+    reactietermijn: relativedelta | None = None
     publicatietekst: str = ""
-    publicatietermijn: Optional[relativedelta] = None
+    publicatietermijn: relativedelta | None = None
     toelichting: str = ""
-    einde_geldigheid: Optional[date] = None
+    einde_geldigheid: date | None = None
     concept: bool = False

@@ -1,5 +1,3 @@
-import uuid
-
 from django.utils.text import slugify
 
 import factory
@@ -11,8 +9,9 @@ from zgw_consumers.models import Service
 class ApiRootProvider(InternetProvider):
     def api_root(self) -> str:
         base = self.url()
-        # faker generates them with a trailing slash, but let's make sure this stays true
-        # zgw_consumers.Service normalizes api_root to append missing trailing slashes
+        # faker generates them with a trailing slash, but let's make sure this stays
+        # true # zgw_consumers.Service normalizes api_root to append missing trailing
+        # slashes
         if not base.endswith("/"):
             base = f"{base}/"
         page = self.uri_page()

@@ -7,7 +7,6 @@ import zgw_consumers.models.validators
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("zgw_consumers", "0020_service_timeout"),
     ]
@@ -18,7 +17,11 @@ class Migration(migrations.Migration):
             name="api_connection_check_path",
             field=models.CharField(
                 blank=True,
-                help_text="A relative URL to perform a connection test. If left blank, the API root itself is used. This connection check is only performed in the admin when viewing the service configuration.",
+                help_text=(
+                    "A relative URL to perform a connection test. If left blank, the "
+                    "API root itself is used. This connection check is only performed "
+                    "in the admin when viewing the service configuration."
+                ),
                 max_length=255,
                 validators=[
                     django.core.validators.RegexValidator(

@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("zgw_consumers", "0022_set_default_service_slug"),
     ]
@@ -14,7 +13,10 @@ class Migration(migrations.Migration):
             model_name="service",
             name="api_root",
             field=models.CharField(
-                help_text="The root URL of the service that will be used to construct the URLs when making requests.",
+                help_text=(
+                    "The root URL of the service that will be used to construct the "
+                    "URLs when making requests."
+                ),
                 max_length=255,
                 unique=True,
                 verbose_name="api root url",
@@ -40,7 +42,10 @@ class Migration(migrations.Migration):
             name="client_id",
             field=models.CharField(
                 blank=True,
-                help_text="The client ID used to construct the JSON Web Token to connect with the service (only needed if auth type is `zgw`).",
+                help_text=(
+                    "The client ID used to construct the JSON Web Token to connect "
+                    "with the service (only needed if auth type is `zgw`)."
+                ),
                 max_length=255,
             ),
         ),
@@ -49,7 +54,10 @@ class Migration(migrations.Migration):
             name="header_key",
             field=models.CharField(
                 blank=True,
-                help_text="The header key used to store the API key (only needed if auth type is `api_key`).",
+                help_text=(
+                    "The header key used to store the API key (only needed if auth "
+                    "type is `api_key`)."
+                ),
                 max_length=100,
                 verbose_name="header key",
             ),
@@ -59,7 +67,10 @@ class Migration(migrations.Migration):
             name="header_value",
             field=models.CharField(
                 blank=True,
-                help_text="The API key to connect with the service (only needed if auth type is `api_key`).",
+                help_text=(
+                    "The API key to connect with the service (only needed if auth "
+                    "type is `api_key`)."
+                ),
                 max_length=255,
                 verbose_name="header value",
             ),
@@ -79,7 +90,10 @@ class Migration(migrations.Migration):
             name="secret",
             field=models.CharField(
                 blank=True,
-                help_text="The secret used to construct the JSON Web Token to connect with the service (only needed if auth type is `zgw`).",
+                help_text=(
+                    "The secret used to construct the JSON Web Token to connect with "
+                    "the service (only needed if auth type is `zgw`)."
+                ),
                 max_length=255,
             ),
         ),

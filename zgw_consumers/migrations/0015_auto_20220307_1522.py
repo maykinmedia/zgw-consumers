@@ -40,7 +40,10 @@ class Migration(migrations.Migration):
                             ("key_pair", "Key-pair"),
                             ("cert_only", "Certificate only"),
                         ],
-                        help_text="Is this only a certificate or is there an associated private key?",
+                        help_text=(
+                            "Is this only a certificate or is there an associated "
+                            "private key?"
+                        ),
                         max_length=20,
                         verbose_name="type",
                     ),

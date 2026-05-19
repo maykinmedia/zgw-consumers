@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("zgw_consumers", "0024_alter_nlxconfig_directory"),
     ]
@@ -15,7 +14,10 @@ class Migration(migrations.Migration):
             name="jwt_valid_for",
             field=models.PositiveIntegerField(
                 default=43200,
-                help_text="How long a JWT is valid for, in seconds. This controls the 'exp' claim (only used if auth type is `zgw`).",
+                help_text=(
+                    "How long a JWT is valid for, in seconds. This controls the 'exp' "
+                    "claim (only used if auth type is `zgw`)."
+                ),
                 verbose_name="JWT expires after",
             ),
         ),

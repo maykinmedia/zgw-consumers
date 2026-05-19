@@ -1,5 +1,3 @@
-from typing import Optional, Tuple
-
 from django.db.models.fields.related_lookups import get_normalized_value
 from django.db.models.lookups import Exact as _Exact, In as _In
 
@@ -8,7 +6,7 @@ from zgw_consumers.models import Service
 from .fields import ServiceUrlField
 
 
-def decompose_value(value: str) -> Tuple[Optional[Service], Optional[str]]:
+def decompose_value(value: str) -> tuple[Service | None, str | None]:
     service = Service.get_service(value)
     if not service:
         return None, None
@@ -18,7 +16,7 @@ def decompose_value(value: str) -> Tuple[Optional[Service], Optional[str]]:
 
 
 class ServiceUrlFieldMixin:
-    def split_lhs(self, compiler, connection) -> Tuple[str, tuple, str, tuple]:
+    def split_lhs(self, compiler, connection) -> tuple[str, tuple, str, tuple]:
         target = self.lhs.target
         alias = self.lhs.alias
 
