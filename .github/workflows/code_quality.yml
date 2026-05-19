@@ -21,8 +21,7 @@ jobs:
     strategy:
       matrix:
         toxenv:
-          - isort
-          - black
+          - ruff
           - docs
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -33,7 +32,7 @@ jobs:
           python-version-file: 'pyproject.toml'
       - name: Install dependencies
         run: pip install tox tox-uv
-      - run: tox
+      - run: tox --colored=yes
         env:
           TOXENV: ${{ matrix.toxenv }}
           FORCE_COLOR: "1"

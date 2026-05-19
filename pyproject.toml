@@ -70,8 +70,7 @@ tests = [
     "requests-mock",
     "freezegun",
     "tox",
-    "isort",
-    "black",
+    "ruff",
     "tabulate",
     "pyquery",
 ]
@@ -89,14 +88,6 @@ release = [
 [tool.setuptools.packages.find]
 include = ["zgw_consumers*"]
 namespaces = false
-
-[tool.isort]
-profile = "black"
-combine_as_imports = true
-known_django = "django"
-known_first_party="zgw_consumers"
-sections=["FUTURE", "STDLIB", "DJANGO", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
-skip = ["env", ".tox", ".history"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -131,11 +122,35 @@ exclude_also = [
     "@(abc\\.)?abstractmethod",
     "raise NotImplementedError",
     "\\.\\.\\.",
-    "\\bpass\\b",
+    "\\bpass$",
 ]
 omit = [
     "zgw_consumers/migrations/*",
 ]
 
-[tool.coverage.html]
-directory = "cover"
+[tool.ruff.lint]
+extend-select = [
+    "UP",  # pyupgrade
+    "DJ",  # django
+    "LOG", # logging
+    "G",
+    "I",   # isort
+    "E",   # pycodestyle
+    "F",   # pyflakes
+    "PERF",# perflint
+    "B",   # flake8-bugbear
+]
+
+[tool.ruff.lint.isort]
+combine-as-imports = true
+section-order = [
+    "future",
+    "standard-library",
+    "django",
+    "third-party",
+    "first-party",
+    "local-folder",
+]
+
+[tool.ruff.lint.isort.sections]
+"django" = ["django"]
