@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from datetime import date
-from typing import Optional
 
 from .base import ZGWModel
 from .constants import VervalRedenen
@@ -18,12 +17,12 @@ class Besluit(ZGWModel):
     zaak: str = ""
     toelichting: str = ""
     bestuursorgaan: str = ""
-    vervaldatum: Optional[date] = None
+    vervaldatum: date | None = None
     vervalreden: str = ""
     vervalreden_weergave: str = ""
-    publicatiedatum: Optional[date] = None
-    verzenddatum: Optional[date] = None
-    uiterlijke_reactiedatum: Optional[date] = None
+    publicatiedatum: date | None = None
+    verzenddatum: date | None = None
+    uiterlijke_reactiedatum: date | None = None
 
     def get_vervalreden_display(self) -> str:
         return VervalRedenen.labels[self.vervalreden]

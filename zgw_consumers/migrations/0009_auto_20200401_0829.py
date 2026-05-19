@@ -12,7 +12,11 @@ class Migration(migrations.Migration):
             name="user_id",
             field=models.CharField(
                 blank=True,
-                help_text="User ID to use for the audit trail. Although these external API credentials are typically used bythis API itself instead of a user, the user ID is required.",
+                help_text=(
+                    "User ID to use for the audit trail. Although these external API "
+                    "credentials are typically used bythis API itself instead of a "
+                    "user, the user ID is required."
+                ),
                 max_length=255,
                 verbose_name="user ID",
             ),

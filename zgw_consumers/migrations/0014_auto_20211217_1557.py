@@ -17,7 +17,11 @@ class Migration(migrations.Migration):
             name="certificate",
             field=privates.fields.PrivateMediaFileField(
                 blank=True,
-                help_text="Your organization TLS certificate for the NLX network. This is used to fetch the list of available services from the NLX directory API.",
+                help_text=(
+                    "Your organization TLS certificate for the NLX network. This is "
+                    "used to fetch the list of available services from the NLX "
+                    "directory API."
+                ),
                 storage=privates.storages.PrivateMediaFileSystemStorage(),
                 upload_to="zgw-consumers/nlx/",
             ),
@@ -27,7 +31,11 @@ class Migration(migrations.Migration):
             name="certificate_key",
             field=privates.fields.PrivateMediaFileField(
                 blank=True,
-                help_text="Your organization TLS private key for the NLX network. This is used to fetch the list of available services from the NLX directory API.",
+                help_text=(
+                    "Your organization TLS private key for the NLX network. This is "
+                    "used to fetch the list of available services from the NLX "
+                    "directory API."
+                ),
                 storage=privates.storages.PrivateMediaFileSystemStorage(),
                 upload_to="zgw-consumers/nlx/",
             ),

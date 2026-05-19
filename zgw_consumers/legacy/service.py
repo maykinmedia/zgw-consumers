@@ -1,4 +1,3 @@
-from typing import List, Optional, Type
 from urllib.parse import parse_qs, urlparse
 
 from zds_client import Client
@@ -13,8 +12,8 @@ from zgw_consumers.models import Service
 def get_paginated_results(
     client: Client,
     resource: str,
-    minimum: Optional[int] = None,
-    test_func: Optional[callable] = None,
+    minimum: int | None = None,
+    test_func: callable | None = None,
     *args,
     **kwargs,
 ) -> list:
@@ -60,8 +59,8 @@ def _get_ztc_clients():
 
 
 def _fetch_list(
-    resource: str, clients: List[Client], model: Type[ZGWModel]
-) -> List[ZGWModel]:
+    resource: str, clients: list[Client], model: type[ZGWModel]
+) -> list[ZGWModel]:
     def _fetch(client: Client):
         results = get_paginated_results(client, resource)
         return results
@@ -73,7 +72,7 @@ def _fetch_list(
     return factory(model, flattened)
 
 
-def get_catalogi(clients: List[Client] = None):
+def get_catalogi(clients: list[Client] = None):
     if clients is None:
         clients = _get_ztc_clients()
 
@@ -81,8 +80,8 @@ def get_catalogi(clients: List[Client] = None):
 
 
 def get_informatieobjecttypen(
-    clients: List[Client] = None,
-) -> List[InformatieObjectType]:
+    clients: list[Client] = None,
+) -> list[InformatieObjectType]:
     """
     Retrieve all informatieobjecttypen for all catalogi.
     """

@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Optional
 
 import pytest
 
@@ -13,7 +12,7 @@ def test_absent_keys_for_optional_fields() -> None:
     @dataclass
     class TestModel(Model):
         required_field: str
-        optional_field: Optional[datetime] = None
+        optional_field: datetime | None = None
 
     data = {"requiredField": "a value"}
 

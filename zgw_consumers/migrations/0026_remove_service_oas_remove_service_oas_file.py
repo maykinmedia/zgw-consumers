@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("zgw_consumers", "0025_service_jwt_valid_for"),
     ]

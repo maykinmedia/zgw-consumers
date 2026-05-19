@@ -1,4 +1,3 @@
-from typing import Optional
 from urllib.parse import urljoin
 
 from django.core import checks
@@ -19,7 +18,7 @@ class ServiceUrlDescriptor:
 
         return Service.get_service(detail_url)
 
-    def __get__(self, instance: Model, cls=None) -> Optional[str]:
+    def __get__(self, instance: Model, cls=None) -> str | None:
         if instance is None:
             return None
 
@@ -30,7 +29,7 @@ class ServiceUrlDescriptor:
         # todo cache value
         return urljoin(base_url, relative_val)
 
-    def __set__(self, instance: Model, value: Optional[str]):
+    def __set__(self, instance: Model, value: str | None):
         if value is None and not self.field.null:
             raise ValueError(
                 "A 'None'-value is not allowed. Make the field "
@@ -46,7 +45,7 @@ class ServiceUrlDescriptor:
             base_val = self.get_base_val(value)
             if not base_val:
                 raise ValueError(
-                    "The base part of url %s is not found in 'Service' data" % value
+                    f"The base part of url {value} is not found in 'Service' data"
                 )
 
             relative_val = value[len(self.get_base_url(base_val)) :]
@@ -139,7 +138,7 @@ class ServiceUrlField(Field):
         return self.attname, None
 
     def deconstruct(self):
-        path = "%s.%s" % (self.__class__.__module__, self.__class__.__qualname__)
+        path = f"{self.__class__.__module__}.{self.__class__.__qualname__}"
         keywords = {
             "base_field": self.base_field,
             "relative_field": self.relative_field,
@@ -184,8 +183,8 @@ class ServiceUrlField(Field):
         except FieldDoesNotExist:
             return [
                 checks.Error(
-                    "The ServiceUrlField base_field references the nonexistent field '%s'."
-                    % self.base_field,
+                    "The ServiceUrlField base_field references the nonexistent field "
+                    f"'{self.base_field}'.",
                     obj=self,
                     id="zgw_consumers.E001",
                 )
@@ -196,8 +195,8 @@ class ServiceUrlField(Field):
             if not isinstance(field, ForeignKey):
                 return [
                     checks.Error(
-                        "'%s.%s' is not a ForeignKey."
-                        % (self.model._meta.object_name, self.base_field),
+                        f"'{self.model._meta.object_name}.{self.base_field}' is not a "
+                        "ForeignKey.",
                         obj=self,
                         id="zgw_consumers.E002",
                     )
@@ -205,8 +204,8 @@ class ServiceUrlField(Field):
             elif field.remote_field.model != Service:
                 return [
                     checks.Error(
-                        "'%s.%s' is not a ForeignKey to 'zgw_consumers.Service'."
-                        % (self.model._meta.object_name, self.base_field),
+                        f"'{self.model._meta.object_name}.{self.base_field}' is not a "
+                        "ForeignKey to 'zgw_consumers.Service'.",
                         obj=self,
                         id="zgw_consumers.E003",
                     )
@@ -223,8 +222,8 @@ class ServiceUrlField(Field):
         except FieldDoesNotExist:
             return [
                 checks.Error(
-                    "The ServiceUrlField relative_field references the nonexistent field '%s'."
-                    % self.relative_field,
+                    "The ServiceUrlField relative_field references the nonexistent "
+                    f"field '{self.relative_field}'.",
                     obj=self,
                     id="zgw_consumers.E004",
                 )

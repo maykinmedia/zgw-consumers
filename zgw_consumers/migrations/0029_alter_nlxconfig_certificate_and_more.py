@@ -6,7 +6,6 @@ import privates.fields
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("zgw_consumers", "0028_alter_service_api_type"),
     ]
@@ -17,7 +16,11 @@ class Migration(migrations.Migration):
             name="certificate",
             field=privates.fields.PrivateMediaFileField(
                 blank=True,
-                help_text="Your organization TLS certificate for the NLX network. This is used to fetch the list of available services from the NLX directory API.",
+                help_text=(
+                    "Your organization TLS certificate for the NLX network. This is "
+                    "used to fetch the list of available services from the NLX "
+                    "directory API."
+                ),
                 upload_to="zgw-consumers/nlx/",
             ),
         ),
@@ -26,7 +29,11 @@ class Migration(migrations.Migration):
             name="certificate_key",
             field=privates.fields.PrivateMediaFileField(
                 blank=True,
-                help_text="Your organization TLS private key for the NLX network. This is used to fetch the list of available services from the NLX directory API.",
+                help_text=(
+                    "Your organization TLS private key for the NLX network. This is "
+                    "used to fetch the list of available services from the NLX "
+                    "directory API."
+                ),
                 upload_to="zgw-consumers/nlx/",
             ),
         ),

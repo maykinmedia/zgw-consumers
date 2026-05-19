@@ -1,5 +1,6 @@
 import logging
-from typing import Optional, TypedDict
+from collections.abc import Callable
+from typing import TypedDict
 
 from django.http import HttpRequest
 
@@ -10,7 +11,7 @@ NOTSET = object()
 
 
 class cache_on_request:
-    def __init__(self, request: HttpRequest, key: str, callback: callable):
+    def __init__(self, request: HttpRequest, key: str, callback: Callable):
         self.request = request
         self.key = key
         self.callback = callback
@@ -42,17 +43,17 @@ class PaginatedResponseData(TypedDict):
 def pagination_helper(
     client: APIClient,
     paginated_data: PaginatedResponseData,
-    max_requests: Optional[int] = None,
+    max_requests: int | None = None,
     **kwargs,
 ):
     """
     Fetch results from a paginated API endpoint, and optionally limit the number of
-    requests to perform when fetching new pages by specifying the ``max_requests`` argument
+    requests to perform when fetching new pages by specifying the ``max_requests``
+    argument
     """
 
     def _iter(_data, num_requests=0):
-        for result in _data["results"]:
-            yield result
+        yield from _data["results"]
         if next_url := _data.get("next"):
             if max_requests and num_requests >= max_requests:
                 logger.info(

@@ -14,7 +14,10 @@ class Migration(migrations.Migration):
             name="oauth2_scope",
             field=models.CharField(
                 blank=True,
-                help_text="Optional OAuth2 scope (space-separated). Included in the token request body if defined. (Only needed if auth type is OAuth2)",
+                help_text=(
+                    "Optional OAuth2 scope (space-separated). Included in the token "
+                    "request body if defined. (Only needed if auth type is OAuth2)"
+                ),
                 max_length=255,
                 verbose_name="OAuth2 scope",
             ),
@@ -24,7 +27,10 @@ class Migration(migrations.Migration):
             name="oauth2_token_url",
             field=models.URLField(
                 blank=True,
-                help_text="OAuth2 token endpoint for client credentials flow. (Only needed if auth type is OAuth2)",
+                help_text=(
+                    "OAuth2 token endpoint for client credentials flow. (Only needed "
+                    "if auth type is OAuth2)"
+                ),
                 max_length=1000,
                 verbose_name="OAuth2 token url",
             ),
@@ -50,7 +56,11 @@ class Migration(migrations.Migration):
             name="client_id",
             field=models.CharField(
                 blank=True,
-                help_text="The client ID used to construct the JSON Web Token to connect with the service (only needed if auth type is `zgw` or `oauth2_client_credentials`).",
+                help_text=(
+                    "The client ID used to construct the JSON Web Token to connect "
+                    "with the service (only needed if auth type is `zgw` or "
+                    "`oauth2_client_credentials`)."
+                ),
                 max_length=255,
             ),
         ),
@@ -59,7 +69,11 @@ class Migration(migrations.Migration):
             name="secret",
             field=models.CharField(
                 blank=True,
-                help_text="The secret used to construct the JSON Web Token to connect with the service (only needed if auth type is `zgw` or `oauth2_client_credentials`).",
+                help_text=(
+                    "The secret used to construct the JSON Web Token to connect with "
+                    "the service (only needed if auth type is `zgw` or "
+                    "`oauth2_client_credentials`)."
+                ),
                 max_length=255,
             ),
         ),

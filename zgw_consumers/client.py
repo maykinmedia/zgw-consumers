@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 ClientT = TypeVar("ClientT", bound=APIClient)
 
 
-def build_client(
+def build_client[ClientT: APIClient](
     service: Service, client_factory: type[ClientT] = NLXClient, **kwargs
 ) -> ClientT:
     """
@@ -35,7 +35,8 @@ def build_client(
 
 @dataclass
 class ServiceConfigAdapter:
-    """An implementation of :class:`ape_pie.ConfigAdapter` that will extract session kwargs
+    """
+    An implementation of :class:`ape_pie.ConfigAdapter` that will extract session kwargs
     from a given :class:`zgw_consumers.models.Service`.
     """
 
@@ -137,7 +138,9 @@ class OAuth2Auth(AuthBase):
         self._fetch_token()
 
     def _fetch_token(self) -> None:
-        """Request a new access token using client credentials and add it to the cache."""
+        """
+        Request a new access token using client credentials and add it to the cache.
+        """
         from oauthlib.oauth2 import BackendApplicationClient
         from requests_oauthlib import OAuth2Session
 

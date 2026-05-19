@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from datetime import date, datetime
-from typing import Any, Optional
+from typing import Any
 
 from .base import ZGWModel
 from .catalogi import Eigenschap
@@ -20,12 +20,12 @@ class Zaak(ZGWModel):
 
     omschrijving: str = ""
     toelichting: str = ""
-    einddatum: Optional[date] = None
-    einddatum_gepland: Optional[date] = None
-    uiterlijke_einddatum_afdoening: Optional[date] = None
-    publicatiedatum: Optional[date] = None
-    status: Optional[str] = None
-    resultaat: Optional[str] = None
+    einddatum: date | None = None
+    einddatum_gepland: date | None = None
+    uiterlijke_einddatum_afdoening: date | None = None
+    publicatiedatum: date | None = None
+    status: str | None = None
+    resultaat: str | None = None
     relevante_andere_zaken: list = field(default_factory=list)
     zaakgeometrie: dict = field(default_factory=dict)
 
@@ -63,9 +63,9 @@ class ZaakEigenschap(ZGWModel):
     naam: str = ""
 
     def get_waarde(self) -> Any:
-        assert isinstance(
-            self.eigenschap, Eigenschap
-        ), "Ensure eigenschap has been resolved"
+        assert isinstance(self.eigenschap, Eigenschap), (
+            "Ensure eigenschap has been resolved"
+        )
         return self.eigenschap.to_python(self.waarde)
 
 
@@ -87,7 +87,7 @@ class Rol(ZGWModel):
     betrokkene: str = ""
     omschrijving: str = ""
     omschrijving_generiek: str = ""
-    registratiedatum: Optional[datetime] = None
+    registratiedatum: datetime | None = None
     indicatie_machtiging: str = ""
     betrokkene_identificatie: dict = field(default_factory=dict)
 
@@ -106,4 +106,4 @@ class ZaakInformatieObject(ZGWModel):
     aard_relatie_weergave: str = ""
     titel: str = ""
     beschrijving: str = ""
-    registratiedatum: Optional[datetime] = None
+    registratiedatum: datetime | None = None

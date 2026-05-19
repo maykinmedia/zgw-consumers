@@ -2,7 +2,7 @@
 Rewrite the URLs in anything that looks like a string, dict or list.
 """
 
-from typing import Any, List, Optional, Union
+from typing import Any
 
 from zds_client.client import Object
 
@@ -37,7 +37,7 @@ class NLXClientMixin:
 
     def request(
         self, path: str, operation: str, method="GET", expected_status=200, **kwargs
-    ) -> Union[List[Object], Object]:
+    ) -> list[Object] | Object:
         """
         Make the actual HTTP request.
         """
@@ -51,7 +51,7 @@ class NLXClientMixin:
         )
 
     def post_response(
-        self, pre_id: Any, response_data: Optional[Union[dict, list]] = None
+        self, pre_id: Any, response_data: dict | list | None = None
     ) -> None:
         """
         Rewrite from NLX -> canonical.

@@ -24,7 +24,6 @@ def set_service_slug_default_from_api_root(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("zgw_consumers", "0021_service_api_connection_check_path"),
     ]
@@ -49,7 +48,10 @@ class Migration(migrations.Migration):
             model_name="service",
             name="slug",
             field=models.SlugField(
-                help_text="A unique, human-friendly slug to identify this service. Primarily useful for cross-instance import/export.",
+                help_text=(
+                    "A unique, human-friendly slug to identify this service. "
+                    "Primarily useful for cross-instance import/export."
+                ),
                 unique=True,
                 verbose_name="service slug",
                 max_length=255,

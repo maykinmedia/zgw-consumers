@@ -1,5 +1,5 @@
 import time
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 from django.core.cache import cache
 
@@ -68,9 +68,9 @@ def test_jwt_exp_configuration():
     assert "exp" in decoded
     # https://www.rfc-editor.org/rfc/rfc7519#section-2 NumericDate (number of seconds
     # since epoch, in UTC)
-    exp = datetime.fromtimestamp(decoded["exp"], tz=timezone.utc)
+    exp = datetime.fromtimestamp(decoded["exp"], tz=UTC)
     # 5 minutes later than "now"
-    assert exp == datetime(2025, 4, 1, 11, 57, 13, tzinfo=timezone.utc)
+    assert exp == datetime(2025, 4, 1, 11, 57, 13, tzinfo=UTC)
 
 
 @pytest.fixture

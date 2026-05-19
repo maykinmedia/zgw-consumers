@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 from datetime import date
-from typing import Optional
 
 from .base import ZGWModel
 from .constants import VertrouwelijkheidsAanduidingen
@@ -20,17 +19,17 @@ class Document(ZGWModel):
 
     beschrijving: str = ""
     bestandsnaam: str = ""
-    bestandsomvang: Optional[int] = None
+    bestandsomvang: int | None = None
     formaat: str = ""  # noqa
-    indicatie_gebruiksrecht: Optional[dict] = None
-    inhoud: Optional[str] = None
-    integriteit: Optional[dict] = None
+    indicatie_gebruiksrecht: dict | None = None
+    inhoud: str | None = None
+    integriteit: dict | None = None
     link: str = ""
-    ondertekening: Optional[dict] = None
-    ontvangstdatum: Optional[date] = None
+    ondertekening: dict | None = None
+    ontvangstdatum: date | None = None
     status: str = ""
     versie: int = 1
-    verzenddatum: Optional[date] = None
+    verzenddatum: date | None = None
     locked: bool = False
 
     def get_vertrouwelijkheidaanduiding_display(self):

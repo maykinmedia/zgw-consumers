@@ -71,7 +71,7 @@ def test_model_access_empty():
 def test_queryset_eq():
     Service.objects.create(api_type=APITypes.ztc, api_root=CASETYPE_API_ROOT)
     case1 = Case.objects.create(casetype=f"{CASETYPE_API_ROOT}casetype/1")
-    case2 = Case.objects.create(casetype=f"{CASETYPE_API_ROOT}casetype/2")
+    Case.objects.create(casetype=f"{CASETYPE_API_ROOT}casetype/2")
 
     qs = Case.objects.filter(casetype=f"{CASETYPE_API_ROOT}casetype/1")
 
@@ -90,7 +90,7 @@ def test_queryset_eq_no_base():
 def test_queryset_in():
     Service.objects.create(api_type=APITypes.ztc, api_root=CASETYPE_API_ROOT)
     case1 = Case.objects.create(casetype=f"{CASETYPE_API_ROOT}casetype/1")
-    case2 = Case.objects.create(casetype=f"{CASETYPE_API_ROOT}casetype/2")
+    Case.objects.create(casetype=f"{CASETYPE_API_ROOT}casetype/2")
 
     qs = Case.objects.filter(
         casetype__in=[
