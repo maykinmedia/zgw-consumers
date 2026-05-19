@@ -18,6 +18,7 @@ python:
         - db
         - drf
         - setup-configuration
+        - testutils
 
 sphinx:
   configuration: docs/conf.py
