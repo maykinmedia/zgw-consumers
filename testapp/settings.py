@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.admin",
+    "privates",
     "zgw_consumers",
     "simple_certmanager",
     "solo",
@@ -74,7 +75,26 @@ TEMPLATES = [
 
 ROOT_URLCONF = "testapp.urls"
 
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+    },
+    "privates": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "OPTIONS": {
+            "location": os.path.join(BASE_DIR, "private-media"),
+            "base_url": "/private-media/",
+        },
+    },
+}
+
 STATIC_URL = "/static/"
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
+
+SENDFILE_ROOT = os.path.join(BASE_DIR, "private-media")
+SENDFILE_URL = "/private-media/"

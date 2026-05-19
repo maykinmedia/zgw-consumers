@@ -35,7 +35,7 @@ Usage
 In the Django admin, you can create:
 
 * ``Service`` instances to define your external APIs.
-* ``NLXConfig`` configuration for your `NLX <https://nlx.io/>`_ outway.
+* ``NLXConfig`` configuration for your NLX outway.
 
 Using ``ape-pie`` to interact with your service
 ***********************************************
