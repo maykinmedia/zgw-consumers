@@ -15,7 +15,7 @@ def test_get_connection_check_correct_status_code(admin_client: Client, settings
         api_connection_check_path="foo",
         auth_type=AuthTypes.zgw,
         client_id="my-client-id",
-        secret="my-secret",
+        secret="my-secret-that-is-sufficiently-long-enough",
     )
     with requests_mock.Mocker() as m:
         m.get("https://example.com/foo", status_code=401)
@@ -37,7 +37,7 @@ def test_get_connection_check_encountering_error(admin_client: Client, settings)
         api_connection_check_path="foo",
         auth_type=AuthTypes.zgw,
         client_id="my-client-id",
-        secret="my-secret",
+        secret="my-secret-that-is-sufficiently-long-enough",
     )
     with requests_mock.Mocker() as m:
         m.get("https://example.com/foo", exc=requests.RequestException)
@@ -58,7 +58,7 @@ def test_get_connection_check_not_configured(admin_client: Client, settings):
         api_root="https://example.com/",
         auth_type=AuthTypes.zgw,
         client_id="my-client-id",
-        secret="my-secret",
+        secret="my-secret-that-is-sufficiently-long-enough",
     )
     with requests_mock.Mocker() as m:
         m.get("https://example.com/", status_code=200)
@@ -90,7 +90,7 @@ def test_custom_exception_in_connection_check_is_handled(admin_client: Client):
         api_connection_check_path="foo",
         auth_type=AuthTypes.zgw,
         client_id="my-client-id",
-        secret="my-secret",
+        secret="my-secret-that-is-sufficiently-long-enough",
     )
 
     with requests_mock.Mocker() as m:

@@ -15,7 +15,7 @@ def test_connection_check_service_model_badly_configured(settings):
         api_connection_check_path="foo",
         auth_type=AuthTypes.zgw,
         client_id="my-client-id",
-        secret="my-secret",
+        secret="my-secret-that-is-sufficiently-long-enough",
     )
 
     with requests_mock.Mocker() as m:
@@ -34,7 +34,7 @@ def test_connection_check_service_model_correctly_configured(settings):
         api_connection_check_path="foo",
         auth_type=AuthTypes.zgw,
         client_id="my-client-id",
-        secret="my-secret",
+        secret="my-secret-that-is-sufficiently-long-enough",
     )
 
     with requests_mock.Mocker() as m:

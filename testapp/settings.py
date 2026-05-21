@@ -98,3 +98,5 @@ MEDIA_URL = "/media/"
 
 SENDFILE_ROOT = os.path.join(BASE_DIR, "private-media")
 SENDFILE_URL = "/private-media/"
+
+FORMS_URLFIELD_ASSUME_HTTPS = True

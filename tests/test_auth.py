@@ -25,7 +25,7 @@ def test_zgw_auth_refresh_token():
         api_root="https://example.com/",
         auth_type=AuthTypes.zgw,
         client_id="my-client-id",
-        secret="my-secret",
+        secret="my-secret-that-is-sufficiently-long-enough",
     )
 
     with freeze_time("2024-11-27T10:00:00+02:00"):
@@ -46,7 +46,7 @@ def test_jwt_exp_configuration():
     service = ServiceFactory.build(
         auth_type=AuthTypes.zgw,
         client_id="my-client-id",
-        secret="my-secret",
+        secret="my-secret-that-is-sufficiently-long-enough",
         jwt_valid_for=5 * 60,  # 5 minutes
     )
 
@@ -64,7 +64,9 @@ def test_jwt_exp_configuration():
     type, token = auth_header.split(" ")
     assert type == "Bearer"
 
-    decoded = jwt.decode(token, "my-secret", algorithms=["HS256"])
+    decoded = jwt.decode(
+        token, "my-secret-that-is-sufficiently-long-enough", algorithms=["HS256"]
+    )
     assert "exp" in decoded
     # https://www.rfc-editor.org/rfc/rfc7519#section-2 NumericDate (number of seconds
     # since epoch, in UTC)
@@ -79,7 +81,7 @@ def oauth2_service():
         api_root="https://example.com/",
         auth_type=AuthTypes.oauth2_client_credentials,
         client_id="my-client-id",
-        secret="my-secret",
+        secret="my-secret-that-is-sufficiently-long-enough",
         oauth2_token_url="https://example.com/token/",
     )
 

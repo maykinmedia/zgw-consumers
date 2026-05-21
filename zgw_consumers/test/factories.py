@@ -3,6 +3,7 @@ from django.utils.text import slugify
 import factory
 from faker.providers.internet import Provider as InternetProvider
 
+from zgw_consumers.constants import AuthTypes
 from zgw_consumers.models import Service
 
 
@@ -25,6 +26,7 @@ class ServiceFactory(factory.django.DjangoModelFactory):
     label = factory.Sequence(lambda n: f"API-{n}")
     api_root = factory.Faker("api_root")
     slug = factory.LazyAttribute(lambda o: slugify(o.api_root))
+    auth_type = AuthTypes.no_auth
 
     class Meta:
         model = Service

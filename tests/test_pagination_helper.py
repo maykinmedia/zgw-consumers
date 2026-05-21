@@ -1,7 +1,7 @@
 import pytest
 
 from zgw_consumers.client import build_client
-from zgw_consumers.constants import APITypes
+from zgw_consumers.constants import APITypes, AuthTypes
 from zgw_consumers.models import Service
 from zgw_consumers.service import pagination_helper
 
@@ -38,6 +38,7 @@ def test_paginated_results(settings, requests_mock):
     service = Service.objects.create(
         api_type=APITypes.orc,
         api_root=BOOK_API_ROOT,
+        auth_type=AuthTypes.no_auth,
     )
     client = build_client(service)
 
@@ -65,6 +66,7 @@ def test_paginated_results_without_next(settings, requests_mock):
     service = Service.objects.create(
         api_type=APITypes.orc,
         api_root=BOOK_API_ROOT,
+        auth_type=AuthTypes.no_auth,
     )
     client = build_client(service)
 
@@ -115,6 +117,7 @@ def test_paginated_results_max_requests(settings, requests_mock):
     service = Service.objects.create(
         api_type=APITypes.orc,
         api_root=BOOK_API_ROOT,
+        auth_type=AuthTypes.no_auth,
     )
     client = build_client(service)
 

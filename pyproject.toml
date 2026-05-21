@@ -60,22 +60,16 @@ setup-configuration = [
 testutils = [
     "Faker>=0.7.0",
     "factory-boy",
-    "requests-mock",
-    "pyyaml",
 ]
 tests = [
-    "django-redis",
     "pytest",
     "pytest-django",
     "requests-mock",
+    "pytest-cov",
     "freezegun",
     "tox",
     "ruff",
     "tabulate",
-    "pyquery",
-]
-coverage = [
-    "pytest-cov",
 ]
 docs = [
     "sphinx",
