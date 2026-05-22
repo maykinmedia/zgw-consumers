@@ -253,7 +253,7 @@ class Migration(migrations.Migration):
                         blank=True,
                         help_text=(
                             "User ID to use for the audit trail. Although these "
-                            "external API credentials are typically used bythis API "
+                            "external API credentials are typically used by this API "
                             "itself instead of a user, the user ID is required."
                         ),
                         max_length=255,
