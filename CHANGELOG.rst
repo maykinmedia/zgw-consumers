@@ -1,6 +1,13 @@
 Changes
 =======
 
+2.0.1 (2026-05-22)
+------------------
+
+Bugfix release.
+
+* Fixed a formatting issue in the migration files.
+
 2.0.0 (2026-05-22)
 ------------------
 
