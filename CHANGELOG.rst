@@ -1,15 +1,60 @@
 Changes
 =======
 
+2.0.0 (2026-05-22)
+------------------
+
+Maintenance release.
+
+**💥 Breaking changes**
+
+* Dropped support for Python 3.11 and older.
+* Dropped support for Django 4.2.
+* Bumped the minimum required version of django-privates to 4.0.0.
+* Bumped the minimum required version of django-simple-certmanager to 4.0.0.
+
+**Deprecations**
+
+Two API types in ``zgw_consumers.constants.APITypes`` have been deprecated. They're
+scheduled for removal in 3.0: ``cmc`` and ``kc``. They're replaced with the customer
+interations API.
+
+**New features**
+
+* [#131] Extended the API types enum with new API types:
+
+    - Customer interactions API
+    - Product type & Product API
+    - Organisation & Identity API
+    - Reference lists API
+    - Berichten API
+    - Taken API
+    - Verzoeken API
+
+* Added support for django-privates 4.
+
+**Project maintenance**
+
+* Handled Django's breaking change in the ``CheckConstraint`` kwarg names.
+* Removed dead ``nlx.io`` URL references in the docs.
+* Improved supply chain security, added Zizmor and applied its suggestions.
+* Improved packaging of translation assets.
+* Replaced black/isort with Ruff.
+* Deleted dead/unused code.
+* Cleaned up the tests and testutils dependency groups, keeping only what's necessary.
+* Squashed the existing migrations. The next major release will remove the original
+  migrations.
+* Fixed warnings produced in test suite.
+
 1.2.0 (2026-01-29)
--------------------
+------------------
 
 Minor feature release.
 
 * [#128] Add Service oauth2 attributes to setup configuration model
 
 1.1.2 (2026-01-26)
--------------------
+------------------
 
 Patch release.
 
@@ -17,7 +62,7 @@ Patch release.
 * Fixed CI configuration issue that would install Django 6 instead of 5.2.
 
 1.1.1 (2025-11-20)
--------------------
+------------------
 
 Patch release.
 
@@ -29,7 +74,7 @@ Patch release.
   * ``NLX_DIRECTORY_URL_PROD`` (default: ``https://nlx-directory-ui.commonground.utrecht.nl/``)
 
 1.1.0 (2025-10-17)
--------------------
+------------------
 
 Feature release that provides OAuth 2.0 client credentials flow.
 
