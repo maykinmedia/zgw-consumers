@@ -95,7 +95,7 @@ jobs:
           enable-cache: false
       - name: Install Django and compile i18n messages
         run: |
-          uv pip install --system '.[tests]'
+          uv pip install --system '.[tests,db,drf,setup-configuration,testutils,oauth2]'
           django-admin compilemessages
         env:
           DJANGO_SETTINGS_MODULE: testapp.settings
