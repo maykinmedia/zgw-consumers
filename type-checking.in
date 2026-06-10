@@ -4,5 +4,6 @@ django~=5.2.0
 django-stubs
 django-stubs-ext
 djangorestframework-stubs
+types-factory-boy
 types-pyyaml
 types-requests

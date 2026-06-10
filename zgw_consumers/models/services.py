@@ -218,8 +218,8 @@ class Service(_Service):
                         "If field '{header_key}' is set, field '{header_value}' must "
                         "also be set"
                     ).format(
-                        header_key=self._meta.get_field("header_key").verbose_name,
-                        header_value=self._meta.get_field("header_value").verbose_name,
+                        header_key=self._meta.get_field("header_key").verbose_name,  # type: ignore header_key is not a GenericForeignKey
+                        header_value=self._meta.get_field("header_value").verbose_name,  # type: ignore header_value is not a GenericForeignKey
                     )
                 }
             )
@@ -230,8 +230,8 @@ class Service(_Service):
                         "If field '{header_value}' is set, field '{header_key}' must "
                         "also be set"
                     ).format(
-                        header_value=self._meta.get_field("header_value").verbose_name,
-                        header_key=self._meta.get_field("header_key").verbose_name,
+                        header_key=self._meta.get_field("header_key").verbose_name,  # type: ignore header_key is not a GenericForeignKey
+                        header_value=self._meta.get_field("header_value").verbose_name,  # type: ignore header_value is not a GenericForeignKey
                     )
                 }
             )
@@ -263,7 +263,7 @@ class Service(_Service):
                         field: _(
                             "The field '{field_name}' is required for OAuth2 client "
                             "credentials flow"
-                        ).format(field_name=self._meta.get_field(field).verbose_name)
+                        ).format(field_name=self._meta.get_field(field).verbose_name)  # type: ignore none of these fields are GenericForeignKey
                         for field in missing
                     }
                 )
