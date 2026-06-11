@@ -4,6 +4,7 @@ django~=5.2.0
 django-stubs
 django-stubs-ext
 djangorestframework-stubs
+# factory-boy currently ships with broken annotations.
+# These stubs are incomplete, but ok for what we use
 types-factory-boy
-types-pyyaml
 types-requests

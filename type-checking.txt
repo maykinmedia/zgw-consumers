@@ -41,7 +41,6 @@ types-factory-boy==0.4.1
     # via -r type-checking.in
 types-pyyaml==6.0.12.20240917
     # via
-    #   -r type-checking.in
     #   django-stubs
     #   djangorestframework-stubs
 types-requests==2.32.0.20241016
