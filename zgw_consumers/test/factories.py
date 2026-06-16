@@ -28,7 +28,7 @@ class ServiceFactory(factory.django.DjangoModelFactory):
     slug = factory.LazyAttribute(lambda o: slugify(o.api_root))
     auth_type = AuthTypes.no_auth
 
-    class Meta:
+    class Meta:  # pyright: ignore[reportIncompatibleVariableOverride]
         model = Service
         django_get_or_create = ("api_root",)
 

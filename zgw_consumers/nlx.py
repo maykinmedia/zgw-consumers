@@ -2,6 +2,7 @@ import json
 import logging
 from collections.abc import Iterable
 from itertools import groupby
+from typing import TypedDict
 
 import requests
 from ape_pie import APIClient
@@ -27,9 +28,12 @@ def _rewrite_url(value: str, rewrites: Iterable[tuple[str, str]]) -> str | None:
 
 class Rewriter:
     def __init__(self):
-        self.rewrites: list[tuple[str, str]] = Service.objects.exclude(
-            nlx=""
-        ).values_list("api_root", "nlx")
+        qs = Service.objects.exclude(nlx="").values_list("api_root", "nlx")
+        self._rewrites = qs
+
+    @property
+    def rewrites(self) -> list[tuple[str, str]]:
+        return list(self._rewrites)
 
     @property
     def reverse_rewrites(self) -> list[tuple[str, str]]:
@@ -160,7 +164,11 @@ class NLXClient(NLXMixin, RefreshTokenMixin, APIClient):
 
 
 Organization = dict[str, str]
-ServiceType = dict[str, str]
+
+
+class ServiceType(TypedDict):
+    name: str
+    organization: Organization
 
 
 def get_nlx_services() -> list[tuple[Organization, list[ServiceType]]]:

@@ -25,7 +25,7 @@ class Besluit(ZGWModel):
     uiterlijke_reactiedatum: date | None = None
 
     def get_vervalreden_display(self) -> str:
-        return VervalRedenen.labels[self.vervalreden]
+        return VervalRedenen(self.vervalreden).label
 
 
 @dataclass

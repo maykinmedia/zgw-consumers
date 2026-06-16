@@ -1,7 +1,16 @@
+from typing import TYPE_CHECKING
+
 from requests import Response
 
+if TYPE_CHECKING:
+    from ape_pie import APIClient
 
-class RefreshTokenMixin:
+    Protocol = APIClient
+else:
+    Protocol = object
+
+
+class RefreshTokenMixin(Protocol):
     def request(
         self, method: str | bytes, url: str | bytes, *args, **kwargs
     ) -> Response:

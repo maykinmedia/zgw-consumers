@@ -22,21 +22,21 @@ class ServiceConfigurationStep(BaseConfigurationStep[ServicesConfigurationModel]
             Service.objects.update_or_create(
                 slug=config.identifier,
                 defaults={
-                    "label": config.label,
-                    "api_type": config.api_type,
-                    "api_root": config.api_root,
-                    "api_connection_check_path": config.api_connection_check_path,
-                    "auth_type": config.auth_type,
-                    "client_id": config.client_id,
-                    "secret": config.secret,
-                    "header_key": config.header_key,
-                    "header_value": config.header_value,
-                    "nlx": config.nlx,
-                    "user_id": config.user_id,
-                    "user_representation": config.user_representation,
-                    "timeout": config.timeout,
-                    "jwt_valid_for": config.jwt_valid_for,
-                    "oauth2_token_url": config.oauth2_token_url,
-                    "oauth2_scope": config.oauth2_scope,
+                    "label": config.label,  # type: ignore setup_configuration pydantic meta programming
+                    "api_type": config.api_type,  # type: ignore setup_configuration pydantic meta programming
+                    "api_root": config.api_root,  # type: ignore setup_configuration pydantic meta programming
+                    "api_connection_check_path": config.api_connection_check_path,  # type: ignore setup_configuration pydantic meta programming
+                    "auth_type": config.auth_type,  # type: ignore setup_configuration pydantic meta programming
+                    "client_id": config.client_id,  # type: ignore setup_configuration pydantic meta programming
+                    "secret": config.secret,  # type: ignore setup_configuration pydantic meta programming
+                    "header_key": config.header_key,  # type: ignore setup_configuration pydantic meta programming
+                    "header_value": config.header_value,  # type: ignore setup_configuration pydantic meta programming
+                    "nlx": config.nlx,  # type: ignore setup_configuration pydantic meta programming
+                    "user_id": config.user_id,  # type: ignore setup_configuration pydantic meta programming
+                    "user_representation": config.user_representation,  # type: ignore setup_configuration pydantic meta programming
+                    "timeout": config.timeout,  # type: ignore setup_configuration pydantic meta programming
+                    "jwt_valid_for": config.jwt_valid_for,  # type: ignore setup_configuration pydantic meta programming
+                    "oauth2_token_url": config.oauth2_token_url,  # type: ignore setup_configuration pydantic meta programming
+                    "oauth2_scope": config.oauth2_scope,  # type: ignore setup_configuration pydantic meta programming
                 },
             )

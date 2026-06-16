@@ -1,4 +1,4 @@
-from django_setup_configuration.models import ConfigurationModel, DjangoModelRef
+from django_setup_configuration import ConfigurationModel, DjangoModelRef
 
 from zgw_consumers.models import Service
 

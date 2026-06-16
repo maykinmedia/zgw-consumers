@@ -1,2 +1,4 @@
 # Switch from black/isort to Ruff
 284f277cae2021a22cc87eb85af4874640168c8a
+# type checking fixes
+cc581fcbdb7eeedf7509a9f326b10a389c569f04
