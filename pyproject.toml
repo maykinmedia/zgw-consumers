@@ -148,3 +148,7 @@ section-order = [
 
 [tool.ruff.lint.isort.sections]
 "django" = ["django"]
+
+[tool.ruff.lint.per-file-ignores]
+"zgw_consumers/migrations/*" = ["RUF012"]
+"testapp/migrations/*" = ["RUF012"]
