@@ -1,3 +1,8 @@
+from collections.abc import Collection, Mapping
+from typing import ClassVar
+
+from django.db.models import Model
+
 from django_setup_configuration import ConfigurationModel, DjangoModelRef
 
 from zgw_consumers.models import Service
@@ -12,7 +17,7 @@ class SingleServiceConfigurationModel(ConfigurationModel):
     identifier: str = DjangoModelRef(Service, "slug", examples=["service-identifier"])
 
     class Meta:
-        django_model_refs = {
+        django_model_refs: ClassVar[dict[type[Model], Collection[str]]] = {
             Service: [
                 "label",
                 "api_type",
@@ -32,7 +37,7 @@ class SingleServiceConfigurationModel(ConfigurationModel):
                 "oauth2_scope",
             ]
         }
-        extra_kwargs = {
+        extra_kwargs: ClassVar[Mapping[str, Mapping[str, object]]] = {
             "label": {
                 "examples": ["Short and human-friendly description of this service"]
             },

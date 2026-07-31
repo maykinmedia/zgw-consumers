@@ -1,3 +1,6 @@
+from collections.abc import Sequence
+from typing import ClassVar
+
 from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 
@@ -15,7 +18,7 @@ class ServiceAdmin(admin.ModelAdmin):
     list_filter = ("api_type", "auth_type")
     search_fields = ("label", "api_root", "nlx", "uuid", "slug")
     readonly_fields = ("get_connection_check",)
-    prepopulated_fields = {"slug": ["label"]}
+    prepopulated_fields: ClassVar[dict[str, Sequence[str]]] = {"slug": ["label"]}
 
     @admin.display(description=_("Connection check status code"))
     def get_connection_check(self, obj):
