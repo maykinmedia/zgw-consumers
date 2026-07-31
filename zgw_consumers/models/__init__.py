@@ -4,7 +4,7 @@ from .services import NLXConfig, Service
 
 __all__ = [
     "Certificate",
-    "Service",
     "NLXConfig",
+    "Service",
     "ServiceUrlField",
 ]

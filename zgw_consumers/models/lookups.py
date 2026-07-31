@@ -105,9 +105,9 @@ class Exact(ServiceUrlFieldMixin, _Exact):
         # process lhs
         (
             base_lhs_sql,
-            base_lhs_params,
+            _base_lhs_params,
             relative_lhs_sql,
-            relative_lhs_params,
+            _relative_lhs_params,
         ) = self.split_lhs(compiler, connection)
 
         # process rhs
@@ -137,9 +137,9 @@ class In(ServiceUrlFieldMixin, _In):
         # process lhs
         (
             base_lhs_sql,
-            base_lhs_params,
+            _base_lhs_params,
             relative_lhs_sql,
-            relative_lhs_params,
+            _relative_lhs_params,
         ) = self.split_lhs(compiler, connection)
 
         # process rhs
@@ -147,7 +147,7 @@ class In(ServiceUrlFieldMixin, _In):
         rhs_sql = "IN (" + ", ".join(["(%s, %s)"] * len(rhs_params)) + ")"
 
         # combine
-        params = sum(rhs_params, [])
+        params = sum(rhs_params, [])  # noqa: RUF017
         sql = f"({base_lhs_sql}, {relative_lhs_sql}) {rhs_sql}"
 
         return sql, params

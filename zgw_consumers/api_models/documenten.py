@@ -20,7 +20,7 @@ class Document(ZGWModel):
     beschrijving: str = ""
     bestandsnaam: str = ""
     bestandsomvang: int | None = None
-    formaat: str = ""  # noqa
+    formaat: str = ""
     indicatie_gebruiksrecht: dict | None = None
     inhoud: str | None = None
     integriteit: dict | None = None

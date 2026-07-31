@@ -160,8 +160,6 @@ class NLXClient(NLXMixin, RefreshTokenMixin, APIClient):
     URLs with :external:ref:`an event hook <event-hooks>`.
     """
 
-    pass
-
 
 Organization = dict[str, str]
 
