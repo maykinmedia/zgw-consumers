@@ -18,7 +18,7 @@ class ServiceAdmin(admin.ModelAdmin):
     list_filter = ("api_type", "auth_type")
     search_fields = ("label", "api_root", "nlx", "uuid", "slug")
     readonly_fields = ("get_connection_check",)
-    prepopulated_fields: ClassVar[dict[str, Sequence[str]]] = {"slug": ["label"]}
+    prepopulated_fields: ClassVar[dict[str, Sequence[str]]] = {"slug": ["label"]}  # pyright: ignore[reportIncompatibleVariableOverride]
 
     @admin.display(description=_("Connection check status code"))
     def get_connection_check(self, obj):
