@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 from django.utils.text import slugify
 
 import factory
@@ -27,6 +29,14 @@ class ServiceFactory(factory.django.DjangoModelFactory):
     api_root = factory.Faker("api_root")
     slug = factory.LazyAttribute(lambda o: slugify(o.api_root))
     auth_type = AuthTypes.no_auth
+
+    # PyJWT >=2.13.0 doesn't accept empty keys when generating JWT
+    client_id = factory.LazyAttribute(
+        lambda service: str(uuid4()) if service.auth_type == AuthTypes.zgw else ""
+    )
+    secret = factory.LazyAttribute(
+        lambda service: str(uuid4()) if service.auth_type == AuthTypes.zgw else ""
+    )
 
     class Meta:  # pyright: ignore[reportIncompatibleVariableOverride]
         model = Service
