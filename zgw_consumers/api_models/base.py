@@ -17,7 +17,7 @@ from relativedeltafield.utils import parse_relativedelta
 from ._camel_case import underscoreize
 from .types import JSONObject
 
-__all__ = ["CONVERTERS", "factory", "Model", "ZGWModel"]
+__all__ = ["CONVERTERS", "Model", "ZGWModel", "factory"]
 
 
 def noop(value: Any) -> Any:

@@ -76,9 +76,8 @@ def test_retry_request_on_403_auth_api_key():
         with freeze_time("2024-11-27T10:00:00+02:00"):
             client = build_client(service)
 
-        with freeze_time("2024-11-27T15:00:00+02:00"):  # 5h later
-            with client:
-                client.get("https://example.com/")
+        with freeze_time("2024-11-27T15:00:00+02:00"), client:  # 5h later
+            client.get("https://example.com/")
 
         history = m.request_history
 
@@ -100,9 +99,8 @@ def test_retry_request_on_403_no_auth():
         with freeze_time("2024-11-27T10:00:00+02:00"):
             client = build_client(service)
 
-        with freeze_time("2024-11-27T15:00:00+02:00"):  # 5h later
-            with client:
-                client.get("https://example.com/")
+        with freeze_time("2024-11-27T15:00:00+02:00"), client:  # 5h later
+            client.get("https://example.com/")
 
         history = m.request_history
 
