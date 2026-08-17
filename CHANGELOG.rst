@@ -1,6 +1,14 @@
 Changes
 =======
 
+2.0.3 (2026-08-17)
+------------------
+
+Bugfix release.
+
+* Define default credentials for ``ServiceFactory`` if ``zgw`` auth is used, because
+  PyJWT >=2.13.0 no longer accepts empty secrets when generating JSON web tokens.
+
 2.0.2 (2026-05-22)
 ------------------
 
