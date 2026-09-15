@@ -33,8 +33,8 @@ Installation
 Requirements
 ------------
 
-* Python 3.10 or newer
-* Django 4.2 or newer
+* Python 3.12 or newer
+* Django 5.2 or newer
 
 
 Install

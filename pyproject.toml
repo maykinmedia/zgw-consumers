@@ -23,6 +23,7 @@ classifiers = [
     "Operating System :: Microsoft :: Windows",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 requires-python = ">=3.12"
@@ -54,7 +55,8 @@ drf = [
 ]
 oauth2 = ["requests-oauthlib"]
 setup-configuration = [
-    "django-setup-configuration>=0.6.0",
+    # TODO
+    "django-setup-configuration @ git+https://github.com/maykinmedia/django-setup-configuration.git@chore/upgrade-dependencies",
 ]
 # These are not the test requirements! They are extras to be installed when making use of `zgw_consumers.test`
 testutils = [
