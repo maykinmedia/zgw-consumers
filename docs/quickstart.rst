@@ -6,8 +6,8 @@ Installation
 
 **Requirements**
 
-* Python 3.10 or newer
-* Django 4.2+
+* Python 3.12 or newer
+* Django 5.2+
 
 1. Install from PyPI using ``pip``:
 
@@ -21,7 +21,7 @@ Installation
    correctly
 
 .. note::
-    
+
     If you want to support OAuth 2.0 authentication (client credentials flow), then install the library with the necessary extras:
 
     .. code-block::
