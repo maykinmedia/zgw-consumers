@@ -1,9 +1,13 @@
+import sys
+from typing import Literal
+
 import pytest
 
 from zgw_consumers.client import build_client
 from zgw_consumers.constants import APITypes, AuthTypes
 from zgw_consumers.models import Service
 from zgw_consumers.service import pagination_helper
+from zgw_consumers.utils import PaginatedResponseData
 
 pytestmark = pytest.mark.django_db
 
@@ -128,3 +132,35 @@ def test_paginated_results_max_requests(settings, requests_mock):
     all_data = pagination_helper(client, data, max_requests=1)
 
     assert list(all_data) == [{"name": "A"}, {"name": "B"}]
+
+
+@pytest.mark.xfail
+def test_paginated_results_max_requests_bigger_than_recursionlimit(
+    settings, requests_mock
+):
+    requests_mock.get(
+        f"{BOOK_API_ROOT}books",
+        json={
+            "count": 1_000_000,  # Dr. Evil
+            "next": f"{BOOK_API_ROOT}books",  # inifinite loop
+            "previous": None,
+            "results": [1],
+        },
+    )
+
+    service = Service.objects.create(
+        api_type=APITypes.orc,
+        api_root=BOOK_API_ROOT,
+        auth_type=AuthTypes.no_auth,
+    )
+    client = build_client(service)
+
+    response = client.get("books")
+    response.raise_for_status()
+    data = response.json()
+
+    limit = sys.getrecursionlimit()
+    all_data = pagination_helper(client, data, max_requests=limit)
+
+    # limit from the requests + 1 from the initial data
+    assert sum(all_data) == limit + 1  # type: ignore  # of the mock we *know* it returns Literal[1]
