@@ -24,7 +24,7 @@ def check_zgw_auth_secret(databases=None, **kwargs) -> list[CheckMessage]:
                 .filter(auth_type=AuthTypes.zgw, secret="")
                 .values_list("slug", flat=True)
             )
-        except DatabaseError:  # table doesn't exist (yet)
+        except DatabaseError:  # pragma: no cover # table doesn't exist (yet)
             continue
 
         errors += [
