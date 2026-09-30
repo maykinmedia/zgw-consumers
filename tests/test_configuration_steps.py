@@ -1,4 +1,5 @@
 import pytest
+from django_setup_configuration.exceptions import PrerequisiteFailed
 from django_setup_configuration.test_utils import execute_single_step
 
 from zgw_consumers.constants import APITypes, AuthTypes
@@ -80,6 +81,7 @@ def test_execute_configuration_step_with_required_fields():
     assert objects_service.api_root == "http://objecten.local/api/v1/"
     assert objects_service.api_type == APITypes.orc
     assert objects_service.auth_type == AuthTypes.zgw
+    assert objects_service.secret == "super-secret"
     assert objects_service.timeout == 10
 
     # Not required fields
@@ -87,10 +89,34 @@ def test_execute_configuration_step_with_required_fields():
     assert objects_service.header_key == ""
     assert objects_service.header_value == ""
     assert objects_service.client_id == ""
-    assert objects_service.secret == ""
     assert objects_service.nlx == ""
     assert objects_service.user_id == ""
     assert objects_service.user_representation == ""
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("auth_type", [None, "zgw"])
+def test_execute_configuration_step_zgw_auth_requires_secret(auth_type):
+    service = {
+        "identifier": "zaken-test",
+        "label": "Zaken API test",
+        "api_root": "http://zaken.local/api/v1/",
+        "api_type": "zrc",
+        "client_id": "some-client-id",
+    }
+    if auth_type is not None:  # zgw is the default
+        service["auth_type"] = auth_type
+
+    with pytest.raises(PrerequisiteFailed, match="'secret' is required"):
+        execute_single_step(
+            ServiceConfigurationStep,
+            object_source={
+                "zgw_consumers_config_enable": True,
+                "zgw_consumers": {"services": [service]},
+            },
+        )
+
+    assert not Service.objects.exists()
 
 
 @pytest.mark.django_db
