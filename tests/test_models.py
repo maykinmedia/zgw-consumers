@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 
 import pytest
@@ -59,3 +60,20 @@ def test_fields_making_up_natural_key_field_are_unique():
 
     with pytest.raises(IntegrityError):
         ServiceFactory.create(slug="i-should-be-unique")
+
+
+@pytest.mark.django_db
+def test_zgw_auth_requires_secret():
+    service = ServiceFactory.build(auth_type=AuthTypes.zgw, secret="")
+
+    with pytest.raises(ValidationError) as exc_info:
+        service.clean()
+
+    assert set(exc_info.value.message_dict) == {"secret"}
+
+
+@pytest.mark.django_db
+def test_zgw_auth_does_not_require_client_id():
+    service = ServiceFactory.build(auth_type=AuthTypes.zgw, client_id="")
+
+    service.clean()

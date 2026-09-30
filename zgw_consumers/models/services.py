@@ -236,6 +236,16 @@ class Service(_Service):
                 }
             )
 
+        # an empty secret can't be used as HMAC key to sign the JWT
+        if self.auth_type == AuthTypes.zgw and not self.secret:
+            raise ValidationError(
+                {
+                    "secret": _(
+                        "The field '{field_name}' is required for ZGW authorization"
+                    ).format(field_name=self._meta.get_field("secret").verbose_name)  # type: ignore secret is not a GenericForeignKey
+                }
+            )
+
         # validate required fields for oauth2_client_credentials type
         if self.auth_type == AuthTypes.oauth2_client_credentials:
             if importlib.util.find_spec("requests_oauthlib") is None:
