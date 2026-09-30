@@ -322,6 +322,11 @@ msgstr ""
 "Er zijn extra systeembibliotheken nodig om OAuth2 te kunnen gebruiken, die "
 "niet beschikbaar zijn. Kies een ander type."
 
+#: zgw_consumers/models/services.py:244
+#, python-brace-format
+msgid "The field '{field_name}' is required for ZGW authorization"
+msgstr "Het veld '{field_name}' is verplicht voor ZGW-authenticatie."
+
 #: zgw_consumers/models/services.py:252
 #, python-brace-format
 msgid "The field '{field_name}' is required for OAuth2 client credentials flow"
