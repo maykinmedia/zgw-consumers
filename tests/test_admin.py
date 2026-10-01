@@ -115,7 +115,7 @@ def test_custom_exception_in_connection_check_is_handled(admin_client: Client):
 @pytest.mark.parametrize(
     "secret,errors",
     [
-        ("", {"secret": ["The field 'secret' is required for ZGW authorization"]}),
+        ("", {"secret": ["The field 'secret' is required for ZGW authentication"]}),
         ("my-secret", {}),
     ],
 )

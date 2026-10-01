@@ -324,7 +324,7 @@ msgstr ""
 
 #: zgw_consumers/models/services.py:244
 #, python-brace-format
-msgid "The field '{field_name}' is required for ZGW authorization"
+msgid "The field '{field_name}' is required for ZGW authentication"
 msgstr "Het veld '{field_name}' is verplicht voor ZGW-authenticatie."
 
 #: zgw_consumers/models/services.py:252

@@ -241,7 +241,7 @@ class Service(_Service):
             raise ValidationError(
                 {
                     "secret": _(
-                        "The field '{field_name}' is required for ZGW authorization"
+                        "The field '{field_name}' is required for ZGW authentication"
                     ).format(field_name=self._meta.get_field("secret").verbose_name)  # type: ignore secret is not a GenericForeignKey
                 }
             )
