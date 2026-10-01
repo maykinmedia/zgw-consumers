@@ -6,3 +6,4 @@ zgw_consumers:
     api_root: http://objecten.local/api/v1/
     api_type: orc
     auth_type: zgw
+    secret: super-secret

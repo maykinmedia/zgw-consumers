@@ -1,8 +1,11 @@
+from django.core.checks import Warning
+from django.core.exceptions import ValidationError
 from django.db import IntegrityError
 
 import pytest
 import requests_mock
 
+from zgw_consumers.checks import check_zgw_auth_secret
 from zgw_consumers.constants import AuthTypes
 from zgw_consumers.models import Service
 from zgw_consumers.test.factories import ServiceFactory
@@ -59,3 +62,38 @@ def test_fields_making_up_natural_key_field_are_unique():
 
     with pytest.raises(IntegrityError):
         ServiceFactory.create(slug="i-should-be-unique")
+
+
+@pytest.mark.django_db
+def test_zgw_auth_requires_secret():
+    service = ServiceFactory.build(auth_type=AuthTypes.zgw, secret="")
+
+    with pytest.raises(ValidationError) as exc_info:
+        service.clean()
+
+    assert set(exc_info.value.message_dict) == {"secret"}
+
+
+@pytest.mark.django_db
+def test_zgw_auth_does_not_require_client_id():
+    service = ServiceFactory.build(auth_type=AuthTypes.zgw, client_id="")
+
+    service.clean()
+
+
+@pytest.mark.django_db
+def test_check_zgw_auth_secret():
+    ServiceFactory.create(slug="ok", auth_type=AuthTypes.zgw)
+    ServiceFactory.create(slug="no-auth", auth_type=AuthTypes.no_auth)
+    ServiceFactory.create(slug="broken", auth_type=AuthTypes.zgw, secret="")
+
+    messages = check_zgw_auth_secret(databases=["default"])
+
+    assert len(messages) == 1
+    assert isinstance(messages[0], Warning)
+    assert messages[0].id == "zgw_consumers.W001"
+    assert "'broken'" in messages[0].msg
+
+
+def test_check_zgw_auth_secret_skipped_without_databases():
+    assert check_zgw_auth_secret(databases=None) == []

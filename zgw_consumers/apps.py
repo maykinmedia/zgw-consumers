@@ -10,6 +10,7 @@ class ZgwConsumersConfig(AppConfig):
     default_auto_field = "django.db.models.AutoField"
 
     def ready(self):
+        from . import checks  # noqa
         from .models import lookups  # noqa
 
         register_serializer_field()
