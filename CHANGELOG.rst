@@ -1,18 +1,25 @@
 Changes
 =======
 
-Unreleased
-----------
+2.1.0 (2026-10-2)
+-----------------
 
-Bugfix release.
+**New features**
 
 * ``Service`` with ``zgw`` authorization now requires a ``secret``, both in the model
   validation (admin) and in the ``ServiceConfigurationStep`` of
   django-setup-configuration. An empty secret can't be used to sign the JSON web
   token; PyJWT >= 2.13.0 raises ``InvalidKeyError`` when building a client for such a
   service.
+  This is *only validation*, so no database changes or checks are applied.
+
 * Added the ``zgw_consumers.W001`` system check (database tag) to warn about existing
   services using ``zgw`` authorization with an empty secret.
+
+**Project maintenance**
+
+ * Reflect the dropped support for Python<3.12 and Django<5.2 in testing matrix
+   and documentation
 
 2.0.3 (2026-08-17)
 ------------------
