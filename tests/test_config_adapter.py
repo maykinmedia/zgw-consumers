@@ -1,4 +1,6 @@
+import certifi
 import pytest
+import requests
 import requests_mock
 from ape_pie import APIClient
 from simple_certmanager.constants import CertificateTypes
@@ -55,6 +57,27 @@ def test_server_cert_specified(server_cert):
     client = APIClient.configure_from(adapter)
 
     assert client.verify == server_cert.public_certificate.path
+
+
+# NOTE: this test will error if you don't have an internet connection :)
+def test_server_cert_and_env_bundle_both_specified(
+    monkeypatch: pytest.MonkeyPatch, server_cert
+):
+    # ensure a valid bundle is in the envvar
+    monkeypatch.setenv("REQUESTS_CA_BUNDLE", certifi.where())
+    # set up a service to example.com, which is covered by the certifi trust store. Our
+    # custom server certificate is not suitable to verify example.com, so we expect the
+    # request to fail with certificate errors!
+    service = ServiceFactory.build(
+        server_certificate=server_cert,
+        api_root="https://example.com",
+    )
+    adapter = ServiceConfigAdapter(service)
+    client = APIClient.configure_from(adapter)
+
+    # expect TLS errors
+    with pytest.raises(requests.exceptions.SSLError):
+        client.get("")
 
 
 def test_no_client_cert_specified():
