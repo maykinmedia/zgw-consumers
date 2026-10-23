@@ -40,3 +40,8 @@ class AuthTypes(models.TextChoices):
 class NLXDirectories(models.TextChoices):
     demo = "demo", _("Demo")
     prod = "prod", _("Prod")
+
+
+class OAuth2TokenAuthMethods(models.TextChoices):
+    request_header = "request_header", _("Request header")
+    body = "body", _("Body")

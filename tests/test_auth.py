@@ -76,13 +76,16 @@ def test_jwt_exp_configuration():
 
 
 @pytest.fixture
-def oauth2_service():
+def oauth2_service(request):
+    auth_method = getattr(request, "param", "request_header")
+
     return ServiceFactory.build(
         api_root="https://example.com/",
         auth_type=AuthTypes.oauth2_client_credentials,
         client_id="my-client-id",
         secret="my-secret-that-is-sufficiently-long-enough",
         oauth2_token_url="https://example.com/token/",
+        oauth2_token_endpoint_auth_method=auth_method,
     )
 
 
@@ -97,7 +100,12 @@ def mock_token_response(m, access_token="mock-access-token", expires_in=3600):
     )
 
 
-def test_oauth2_token_is_added_to_the_headers(oauth2_service):
+@pytest.mark.parametrize(
+    "oauth2_service",
+    ["request_header"],
+    indirect=True,
+)
+def test_oauth2_flow_with_credentials_in_the_header(oauth2_service):
     with requests_mock.Mocker() as m:
         mock_token_response(m)
         m.get("https://example.com/irrelevant", text="OK")
@@ -106,7 +114,46 @@ def test_oauth2_token_is_added_to_the_headers(oauth2_service):
             resp = client.get("irrelevant")
 
         assert resp.status_code == 200
-        last_req = m.request_history[-1]
+
+        # token POST request assertions
+        token_req = m.request_history[0]
+        assert token_req.body == "grant_type=client_credentials"
+        assert "Authorization" in token_req.headers
+        assert token_req.headers["Authorization"].startswith("Basic")
+
+        # next GET request assertions
+        last_req = m.request_history[1]
+        assert last_req.body is None
+        assert last_req.headers["Authorization"] == "Bearer mock-access-token"
+
+
+@pytest.mark.parametrize(
+    "oauth2_service",
+    ["body"],
+    indirect=True,
+)
+def test_oauth2_flow_with_credentials_in_the_body(oauth2_service):
+    with requests_mock.Mocker() as m:
+        mock_token_response(m)
+        m.get("https://example.com/irrelevant", text="OK")
+
+        with build_client(oauth2_service) as client:
+            resp = client.get("irrelevant")
+
+        assert resp.status_code == 200
+
+        # token POST request assertions
+        token_req = m.request_history[0]
+        assert (
+            token_req.body
+            == "grant_type=client_credentials&client_id=my-client-id&client_secret="
+            "my-secret-that-is-sufficiently-long-enough"
+        )
+        assert "Authorization" not in token_req.headers
+
+        # next GET request assertions
+        last_req = m.request_history[1]
+        assert last_req.body is None
         assert last_req.headers["Authorization"] == "Bearer mock-access-token"
 
 
