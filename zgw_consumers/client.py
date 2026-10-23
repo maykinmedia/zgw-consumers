@@ -52,6 +52,10 @@ class ServiceConfigAdapter:
         if server_cert := self.service.server_certificate:
             # NOTE: this only works with a file-system based storage!
             kwargs["verify"] = server_cert.public_certificate.path
+            # When both Session.verify is set and REQUESTS_CA_BUNDLE (or CURL_CA_BUNDLE)
+            # are in the environment, the latter is preferred by requests. Not trusting
+            # the env in these situations forces requests to use Session.verify.
+            kwargs["trust_env"] = False
 
         # mTLS: offer client certificate if configured
         if client_cert := self.service.client_certificate:
