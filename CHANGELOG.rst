@@ -1,8 +1,16 @@
 Changes
 =======
 
-2.1.0 (2026-10-2)
------------------
+2.1.1 (2026-10-23)
+------------------
+
+Bugfix release.
+
+* Ensure server certificates are used for verification when ``REQUESTS_CA_BUNDLE`` is
+  set in the env.
+
+2.1.0 (2026-10-02)
+------------------
 
 **New features**
 
@@ -18,8 +26,8 @@ Changes
 
 **Project maintenance**
 
- * Reflect the dropped support for Python<3.12 and Django<5.2 in testing matrix
-   and documentation
+* Reflect the dropped support for Python<3.12 and Django<5.2 in testing matrix
+  and documentation
 
 2.0.3 (2026-08-17)
 ------------------
