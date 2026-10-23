@@ -1,6 +1,14 @@
 Changes
 =======
 
+1.2.1 (2026-10-23)
+------------------
+
+Bugfix backport.
+
+* Ensure server certificates are used for verification when ``REQUESTS_CA_BUNDLE`` is
+  set in the env.
+
 1.2.0 (2026-01-29)
 -------------------
 
