@@ -5,7 +5,7 @@ from django.utils.text import slugify
 import factory
 from faker.providers.internet import Provider as InternetProvider
 
-from zgw_consumers.constants import AuthTypes
+from zgw_consumers.constants import AuthTypes, OAuth2TokenAuthMethods
 from zgw_consumers.models import Service
 
 
@@ -29,6 +29,7 @@ class ServiceFactory(factory.django.DjangoModelFactory):
     api_root = factory.Faker("api_root")
     slug = factory.LazyAttribute(lambda o: slugify(o.api_root))
     auth_type = AuthTypes.no_auth
+    oauth2_token_endpoint_auth_method = OAuth2TokenAuthMethods.request_header
 
     # PyJWT >=2.13.0 doesn't accept empty keys when generating JWT
     client_id = factory.LazyAttribute(
