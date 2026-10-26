@@ -130,6 +130,7 @@ def test_zgw_auth_requires_secret(admin_client: Client, secret, errors):
         "auth_type": AuthTypes.zgw,
         "client_id": "my-client-id",
         "secret": secret,
+        "oauth2_token_endpoint_auth_method": "request_header",
         "timeout": 10,
         "jwt_valid_for": 43200,
     }

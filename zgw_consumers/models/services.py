@@ -19,7 +19,7 @@ from solo.models import SingletonModel
 
 from zgw_consumers import settings as zgw_settings
 
-from ..constants import APITypes, AuthTypes, NLXDirectories
+from ..constants import APITypes, AuthTypes, NLXDirectories, OAuth2TokenAuthMethods
 from .abstract import Service as _Service
 from .validators import NonUrlValidator, validate_leading_slashes
 
@@ -114,6 +114,17 @@ class Service(_Service):
             "Optional OAuth2 scope (space-separated). "
             "Included in the token request body if defined. "
             "(Only needed if auth type is OAuth2)"
+        ),
+    )
+    # necessary only for OAuth2 client credentials flow
+    oauth2_token_endpoint_auth_method = models.CharField(
+        _("OAuth2 token method"),
+        max_length=30,
+        choices=OAuth2TokenAuthMethods.choices,
+        default=OAuth2TokenAuthMethods.request_header,
+        help_text=_(
+            "Whether to include the credentials as a request header (under "
+            "Authorization) or in the body."
         ),
     )
     jwt_valid_for = models.PositiveIntegerField(

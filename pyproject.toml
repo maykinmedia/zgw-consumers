@@ -89,6 +89,7 @@ testpaths = ["tests"]
 DJANGO_SETTINGS_MODULE = "testapp.settings"
 markers = [
     "config_path: the path to the YAML file that is loaded for setup_configuration",
+    "oauth2_auth_method: whether to include credentials in the body or as a request header"
 ]
 
 [tool.bumpversion]
