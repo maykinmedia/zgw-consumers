@@ -1,13 +1,7 @@
 import copy
-from collections.abc import Callable
-from typing import Protocol, Unpack
 
 import pytest
 from rest_framework.test import APIClient
-
-from .typing import OAuth2TokenEndpointAuthMethodOptions
-
-type Markable = Callable[..., object] | type  # copied from pytest types
 
 
 @pytest.fixture()
@@ -43,10 +37,3 @@ def temp_private_root(tmp_path, settings):
     settings.STORAGES = new_storages
     settings.SENDFILE_ROOT = location
     return settings
-
-
-class OAuth2TokenEndpointAuthMethodMark(Protocol):
-    def __call__(
-        self,
-        **options: Unpack[OAuth2TokenEndpointAuthMethodOptions],
-    ) -> pytest.MarkDecorator: ...

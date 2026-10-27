@@ -1,5 +1,6 @@
 import time
 from datetime import UTC, datetime
+from typing import Literal, Protocol
 
 from django.core.cache import cache
 
@@ -12,7 +13,15 @@ from zgw_consumers.client import ZGWAuth, build_client
 from zgw_consumers.constants import AuthTypes
 from zgw_consumers.test.factories import ServiceFactory
 
-from .conftest import OAuth2TokenEndpointAuthMethodMark
+
+class OAuth2TokenEndpointAuthMethodMark(Protocol):
+    def __call__(
+        self,
+        oauth2_token_endpoint_auth_method: Literal[
+            "request_header", "request_body"
+        ] = ...,
+    ) -> pytest.MarkDecorator: ...
+
 
 oauth2_auth_method: OAuth2TokenEndpointAuthMethodMark = pytest.mark.oauth2_auth_method
 
@@ -108,7 +117,7 @@ def mock_token_response(m, access_token="mock-access-token", expires_in=3600):
     )
 
 
-@pytest.mark.oauth2_auth_method(oauth2_token_endpoint_auth_method="request_header")
+@oauth2_auth_method(oauth2_token_endpoint_auth_method="request_header")
 def test_oauth2_flow_with_credentials_in_the_header(oauth2_service):
     with requests_mock.Mocker() as m:
         mock_token_response(m)
@@ -131,7 +140,7 @@ def test_oauth2_flow_with_credentials_in_the_header(oauth2_service):
         assert last_req.headers["Authorization"] == "Bearer mock-access-token"
 
 
-@pytest.mark.oauth2_auth_method(oauth2_token_endpoint_auth_method="body")
+@oauth2_auth_method(oauth2_token_endpoint_auth_method="body")
 def test_oauth2_flow_with_credentials_in_the_body(oauth2_service):
     with requests_mock.Mocker() as m:
         mock_token_response(m)
