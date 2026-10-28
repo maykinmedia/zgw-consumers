@@ -1,6 +1,14 @@
 Changes
 =======
 
+2.2.0 (2026-10-28)
+------------------
+
+Feature release.
+
+* Added support for oauth2 flows where the client credentials are submitted in the body
+  rather than the Basic Auth header.
+
 2.1.1 (2026-10-23)
 ------------------
 
