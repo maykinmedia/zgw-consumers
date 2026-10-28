@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: 2.1.1\n"
+"Project-Id-Version: 2.2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-17 08:57-0600\n"
+"POT-Creation-Date: 2026-10-28 04:42-0500\n"
 "PO-Revision-Date: 2022-05-17 09:40+02:00\n"
 "Last-Translator: Sergei Maertens <sergei@maykinmedia.nl>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,111 +18,151 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: zgw_consumers/admin.py:23
+#: admin.py:23
 msgid "Connection check status code"
 msgstr "Statuscode van de verbindingstest"
 
-#: zgw_consumers/admin.py:26
+#: admin.py:26
 msgid "n/a"
 msgstr "n.v.t."
 
-#: zgw_consumers/admin_fields.py:38
+#: admin_fields.py:38
 msgid "No NLX"
 msgstr "Geen NLX"
 
-#: zgw_consumers/api_models/constants.py:54
+#: api_models/constants.py:54
 msgid "Vervolg"
 msgstr ""
 
-#: zgw_consumers/api_models/constants.py:55
+#: api_models/constants.py:55
 msgid "Bijdrage"
 msgstr ""
 
-#: zgw_consumers/api_models/constants.py:56
+#: api_models/constants.py:56
 msgid "Onderwerp"
 msgstr ""
 
-#: zgw_consumers/constants.py:6
+#: constants.py:6
 msgid "AC (Authorizations)"
 msgstr "AC (Autorisaties API)"
 
-#: zgw_consumers/constants.py:7
+#: constants.py:7
 msgid "NRC (Notifications)"
 msgstr "NRC (Notificaties API)"
 
-#: zgw_consumers/constants.py:9
+#: constants.py:8
 msgid "ZRC (Zaken)"
 msgstr "ZRC (Zaken API)"
 
-#: zgw_consumers/constants.py:10
+#: constants.py:9
 msgid "ZTC (Zaaktypen)"
 msgstr "ZTC (Catalogi API)"
 
-#: zgw_consumers/constants.py:11
+#: constants.py:10
 msgid "DRC (Informatieobjecten)"
 msgstr "DRC (Documenten API)"
 
-#: zgw_consumers/constants.py:12
+#: constants.py:11
 msgid "BRC (Besluiten)"
 msgstr "BRC (Besluiten API)"
 
-#: zgw_consumers/constants.py:14
-msgid "Contactmomenten API"
+#: constants.py:12
+msgid "Referentielijsten API"
 msgstr ""
 
-#: zgw_consumers/constants.py:15
-msgid "Klanten API"
+#: constants.py:13
+msgid "Klantinteracties API"
 msgstr ""
 
-#: zgw_consumers/constants.py:16
+#: constants.py:14
+msgid "Organisatie API"
+msgstr ""
+
+#: constants.py:15
+msgid "Identiteit API"
+msgstr ""
+
+#: constants.py:16
+msgid "Producten API"
+msgstr ""
+
+#: constants.py:17
+msgid "Producttypen API"
+msgstr ""
+
+#: constants.py:18
 msgid "Verzoeken API"
 msgstr ""
 
-#: zgw_consumers/constants.py:18
+#: constants.py:19
+msgid "Taken API"
+msgstr ""
+
+#: constants.py:20
+msgid "Berichten API"
+msgstr ""
+
+#: constants.py:24
+msgid "Contactmomenten API - (Deprecated)"
+msgstr "Contactmomenten API - (Verouderd)"
+
+#: constants.py:25
+msgid "Klanten API - (Deprecated)"
+msgstr "Klanten API - (Verouderd)"
+
+#: constants.py:27
 msgid "ORC (Overige)"
 msgstr ""
 
-#: zgw_consumers/constants.py:22
+#: constants.py:31
 msgid "No authorization"
 msgstr "Geen authorisatie"
 
-#: zgw_consumers/constants.py:23
+#: constants.py:32
 msgid "API key"
 msgstr "API sleutel"
 
-#: zgw_consumers/constants.py:24
+#: constants.py:33
 msgid "ZGW client_id + secret"
 msgstr "ZGW client_id en secret"
 
-#: zgw_consumers/constants.py:27
+#: constants.py:36
 msgid "OAuth2 client credentials flow"
 msgstr "OAuth2 (client credentials flow)"
 
-#: zgw_consumers/constants.py:32
+#: constants.py:41
 msgid "Demo"
 msgstr ""
 
-#: zgw_consumers/constants.py:33
+#: constants.py:42
 msgid "Prod"
 msgstr ""
 
-#: zgw_consumers/drf/fields.py:14
+#: constants.py:46
+msgid "Request header"
+msgstr "Verzoek-header"
+
+#: constants.py:47
+msgid "Body"
+msgstr "Body"
+
+#: drf/fields.py:14
 msgid "The url service is unknown."
 msgstr "De service voor de URL is onbekend."
 
-#: zgw_consumers/models/abstract.py:6
+#: models/abstract.py:6
 msgid "label"
 msgstr "label"
 
-#: zgw_consumers/models/services.py:35
+#: models/services.py:35
 msgid "UUID"
 msgstr "UUID"
 
-#: zgw_consumers/models/services.py:37
+#: models/services.py:37
 msgid "service slug"
 msgstr "service slug"
 
-#: zgw_consumers/models/services.py:42
+#: models/services.py:42
 msgid ""
 "A unique, human-friendly slug to identify this service. Primarily useful for "
 "cross-instance import/export."
@@ -130,15 +170,15 @@ msgstr ""
 "Een unieke, voor mensen leesbare identificatie om deze service te herkennen. "
 "Hoofdzakelijk nuttig voor importeren en exporteren."
 
-#: zgw_consumers/models/services.py:46
+#: models/services.py:47
 msgid "type"
 msgstr "type"
 
-#: zgw_consumers/models/services.py:48
+#: models/services.py:49
 msgid "api root url"
 msgstr "basisurl van de API"
 
-#: zgw_consumers/models/services.py:50
+#: models/services.py:51
 msgid ""
 "The root URL of the service that will be used to construct the URLs when "
 "making requests."
@@ -146,11 +186,11 @@ msgstr ""
 "De basis-URL van de service om volledige URLs op te bouwen bij het maken van "
 "verzoeken."
 
-#: zgw_consumers/models/services.py:56
+#: models/services.py:58
 msgid "connection check endpoint"
 msgstr "endpoint verbindingstest"
 
-#: zgw_consumers/models/services.py:58
+#: models/services.py:60
 msgid ""
 "A relative URL to perform a connection test. If left blank, the API root "
 "itself is used. This connection check is only performed in the admin when "
@@ -161,15 +201,15 @@ msgstr ""
 "verbindingstest wordt enkel uitgevoerd in de beheerpagina wanneer de "
 "instellingen weergegeven worden."
 
-#: zgw_consumers/models/services.py:71
+#: models/services.py:73
 msgid "authorization type"
 msgstr "authorisatietype"
 
-#: zgw_consumers/models/services.py:75
+#: models/services.py:77
 msgid "The type of authorization to use for this service."
 msgstr "De soort autorisatie die op deze service van toepassing is."
 
-#: zgw_consumers/models/services.py:82
+#: models/services.py:84
 msgid ""
 "The client ID used to construct the JSON Web Token to connect with the "
 "service (only needed if auth type is `zgw` or `oauth2_client_credentials`)."
@@ -178,7 +218,7 @@ msgstr ""
 "authenticeren bij de service (enkel nodig bij autorisatietype `zgw` of "
 "`oauth2_client_credentials`)."
 
-#: zgw_consumers/models/services.py:90
+#: models/services.py:93
 msgid ""
 "The secret used to construct the JSON Web Token to connect with the service "
 "(only needed if auth type is `zgw` or `oauth2_client_credentials`)."
@@ -187,11 +227,11 @@ msgstr ""
 "de service te authenticeren (enkel nodig bij autorisatietype `zgw`of "
 "`oauth2_client_credentials`)."
 
-#: zgw_consumers/models/services.py:96
+#: models/services.py:100
 msgid "OAuth2 token url"
 msgstr "OAuth2 token-endpoint"
 
-#: zgw_consumers/models/services.py:100
+#: models/services.py:104
 msgid ""
 "OAuth2 token endpoint for client credentials flow. (Only needed if auth type "
 "is OAuth2)"
@@ -199,11 +239,11 @@ msgstr ""
 "De token-endpoint waar client-ID en secret uitgewisseld worden voor een "
 "token (enkel relevant voor de OAuth2-authenticatietype(n))."
 
-#: zgw_consumers/models/services.py:106
+#: models/services.py:110
 msgid "OAuth2 scope"
 msgstr "OAuth2 scope"
 
-#: zgw_consumers/models/services.py:110
+#: models/services.py:114
 msgid ""
 "Optional OAuth2 scope (space-separated). Included in the token request body "
 "if defined. (Only needed if auth type is OAuth2)"
@@ -212,11 +252,23 @@ msgstr ""
 "Deze wordt meegestuurd bij het ophalen van een autorisatietoken (enkel "
 "relevant voor de OAuth2-authenticatietype(n))."
 
-#: zgw_consumers/models/services.py:116
+#: models/services.py:121
+msgid "OAuth2 token method"
+msgstr "OAuth2 token-methode"
+
+#: models/services.py:126
+msgid ""
+"Whether to include the credentials as a request header (under Authorization) "
+"or in the body."
+msgstr ""
+"Selecteer of de authenticatiegegevens in een verzoek-header (Authorization) "
+"of in de body van het verzoek opgenomen wordt."
+
+#: models/services.py:131
 msgid "JWT expires after"
 msgstr "JWT vervalt na"
 
-#: zgw_consumers/models/services.py:119
+#: models/services.py:134
 msgid ""
 "How long a JWT is valid for, in seconds. This controls the 'exp' claim (only "
 "used if auth type is `zgw`)."
@@ -224,11 +276,11 @@ msgstr ""
 "Bepaalt de geldigheidsduur van een JWT, in seconden. Deze parameter heeft "
 "invloed op de 'exp' claim (enkel relevant bij autorisatietype `zgw`)."
 
-#: zgw_consumers/models/services.py:125
+#: models/services.py:140
 msgid "header key"
 msgstr "header sleutel"
 
-#: zgw_consumers/models/services.py:129
+#: models/services.py:144
 msgid ""
 "The header key used to store the API key (only needed if auth type is "
 "`api_key`)."
@@ -236,85 +288,90 @@ msgstr ""
 "De naam van de header die de API-key bevat (enkel nodig bij autorisatietype "
 "`api_key`)."
 
-#: zgw_consumers/models/services.py:133
+#: models/services.py:149
 msgid "header value"
 msgstr "header waarde"
 
-#: zgw_consumers/models/services.py:137
+#: models/services.py:153
 msgid ""
 "The API key to connect with the service (only needed if auth type is "
 "`api_key`)."
 msgstr ""
 "De waarde voor de API-key header (enkel nodig bij autorisatietype `api_key`)."
 
-#: zgw_consumers/models/services.py:141
+#: models/services.py:158
 msgid "NLX url"
 msgstr "NLX-url"
 
-#: zgw_consumers/models/services.py:141
+#: models/services.py:158
 msgid "NLX (outway) address."
 msgstr "NLX (outway)-adres"
 
-#: zgw_consumers/models/services.py:144
+#: models/services.py:161
 msgid "user ID"
 msgstr "gebruikers-ID"
 
-#: zgw_consumers/models/services.py:148
+#: models/services.py:165
 msgid ""
 "User ID to use for the audit trail. Although these external API credentials "
-"are typically used bythis API itself instead of a user, the user ID is "
+"are typically used by this API itself instead of a user, the user ID is "
 "required."
 msgstr ""
 
-#: zgw_consumers/models/services.py:153
+#: models/services.py:171
 msgid "user representation"
 msgstr "gebruikersweergave"
 
-#: zgw_consumers/models/services.py:156
+#: models/services.py:174
 msgid "Human readable representation of the user."
 msgstr "Weergave van de gebruikersidentiteit voor mensen."
 
-#: zgw_consumers/models/services.py:162
+#: models/services.py:180
 msgid "The SSL/TLS certificate of the client"
 msgstr "Het SSL/TLS-certificaat van de client"
 
-#: zgw_consumers/models/services.py:170
+#: models/services.py:188
 msgid "The SSL/TLS certificate of the server"
 msgstr "Het SSL/TLS-certificaat van de server"
 
-#: zgw_consumers/models/services.py:175
+#: models/services.py:193
 msgid "timeout"
 msgstr "time-out"
 
-#: zgw_consumers/models/services.py:176
+#: models/services.py:194
 msgid "Timeout (in seconds) for HTTP calls."
 msgstr ""
 "Time-out (in seconden) voor HTTP-calls. Na het verstrijken wordt het verzoek "
 "afgebroken."
 
-#: zgw_consumers/models/services.py:183
+#: models/services.py:203
 msgid "service"
 msgstr "service"
 
-#: zgw_consumers/models/services.py:184
+#: models/services.py:204
 msgid "services"
 msgstr "services"
 
-#: zgw_consumers/models/services.py:209
+#: models/services.py:229
 #, python-brace-format
 msgid "If field '{header_key}' is set, field '{header_value}' must also be set"
 msgstr ""
 "Als het veld '{header_key}' opgegeven is, dan moet je ook een waarde opgeven "
 "voor het '{header_value}'-veld."
 
-#: zgw_consumers/models/services.py:220
+#: models/services.py:241
 #, python-brace-format
 msgid "If field '{header_value}' is set, field '{header_key}' must also be set"
 msgstr ""
 "Als het veld '{header_value}' opgegeven is, dan moet je ook een waarde "
 "opgeven voor het '{header_key}'-veld."
 
-#: zgw_consumers/models/services.py:234
+#: models/services.py:255
+#, python-brace-format
+msgid "The field '{field_name}' is required for ZGW authentication"
+msgstr "Het veld '{field_name}' is verplicht voor ZGW-authenticatie."
+
+#: models/services.py:266
 msgid ""
 "Additional libraries are required to use OAuth, which aren't installed. "
 "Select another method."
@@ -322,31 +379,26 @@ msgstr ""
 "Er zijn extra systeembibliotheken nodig om OAuth2 te kunnen gebruiken, die "
 "niet beschikbaar zijn. Kies een ander type."
 
-#: zgw_consumers/models/services.py:244
-#, python-brace-format
-msgid "The field '{field_name}' is required for ZGW authentication"
-msgstr "Het veld '{field_name}' is verplicht voor ZGW-authenticatie."
-
-#: zgw_consumers/models/services.py:252
+#: models/services.py:285
 #, python-brace-format
 msgid "The field '{field_name}' is required for OAuth2 client credentials flow"
 msgstr ""
 "Het veld '{field_name}' is verplicht voor de OAuth2 OAuth2-"
 "authenticatietype(n)."
 
-#: zgw_consumers/models/services.py:297
+#: models/services.py:336
 msgid "NLX directory"
 msgstr "NLX directory"
 
-#: zgw_consumers/models/services.py:300
+#: models/services.py:339
 msgid "NLX outway address"
 msgstr "NLX-outway adres"
 
-#: zgw_consumers/models/services.py:302
+#: models/services.py:341
 msgid "Example: http://my-outway.nlx:8080"
 msgstr "Voorbeeld: http://mijn-outway.nl:8080"
 
-#: zgw_consumers/models/services.py:308
+#: models/services.py:347
 msgid ""
 "Your organization TLS certificate for the NLX network. This is used to fetch "
 "the list of available services from the NLX directory API."
@@ -355,7 +407,7 @@ msgstr ""
 "gebruikt om de lijst van beschikbare services uit de NLX directory API op te "
 "halen."
 
-#: zgw_consumers/models/services.py:315
+#: models/services.py:354
 msgid ""
 "Your organization TLS private key for the NLX network. This is used to fetch "
 "the list of available services from the NLX directory API."
@@ -363,18 +415,18 @@ msgstr ""
 "De TLS-privésleutel voor het NLX-netwerk. Dit wordt gebruikt om de lijst van "
 "beschikbare services uit de NLX directory API op te halen."
 
-#: zgw_consumers/models/services.py:322
+#: models/services.py:361
 msgid "NLX configuration"
 msgstr "NLX-configuratie"
 
-#: zgw_consumers/models/services.py:353
+#: models/services.py:392
 msgid "Connection refused. Please provide a correct address."
 msgstr "Verbinding geweigerd. Geef een valide adres op."
 
-#: zgw_consumers/models/validators.py:13
+#: models/validators.py:13
 msgid "Value cannot be a URL"
 msgstr "De waarde mag geen volledige URL zijn."
 
-#: zgw_consumers/templates/admin/widgets/clearable_no_download_private_file_input.html:3
+#: templates/admin/widgets/clearable_no_download_private_file_input.html:3
 msgid "No download allowed"
 msgstr "Geen download toegestaan"
