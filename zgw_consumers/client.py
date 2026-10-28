@@ -13,6 +13,7 @@ from requests.models import PreparedRequest
 from zgw_consumers.constants import AuthTypes
 from zgw_consumers.models import Service
 
+from .constants import OAuth2TokenAuthMethods
 from .nlx import NLXClient
 
 logger = logging.getLogger(__name__)
@@ -163,6 +164,14 @@ class OAuth2Auth(AuthBase):
                 token_url=self.service.oauth2_token_url,
                 client_id=self.service.client_id,
                 client_secret=self.service.secret,
+                # include the credentials in the body in case this is configured in the
+                # Service model, otherwise they will be part of the headers (Basic ...)
+                include_client_id=(
+                    True
+                    if self.service.oauth2_token_endpoint_auth_method
+                    == OAuth2TokenAuthMethods.body
+                    else None
+                ),
             )
 
         # Determine TTL based on token's `expires_in`
