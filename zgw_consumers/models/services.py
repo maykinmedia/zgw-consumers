@@ -5,7 +5,6 @@ import logging
 import socket
 import uuid
 from collections.abc import Callable
-from typing import Self
 from urllib.parse import urlparse, urlsplit, urlunsplit
 
 from django.core.exceptions import ValidationError
@@ -313,7 +312,7 @@ class Service(_Service):
         return None
 
     @classmethod
-    def get_service(cls, url: str) -> Self | None:
+    def get_service(cls, url: str) -> Service | None:
         split_url = urlsplit(url)
         scheme_and_domain = urlunsplit(split_url[:2] + ("", "", ""))
 
