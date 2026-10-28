@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from datetime import date
 
+from django.utils.functional import Promise
+
 from .base import ZGWModel
 from .constants import VervalRedenen
 
@@ -24,7 +26,7 @@ class Besluit(ZGWModel):
     verzenddatum: date | None = None
     uiterlijke_reactiedatum: date | None = None
 
-    def get_vervalreden_display(self) -> str:
+    def get_vervalreden_display(self) -> str | Promise:
         return VervalRedenen(self.vervalreden).label
 
 

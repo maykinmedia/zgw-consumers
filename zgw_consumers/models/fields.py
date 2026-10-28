@@ -124,6 +124,7 @@ class ServiceUrlField(Field):
         else:
             constraint = CheckConstraint(name=constraint_name, condition=both_filled)
 
+        assert isinstance(options.constraints, list)
         options.constraints.append(constraint)
         # ensure this can be picked up by migrations by making it "explicitly defined"
         if "constraints" not in options.original_attrs:
