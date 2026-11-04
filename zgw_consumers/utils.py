@@ -1,6 +1,6 @@
 import logging
-from collections.abc import Callable
-from typing import TypedDict
+from collections.abc import Callable, Iterable
+from typing import NotRequired, TypedDict
 
 from django.http import HttpRequest
 
@@ -40,26 +40,26 @@ class cache_on_request[T]:
         return cached_value
 
 
-class PaginatedResponseData(TypedDict):
+class PaginatedResponseData[T](TypedDict):
     count: int
-    next: str
-    previous: str
-    results: list
+    next: NotRequired[str | None]
+    previous: NotRequired[str | None]
+    results: Iterable[T]
 
 
-def pagination_helper(
+def pagination_helper[T](
     client: APIClient,
-    paginated_data: PaginatedResponseData,
+    paginated_data: PaginatedResponseData[T],
     max_requests: int | None = None,
     **kwargs,
-):
+) -> Iterable[T | object]:
     """
     Fetch results from a paginated API endpoint, and optionally limit the number of
     requests to perform when fetching new pages by specifying the ``max_requests``
-    argument
+    argument.
     """
 
-    def _iter(_data, num_requests=0):
+    def _iter(_data: PaginatedResponseData[T], num_requests=0):
         yield from _data["results"]
         if next_url := _data.get("next"):
             if max_requests and num_requests >= max_requests:
