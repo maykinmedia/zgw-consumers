@@ -144,3 +144,18 @@ def test_zgw_auth_requires_secret(admin_client: Client, secret, errors):
     else:
         assert response.status_code == 302
         assert Service.objects.get().secret == secret
+
+
+@pytest.mark.django_db
+def test_duplicate_api_root_without_trailing_slash_is_a_form_error(
+    admin_client: Client,
+):
+    ServiceFactory.create(api_root="https://example.com/api/")
+
+    response = admin_client.post(
+        reverse("admin:zgw_consumers_service_add"),
+        {"label": "Duplicate", "api_root": "https://example.com/api"},
+    )
+
+    assert response.status_code == 200
+    assert "api_root" in response.context["adminform"].form.errors
