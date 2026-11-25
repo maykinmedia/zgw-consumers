@@ -65,6 +65,17 @@ def test_fields_making_up_natural_key_field_are_unique():
 
 
 @pytest.mark.django_db
+def test_api_root_without_trailing_slash_is_validated_as_unique():
+    ServiceFactory.create(api_root="https://example.com/api/")
+    service = ServiceFactory.build(api_root="https://example.com/api")
+
+    with pytest.raises(ValidationError) as exc_info:
+        service.full_clean()
+
+    assert "api_root" in exc_info.value.message_dict
+
+
+@pytest.mark.django_db
 def test_zgw_auth_requires_secret():
     service = ServiceFactory.build(auth_type=AuthTypes.zgw, secret="")
 

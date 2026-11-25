@@ -208,17 +208,24 @@ class Service(_Service):
     def natural_key(self):
         return (self.slug,)
 
-    def save(self, *args, **kwargs):
+    def _normalize_urls(self) -> None:
         if not self.api_root.endswith("/"):
             self.api_root = f"{self.api_root}/"
 
         if self.nlx and not self.nlx.endswith("/"):
             self.nlx = f"{self.nlx}/"
 
+    def save(self, *args, **kwargs):
+        self._normalize_urls()
         super().save(*args, **kwargs)
 
     def clean(self):
         super().clean()
+
+        # normalize before the uniqueness checks (which run after clean), so a
+        # duplicate api_root without trailing slash is a validation error instead
+        # of an IntegrityError on save
+        self._normalize_urls()
 
         # validate header_key and header_value
         if self.header_key and not self.header_value:
